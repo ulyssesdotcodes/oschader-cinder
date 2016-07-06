@@ -24,7 +24,16 @@ std::shared_ptr<ci::ivec2> AdditiveProgram::matrixWindow()
 
 ci::gl::TextureRef AdditiveProgram::getColorTexture()
 {
-	return mBlendProg->getColorTexture();
+	if(mB) {
+		return mBlendProg->getColorTexture();
+	}
+
+	return mA->getColorTexture();
+}
+
+void AdditiveProgram::updateUniform(std::string name, float val)
+{
+	mA->updateUniform(name, val);
 }
 
 void AdditiveProgram::draw()

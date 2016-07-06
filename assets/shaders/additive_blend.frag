@@ -13,7 +13,7 @@ void main() {
 	vec4 A = texture2D(i_tex_A, pos);
 	vec4 B = texture2D(i_tex_B, pos);
 
-	vec3 color = A.xyz + B.xyz;
+	vec3 color = min(vec3(1), A.xyz + B.xyz);
 
 	o_fragColor = vec4(color, 1);
 }

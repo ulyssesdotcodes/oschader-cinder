@@ -32,3 +32,7 @@ void BaseProgram::draw()
 	gl::popMatrices();
 	gl::popViewport();
 }
+
+void BaseProgram::mappend(BaseProgramRef)
+{
+}

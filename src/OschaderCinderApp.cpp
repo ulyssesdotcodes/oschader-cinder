@@ -15,12 +15,13 @@ using namespace std;
 class OschaderCinderApp : public App {
   public:
 	void setup() override;
-	void mouseDown( MouseEvent event ) override;
 	void update() override;
 	void draw() override;
 
+	void addProgram(BaseProgramRef, int);
+
 private:
-	ProgramRef mProg;
+	std::shared_ptr<osc::ReceiverUdp> mOscReceiver;
 
 	std::array<BaseProgramRef, 8> mPrograms;
 };
@@ -28,15 +29,20 @@ private:
 void OschaderCinderApp::setup()
 {
 	ProgramFactory factory;
-	mPrograms[0] = factory.createProgram("sine");
-	mPrograms[1] = factory.createProgram("line_down");
-	AdditiveProgramRef prog = AdditiveProgram::create(mPrograms[0]);
-	prog->mappend(mPrograms[1]);
-	mProg = prog;
-}
 
-void OschaderCinderApp::mouseDown( MouseEvent event )
-{
+	mOscReceiver = std::shared_ptr<osc::ReceiverUdp>(new osc::ReceiverUdp(9001));
+
+	for (int i = 0; i < mPrograms.size(); i++) {
+		mOscReceiver->setListener("/shaders/" + std::to_string(i), [&](osc::Message msg) {
+			addProgram(AdditiveProgram::create(factory.createProgram(msg.getArgString(0))), i);
+		});
+
+		mOscReceiver->setListener("/shaders/" + std::to_string(i) + "/uniform", [&](osc::Message msg) {
+			if (mPrograms[i]) {
+				mPrograms[i]->updateUniform(msg.getArgString(0), msg.getArgFloat(1));
+			}
+		});
+	}
 }
 
 void OschaderCinderApp::update()
@@ -53,7 +59,20 @@ void OschaderCinderApp::draw()
 {
 	gl::clear( Color( 0, 0, 0 ) ); 
 
-	mProg->draw();
+	if (mPrograms[0]) {
+		mPrograms[0]->draw();
+	}
+}
+
+void OschaderCinderApp::addProgram(BaseProgramRef p, int i)
+{
+	mPrograms[i] = p;
+	if (i > 0 && mPrograms[i - 1]) {
+		mPrograms[i - 1]->mappend(p);
+	}
+	if (i < mPrograms.size() - 1 && mPrograms[i + 1]) {
+		p->mappend(mPrograms[i + 1]);
+	}
 }
 
 CINDER_APP(OschaderCinderApp, RendererGl(), [&](App::Settings *settings) {

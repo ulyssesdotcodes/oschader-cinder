@@ -12,6 +12,7 @@ public:
 	virtual void draw();
 
 	virtual ci::gl::TextureRef getColorTexture() = 0;
+	virtual void mappend(BaseProgramRef);
 
 protected:
 	BaseProgram(ProgramRef prog);
