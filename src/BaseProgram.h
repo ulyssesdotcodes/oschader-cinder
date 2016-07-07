@@ -9,9 +9,7 @@ public:
 	virtual std::shared_ptr<ci::Camera> camera();
 	virtual std::shared_ptr<ci::ivec2> matrixWindow();
 
-	virtual void draw();
-
-	virtual ci::gl::TextureRef getColorTexture() = 0;
+	virtual ci::gl::TextureRef getColorTexture(ci::gl::FboRef);
 	virtual void mappend(BaseProgramRef);
 
 protected:

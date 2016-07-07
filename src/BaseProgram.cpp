@@ -21,16 +21,14 @@ void BaseProgram::update()
 {
 }
 
-void BaseProgram::draw()
+ci::gl::TextureRef BaseProgram::getColorTexture(ci::gl::FboRef fbo)
 {
-	gl::pushViewport();
-	gl::pushMatrices();
+	gl::ScopedFramebuffer sfbo(fbo);
+	gl::ScopedViewport svp(fbo->getSize());
 
-	gl::setMatricesWindow(getColorTexture()->getBounds().getSize());
-	gl::draw(getColorTexture());
+	draw();
 
-	gl::popMatrices();
-	gl::popViewport();
+	return fbo->getColorTexture();
 }
 
 void BaseProgram::mappend(BaseProgramRef)
