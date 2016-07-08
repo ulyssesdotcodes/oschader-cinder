@@ -2,10 +2,10 @@
 
 using namespace ci;
 
-BaseProgramRef FboProgram::create(ProgramRef b)
+EffectProgramRef FboProgram::create(ProgramRef b)
 {
 	ci::gl::FboRef fbo = gl::Fbo::create(app::getWindowWidth(), app::getWindowHeight());
-	return BaseProgramRef(new FboProgram(b, fbo));
+	return EffectProgramRef(new FboProgram(b, fbo));
 }
 
 std::shared_ptr<ci::Camera> FboProgram::camera()
@@ -25,7 +25,7 @@ ci::gl::TextureRef FboProgram::getColorTexture()
 	return mFbo->getColorTexture();
 }
 
-FboProgram::FboProgram(ProgramRef p, ci::gl::FboRef f) : BaseProgram(p), mProg(p), mFbo(f), mLastUpdatedFrame(0)
+FboProgram::FboProgram(ProgramRef p, ci::gl::FboRef f) : EffectProgram(p), mProg(p), mFbo(f), mLastUpdatedFrame(0)
 {
 }
 

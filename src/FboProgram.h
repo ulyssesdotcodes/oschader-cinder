@@ -1,10 +1,10 @@
 #pragma once
 
-#include "BaseProgram.h"
+#include "EffectProgram.h"
 
-class FboProgram : public BaseProgram {
+class FboProgram : public EffectProgram {
 public:
-	static BaseProgramRef create(ProgramRef);
+	static EffectProgramRef create(ProgramRef);
 	virtual std::shared_ptr<ci::Camera> camera();
 	virtual std::shared_ptr<ci::ivec2> matrixWindow();
 

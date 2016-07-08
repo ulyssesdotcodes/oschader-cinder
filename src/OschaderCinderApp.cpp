@@ -6,7 +6,7 @@
 
 #include "ProgramFactory.h"
 
-#include "AdditiveProgram.h"
+//#include "AdditiveProgram.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -18,23 +18,25 @@ class OschaderCinderApp : public App {
 	void update() override;
 	void draw() override;
 
-	void addProgram(BaseProgramRef, int);
+	void addProgram(ProgramRef, int);
 
 private:
 	std::shared_ptr<osc::ReceiverUdp> mOscReceiver;
 
-	std::array<BaseProgramRef, 8> mPrograms;
+	std::array<ProgramRef, 8> mPrograms;
+
+	ProgramFactory mFactory;
 };
 
 void OschaderCinderApp::setup()
 {
-	ProgramFactory factory;
-
 	mOscReceiver = std::shared_ptr<osc::ReceiverUdp>(new osc::ReceiverUdp(9001));
+	mOscReceiver->bind();
+	mOscReceiver->listen();
 
 	for (int i = 0; i < mPrograms.size(); i++) {
-		mOscReceiver->setListener("/shaders/" + std::to_string(i), [&](osc::Message msg) {
-			addProgram(AdditiveProgram::create(factory.createProgram(msg.getArgString(0))), i);
+		mOscReceiver->setListener("/shaders/" + std::to_string(i), [&, i](osc::Message msg) {
+			addProgram(mFactory.createProgram(msg.getArgString(0)), i);
 		});
 
 		mOscReceiver->setListener("/shaders/" + std::to_string(i) + "/uniform", [&](osc::Message msg) {
@@ -43,6 +45,8 @@ void OschaderCinderApp::setup()
 			}
 		});
 	}
+
+	addProgram(mFactory.createProgram("line_down"), 0);
 }
 
 void OschaderCinderApp::update()
@@ -64,15 +68,15 @@ void OschaderCinderApp::draw()
 	}
 }
 
-void OschaderCinderApp::addProgram(BaseProgramRef p, int i)
+void OschaderCinderApp::addProgram(ProgramRef p, int i)
 {
 	mPrograms[i] = p;
-	if (i > 0 && mPrograms[i - 1]) {
-		mPrograms[i - 1]->mappend(p);
-	}
-	if (i < mPrograms.size() - 1 && mPrograms[i + 1]) {
-		p->mappend(mPrograms[i + 1]);
-	}
+	//if (i > 0 && mPrograms[i - 1]) {
+	//	mPrograms[i - 1]->mappend(p);
+	//}
+	//if (i < mPrograms.size() - 1 && mPrograms[i + 1]) {
+	//	p->mappend(mPrograms[i + 1]);
+	//}
 }
 
 CINDER_APP(OschaderCinderApp, RendererGl(), [&](App::Settings *settings) {

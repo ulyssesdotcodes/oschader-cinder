@@ -19,8 +19,19 @@ void Program::updateUniform(std::string name, int val) {
 	mBatch->getGlslProg()->uniform("i_" + name, val);
 }
 
-void Program::draw()
+// Note that it uses fbo a
+gl::Texture2dRef Program::getColorTexture(ci::gl::FboRef a, ci::gl::FboRef b)
 {
+	gl::ScopedFramebuffer fbo(a);
+	gl::ScopedViewport vp(a->getSize());
+	gl::ScopedMatrices ms();
+	gl::setMatricesWindow(a->getSize());
+
+	draw();
+
+	return a->getColorTexture();
+}
+void Program::draw() {
 	gl::pushViewport();
 	gl::pushMatrices();
 

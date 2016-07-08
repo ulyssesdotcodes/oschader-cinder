@@ -54,13 +54,10 @@
     <ClCompile Include="..\src\ProgramRect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\AdditiveProgram.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\BaseProgram.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\FboProgram.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\EffectProgram.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -80,13 +77,10 @@
     <ClInclude Include="..\src\ProgramRect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\AdditiveProgram.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\BaseProgram.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\FboProgram.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\EffectProgram.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

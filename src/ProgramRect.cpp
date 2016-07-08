@@ -6,11 +6,10 @@ ProgramRect::ProgramRect(gl::BatchRef batch) : Program(batch)
 {
 }
 
-BaseProgramRef ProgramRect::create(gl::GlslProgRef prog)
+ProgramRef ProgramRect::create(gl::GlslProgRef prog)
 {
 	gl::BatchRef batch = gl::Batch::create(geom::Rect(app::getWindowBounds()), prog);
-	ProgramRef rectProg = ProgramRef(new ProgramRect(batch));
-	return FboProgram::create(rectProg);
+	return ProgramRef(new ProgramRect(batch));
 }
 
 std::shared_ptr<Camera> ProgramRect::camera()

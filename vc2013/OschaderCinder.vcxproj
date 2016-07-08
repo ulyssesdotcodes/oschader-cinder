@@ -106,8 +106,7 @@
     <None Include="..\assets\shaders\sine.frag" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\AdditiveProgram.cpp" />
-    <ClCompile Include="..\src\BaseProgram.cpp" />
+    <ClCompile Include="..\src\EffectProgram.cpp" />
     <ClCompile Include="..\src\FboProgram.cpp" />
     <ClCompile Include="..\src\FragmentProgram.cpp" />
     <ClCompile Include="..\src\OschaderCinderApp.cpp" />
@@ -119,8 +118,7 @@
   <ItemGroup>
     <ClInclude Include="..\include\Resources.h" />
     <ClInclude Include="..\blocks\OSC\src\Osc.h" />
-    <ClInclude Include="..\src\AdditiveProgram.h" />
-    <ClInclude Include="..\src\BaseProgram.h" />
+    <ClInclude Include="..\src\EffectProgram.h" />
     <ClInclude Include="..\src\FboProgram.h" />
     <ClInclude Include="..\src\FragmentProgram.h" />
     <ClInclude Include="..\src\ProgramRect.h" />

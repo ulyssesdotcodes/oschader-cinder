@@ -5,8 +5,8 @@
 class ProgramFactory {
 public:
 	ProgramFactory();
-	BaseProgramRef createProgram(std::string);
+	ProgramRef createProgram(std::string);
 
 private:
-	std::map<std::string, std::function<BaseProgramRef()>> mConstructorMap;
+	std::map<std::string, std::function<ProgramRef()>> mConstructorMap;
 };

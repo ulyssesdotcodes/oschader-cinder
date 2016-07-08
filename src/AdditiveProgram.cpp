@@ -2,14 +2,9 @@
 
 using namespace ci;
 
-AdditiveProgramRef AdditiveProgram::create(BaseProgramRef a)
+AdditiveProgramRef AdditiveProgram::create(ProgramRef a)
 {
 	return AdditiveProgramRef(new AdditiveProgram(FragmentProgram::create("shaders/additive_blend.frag"), a));
-}
-
-void AdditiveProgram::mappend(BaseProgramRef b)
-{
-	mB = b;
 }
 
 std::shared_ptr<ci::Camera> AdditiveProgram::camera()
@@ -22,13 +17,13 @@ std::shared_ptr<ci::ivec2> AdditiveProgram::matrixWindow()
 	return mBlendProg->matrixWindow();
 }
 
-ci::gl::TextureRef AdditiveProgram::getColorTexture()
+ci::gl::TextureRef AdditiveProgram::getColorTexture(ci::gl::FboRef a, ci::gl::FboRef b)
 {
 	if(mB) {
-		return mBlendProg->getColorTexture();
+		return mBlendProg->getColorTexture(b, a);
 	}
 
-	return mA->getColorTexture();
+	return mA->getColorTexture(a, b);
 }
 
 void AdditiveProgram::updateUniform(std::string name, float val)
@@ -36,7 +31,7 @@ void AdditiveProgram::updateUniform(std::string name, float val)
 	mA->updateUniform(name, val);
 }
 
-void AdditiveProgram::draw()
+void AdditiveProgram::draw(ci::gl::FboRef a, ci::gl::FboRef b)
 {
 	if(mB) {
 		gl::ScopedTextureBind texA(mA->getColorTexture(), 0);
@@ -48,7 +43,7 @@ void AdditiveProgram::draw()
 	}
 }
 
-AdditiveProgram::AdditiveProgram(BaseProgramRef blendProg, BaseProgramRef a) : BaseProgram(blendProg)
+AdditiveProgram::AdditiveProgram(EffectProgramRef blendProg, EffectProgramRef a) : EffectProgram(blendProg)
 {
 	mBlendProg = blendProg;
 	mA = a;
