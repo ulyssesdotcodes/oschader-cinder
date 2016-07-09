@@ -11,17 +11,17 @@ public:
 
 	virtual ci::gl::Texture2dRef getColorTexture(ci::gl::FboRef, ci::gl::FboRef);
 
+	static EffectProgramRef create(std::string frag);
+
 	virtual void draw(ci::gl::FboRef, ci::gl::FboRef);
-	virtual void draw() override;
 
 	virtual void setBase(ProgramRef);
 
 protected:
-	EffectProgram(ProgramRef prog);
+	EffectProgram(ci::gl::BatchRef prog);
 
 private:
 	ProgramRef mBaseProg;
-	ProgramRef mEffectProg;
 
 	uint32_t mLastUpdatedFrame;
 };

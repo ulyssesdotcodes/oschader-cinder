@@ -15,6 +15,7 @@ public:
 	virtual void updateUniform(std::string name, int val);
 
 	virtual ci::gl::Texture2dRef getColorTexture(ci::gl::FboRef, ci::gl::FboRef);
+	virtual void draw(ci::gl::FboRef, ci::gl::FboRef);
 	virtual void draw();
 
 protected:

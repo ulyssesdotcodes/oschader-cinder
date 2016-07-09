@@ -27,9 +27,12 @@ gl::Texture2dRef Program::getColorTexture(ci::gl::FboRef a, ci::gl::FboRef b)
 	gl::ScopedMatrices ms();
 	gl::setMatricesWindow(a->getSize());
 
-	draw();
+	draw(b, a);
 
 	return a->getColorTexture();
+}
+void Program::draw(ci::gl::FboRef, ci::gl::FboRef) {
+	draw();
 }
 void Program::draw() {
 	gl::pushViewport();

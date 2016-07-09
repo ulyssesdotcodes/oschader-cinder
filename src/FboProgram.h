@@ -2,9 +2,9 @@
 
 #include "EffectProgram.h"
 
-class FboProgram : public EffectProgram {
+class FboProgram : public Program {
 public:
-	static EffectProgramRef create(ProgramRef);
+	static ProgramRef create(ProgramRef);
 	virtual std::shared_ptr<ci::Camera> camera();
 	virtual std::shared_ptr<ci::ivec2> matrixWindow();
 

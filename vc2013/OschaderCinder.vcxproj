@@ -46,7 +46,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\include;"..\..\Cinder\include";..\blocks\OSC\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\include;..\..\Cinder\include;..\blocks\OSC\src;..\blocks\Mach7\code\mach7</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WIN32_WINNT=0x0601;_WINDOWS;NOMINMAX;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -114,6 +114,7 @@
     <ClCompile Include="..\src\Program.cpp" />
     <ClCompile Include="..\src\ProgramRect.cpp" />
     <ClCompile Include="..\src\ProgramFactory.cpp" />
+    <ClCompile Include="..\src\ProgramState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Resources.h" />
@@ -124,6 +125,7 @@
     <ClInclude Include="..\src\ProgramRect.h" />
     <ClInclude Include="..\src\Program.h" />
     <ClInclude Include="..\src\ProgramFactory.h" />
+    <ClInclude Include="..\src\ProgramState.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

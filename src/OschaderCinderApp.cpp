@@ -5,6 +5,7 @@
 #include "Osc.h"
 
 #include "ProgramFactory.h"
+#include "ProgramState.h"
 
 //#include "AdditiveProgram.h"
 
@@ -18,15 +19,34 @@ class OschaderCinderApp : public App {
 	void update() override;
 	void draw() override;
 
-	void addProgram(ProgramRef, int);
-
 private:
 	std::shared_ptr<osc::ReceiverUdp> mOscReceiver;
 
-	std::array<ProgramRef, 8> mPrograms;
+	ci::gl::FboRef a, b;
 
 	ProgramFactory mFactory;
+	ProgramState mState;
 };
+
+//s $ p "fade" ["a" 0.98] "s1"
+//pr "s1" $ p "sine"
+//pr "a" $ p "moveY" [1] "a1"
+//pr "a1" $ p "scale" [1]
+//
+//["/shader", "fade"]
+//["/shader/uniform/prog", ["a"]]
+//["/shader/uniform/fade", [0.98]]
+//["/shader/next", ["s1"]]
+//
+//["/progs/s1", "sine"]
+//
+//["/progs/a", "moveY"]
+//["/progs/a/uniform", [1]]
+//["/progs/a/next", ["a1"]]
+//
+//["/progs/a1", ["scale"]]
+//["/progs/a1/uniform/scale", [1]]
+
 
 void OschaderCinderApp::setup()
 {
@@ -34,49 +54,49 @@ void OschaderCinderApp::setup()
 	mOscReceiver->bind();
 	mOscReceiver->listen();
 
-	for (int i = 0; i < mPrograms.size(); i++) {
-		mOscReceiver->setListener("/shaders/" + std::to_string(i), [&, i](osc::Message msg) {
-			addProgram(mFactory.createProgram(msg.getArgString(0)), i);
-		});
+	mOscReceiver->setListener("/shader", [&](const osc::Message msg) {
+		mState.setProgram("s", msg.getArgString(0));
+	});
 
-		mOscReceiver->setListener("/shaders/" + std::to_string(i) + "/uniform", [&](osc::Message msg) {
-			if (mPrograms[i]) {
-				mPrograms[i]->updateUniform(msg.getArgString(0), msg.getArgFloat(1));
-			}
-		});
-	}
+	mOscReceiver->setListener("/shader/uniform/*", [&](const osc::Message msg) {
+		ProgramRef s = mState.getProgram("s");
+		if (s) {
+			s->updateUniform(msg.getAddress().substr(16), msg.getArgFloat(0));
+		}
+	});
 
-	addProgram(mFactory.createProgram("line_down"), 0);
+	mOscReceiver->setListener("/progs/*", [&](const osc::Message msg) {
+		mState.setProgram(msg.getAddress().substr(7), msg.getArgString(0));
+	});
+
+	//for (int i = 0; i < mPrograms.size(); i++) {
+		//mOscReceiver->setListener("/shaders/" + std::to_string(i), [&, i](osc::Message msg) {
+		//	addProgram(mFactory.createProgram(msg.getArgString(0)), i);
+		//});
+
+		//mOscReceiver->setListener("/shaders/" + std::to_string(i) + "/uniform", [&](osc::Message msg) {
+		//	if (mPrograms[i]) {
+		//		mPrograms[i]->updateUniform(msg.getArgString(0), msg.getArgFloat(1));
+		//	}
+		//});
+	//}
+
+	a = gl::Fbo::create(app::getWindowWidth(), app::getWindowHeight());
+	b = gl::Fbo::create(app::getWindowWidth(), app::getWindowHeight());
 }
 
 void OschaderCinderApp::update()
 {
-	float time = app::getElapsedSeconds();
-	std::for_each(mPrograms.begin(), mPrograms.end(), [time](ProgramRef prog) {
-		if (prog) {
-			prog->updateUniform("time", time);
-		}
-	});
 }
 
 void OschaderCinderApp::draw()
 {
 	gl::clear( Color( 0, 0, 0 ) ); 
 
-	if (mPrograms[0]) {
-		mPrograms[0]->draw();
+	ProgramRef s = mState.getProgram("s");
+	if (s) {
+		s->draw(a, b);
 	}
-}
-
-void OschaderCinderApp::addProgram(ProgramRef p, int i)
-{
-	mPrograms[i] = p;
-	//if (i > 0 && mPrograms[i - 1]) {
-	//	mPrograms[i - 1]->mappend(p);
-	//}
-	//if (i < mPrograms.size() - 1 && mPrograms[i + 1]) {
-	//	p->mappend(mPrograms[i + 1]);
-	//}
 }
 
 CINDER_APP(OschaderCinderApp, RendererGl(), [&](App::Settings *settings) {
