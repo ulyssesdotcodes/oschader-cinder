@@ -103,6 +103,7 @@
     <None Include="..\assets\shaders\additive_blend.frag" />
     <None Include="..\assets\shaders\line_down.frag" />
     <None Include="..\assets\shaders\passthrough.vert" />
+    <None Include="..\assets\shaders\scale.frag" />
     <None Include="..\assets\shaders\sine.frag" />
   </ItemGroup>
   <ItemGroup>

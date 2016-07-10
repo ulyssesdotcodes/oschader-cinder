@@ -1,16 +1,17 @@
 #pragma once
 
 #include "Program.h"
-#include "ProgramFactory.h"
+
+
+class ProgramFactory;
 
 class ProgramState {
 public:
-	void setProgram(std::string id, std::string name);
+	void setProgram(std::string id, std::string name, const ProgramFactory&);
 	void setUniform(std::string id, std::string name, float uniform);
 	void clearProgram(std::string id);
 	ProgramRef getProgram(std::string id);
 	
 private:
-	ProgramFactory mFactory;
-	std::map<std::string, ProgramRef> mState;
+	std::map<std::string, std::pair<std::string, ProgramRef>> mState;
 };

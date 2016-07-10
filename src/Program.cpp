@@ -52,3 +52,8 @@ void Program::draw() {
 	gl::popMatrices();
 	gl::popViewport();
 }
+
+void Program::setBase(std::string)
+{
+	throw Exception("Can't set the base of a regular prog.");
+}

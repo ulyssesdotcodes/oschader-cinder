@@ -1,11 +1,13 @@
 #pragma once
 
-#include "FragmentProgram.h"
+#include "Program.h"
+
+#include "ProgramState.h"
 
 class ProgramFactory {
 public:
-	ProgramFactory();
-	ProgramRef createProgram(std::string);
+	void setup(std::shared_ptr<ProgramState>);
+	ProgramRef createProgram(std::string) const;
 
 private:
 	std::map<std::string, std::function<ProgramRef()>> mConstructorMap;

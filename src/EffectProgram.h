@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Program.h"
+#include "ProgramState.h"
 
 typedef std::shared_ptr<class EffectProgram> EffectProgramRef;
 
@@ -11,17 +12,19 @@ public:
 
 	virtual ci::gl::Texture2dRef getColorTexture(ci::gl::FboRef, ci::gl::FboRef);
 
-	static EffectProgramRef create(std::string frag);
+	static EffectProgramRef create(std::shared_ptr<ProgramState>, std::string frag);
 
-	virtual void draw(ci::gl::FboRef, ci::gl::FboRef);
+	virtual void draw(ci::gl::FboRef, ci::gl::FboRef) override;
 
-	virtual void setBase(ProgramRef);
+	virtual void setBase(std::string) override;
 
 protected:
-	EffectProgram(ci::gl::BatchRef prog);
+	EffectProgram(std::shared_ptr<ProgramState>, ci::gl::BatchRef prog);
+	ProgramRef getBaseProgram();
 
 private:
-	ProgramRef mBaseProg;
+	std::shared_ptr<ProgramState> mState;
+	std::string mBaseProg;
 
 	uint32_t mLastUpdatedFrame;
 };

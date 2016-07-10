@@ -2,6 +2,8 @@
 #include "cinder/app/RendererGl.h"
 #include "cinder/gl/gl.h"
 
+#include <regex>
+
 #include "Osc.h"
 
 #include "ProgramFactory.h"
@@ -24,8 +26,8 @@ private:
 
 	ci::gl::FboRef a, b;
 
+	std::shared_ptr<ProgramState> mState;
 	ProgramFactory mFactory;
-	ProgramState mState;
 };
 
 //s $ p "fade" ["a" 0.98] "s1"
@@ -50,36 +52,42 @@ private:
 
 void OschaderCinderApp::setup()
 {
+	mState = std::make_shared<ProgramState>();
+	mFactory.setup(mState);
+
 	mOscReceiver = std::shared_ptr<osc::ReceiverUdp>(new osc::ReceiverUdp(9001));
 	mOscReceiver->bind();
 	mOscReceiver->listen();
 
 	mOscReceiver->setListener("/shader", [&](const osc::Message msg) {
-		mState.setProgram("s", msg.getArgString(0));
+		mState->setProgram("s", msg.getArgString(0), mFactory);
 	});
 
 	mOscReceiver->setListener("/shader/uniform/*", [&](const osc::Message msg) {
-		ProgramRef s = mState.getProgram("s");
+		ProgramRef s = mState->getProgram("s");
 		if (s) {
 			s->updateUniform(msg.getAddress().substr(16), msg.getArgFloat(0));
 		}
 	});
 
-	mOscReceiver->setListener("/progs/*", [&](const osc::Message msg) {
-		mState.setProgram(msg.getAddress().substr(7), msg.getArgString(0));
+	mOscReceiver->setListener("/shader/base", [&](const osc::Message msg) {
+		ProgramRef s = mState->getProgram("s");
+		if (s) {
+			s->setBase(msg.getArgString(0));
+		}
 	});
 
-	//for (int i = 0; i < mPrograms.size(); i++) {
-		//mOscReceiver->setListener("/shaders/" + std::to_string(i), [&, i](osc::Message msg) {
-		//	addProgram(mFactory.createProgram(msg.getArgString(0)), i);
-		//});
+	mOscReceiver->setListener("/progs", [&](const osc::Message msg) {
+		mState->setProgram(msg.getArgString(0), msg.getArgString(1), mFactory);
+	});
 
-		//mOscReceiver->setListener("/shaders/" + std::to_string(i) + "/uniform", [&](osc::Message msg) {
-		//	if (mPrograms[i]) {
-		//		mPrograms[i]->updateUniform(msg.getArgString(0), msg.getArgFloat(1));
-		//	}
-		//});
-	//}
+	mOscReceiver->setListener("/progs/uniform", [&](const osc::Message msg) {
+		ProgramRef p = mState->getProgram(msg.getArgString(0));
+		if (p) {
+			p->updateUniform(msg.getArgString(1), msg.getArgFloat(2));
+		}
+	});
+
 
 	a = gl::Fbo::create(app::getWindowWidth(), app::getWindowHeight());
 	b = gl::Fbo::create(app::getWindowWidth(), app::getWindowHeight());
@@ -93,7 +101,7 @@ void OschaderCinderApp::draw()
 {
 	gl::clear( Color( 0, 0, 0 ) ); 
 
-	ProgramRef s = mState.getProgram("s");
+	ProgramRef s = mState->getProgram("s");
 	if (s) {
 		s->draw(a, b);
 	}

@@ -18,6 +18,8 @@ public:
 	virtual void draw(ci::gl::FboRef, ci::gl::FboRef);
 	virtual void draw();
 
+	virtual void setBase(std::string);
+
 protected:
 	Program(ci::gl::BatchRef);
 
