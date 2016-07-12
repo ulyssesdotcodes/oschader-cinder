@@ -1,10 +1,10 @@
-uniform vec2 i_resolution;
 uniform float i_time;
 
+in vec2 vertTexCoord0;
 out vec4 fragColor;
 
 void main() {
-  vec2 pos = (gl_FragCoord.xy / i_resolution.xy - vec2(0.5)) * vec2(i_resolution.x/i_resolution.y, 1.0);
+  vec2 pos = (vertTexCoord0 + vec2(0.5f)) * 2.0f;
 
   float y = sin(i_time);
 

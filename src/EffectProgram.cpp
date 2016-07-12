@@ -17,7 +17,6 @@ ProgramRef EffectProgram::getBaseProgram()
 EffectProgramRef EffectProgram::create(std::shared_ptr<ProgramState> state, std::string frag) {
 	gl::GlslProgRef prog = gl::GlslProg::create(app::loadAsset("shaders/passthrough.vert"), app::loadAsset(frag));
 	gl::BatchRef batch = gl::Batch::create(geom::Rect(app::getWindowBounds()), prog);
-	prog->uniform("i_resolution", (vec2) app::getWindowSize());
 	return EffectProgramRef(new EffectProgram(state, batch));
 }
 
@@ -46,7 +45,10 @@ ci::gl::Texture2dRef EffectProgram::getColorTexture(ci::gl::FboRef a, ci::gl::Fb
 }
 
 void EffectProgram::draw(ci::gl::FboRef a, ci::gl::FboRef b) {
-	gl::ScopedTextureBind tex(getBaseProgram()->getColorTexture(b, a), 0);
+	ProgramRef p = getBaseProgram();
+	if (p) {
+		gl::ScopedTextureBind tex(getBaseProgram()->getColorTexture(b, a), 0);
+	}
 
 	Program::draw();
 }

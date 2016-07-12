@@ -1,12 +1,20 @@
 uniform vec2 i_resolution;
 uniform float i_time;
+uniform float i_scale;
+uniform float i_amplitude;
+
+in vec2 vertTexCoord0;
 
 out vec4 fragColor;
 
 void main() {
-  vec2 pos = (gl_FragCoord.xy / i_resolution.xy - vec2(0.5)) * vec2(i_resolution.x/i_resolution.y, 1.0);
+  float scale = i_scale + 1.0f; 
+  float amplitude = i_amplitude + 1.0f; 
+  vec2 pos = 2 * (vertTexCoord0 - vec2(0.5));
 
-  float y = sin(pos.x + i_time);
+  pos = pos * scale;
+
+  float y = sin(pos.x + i_time) * amplitude;
 
   float color = max(0, (0.1 - (y - pos.y) * (y - pos.y)) * 10);
 

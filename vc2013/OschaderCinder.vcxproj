@@ -116,6 +116,7 @@
     <ClCompile Include="..\src\ProgramRect.cpp" />
     <ClCompile Include="..\src\ProgramFactory.cpp" />
     <ClCompile Include="..\src\ProgramState.cpp" />
+    <ClCompile Include="..\src\ScaleEffectProgram.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Resources.h" />
