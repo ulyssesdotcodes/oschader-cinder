@@ -48,9 +48,8 @@ void EffectProgram::draw(ci::gl::FboRef a, ci::gl::FboRef b) {
 	ProgramRef p = getBaseProgram();
 	if (p) {
 		gl::ScopedTextureBind tex(getBaseProgram()->getColorTexture(b, a), 0);
+		Program::draw();
 	}
-
-	Program::draw();
 }
 
 void EffectProgram::setBase(std::string base)

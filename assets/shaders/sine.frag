@@ -14,7 +14,7 @@ void main() {
 
   pos = pos * scale;
 
-  float y = sin(pos.x + i_time) * amplitude;
+  float y = sin(pos.x + i_time * 3.1415 * 2.0) * amplitude;
 
   float color = max(0, (0.1 - (y - pos.y) * (y - pos.y)) * 10);
 

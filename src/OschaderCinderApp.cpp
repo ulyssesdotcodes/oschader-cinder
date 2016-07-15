@@ -59,21 +59,10 @@ void OschaderCinderApp::setup()
 	mOscReceiver->bind();
 	mOscReceiver->listen();
 
-	mOscReceiver->setListener("/shader", [&](const osc::Message msg) {
-		mState->setProgram("s", msg.getArgString(0), mFactory);
-	});
-
-	mOscReceiver->setListener("/shader/uniform/*", [&](const osc::Message msg) {
-		ProgramRef s = mState->getProgram("s");
+	mOscReceiver->setListener("/progs/base", [&](const osc::Message msg) {
+		ProgramRef s = mState->getProgram(msg.getArgString(0));
 		if (s) {
-			s->updateUniform(msg.getAddress().substr(16), msg.getArgFloat(0));
-		}
-	});
-
-	mOscReceiver->setListener("/shader/base", [&](const osc::Message msg) {
-		ProgramRef s = mState->getProgram("s");
-		if (s) {
-			s->setBase(msg.getArgString(0));
+			s->setBase(msg.getArgString(1));
 		}
 	});
 
