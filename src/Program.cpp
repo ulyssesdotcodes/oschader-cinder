@@ -20,20 +20,23 @@ void Program::updateUniform(std::string name, int val) {
 }
 
 // Note that it uses fbo a
-gl::Texture2dRef Program::getColorTexture(ci::gl::FboRef a, ci::gl::FboRef b)
+gl::Texture2dRef Program::getColorTexture(ci::gl::FboRef base, ci::gl::FboRef _)
 {
-	gl::ScopedFramebuffer fbo(a);
-	gl::ScopedViewport vp(a->getSize());
+	gl::ScopedFramebuffer fbo(base);
+	gl::ScopedViewport vp(base->getSize());
 	gl::ScopedMatrices ms();
-	gl::setMatricesWindow(a->getSize());
+	gl::setMatricesWindow(base->getSize());
 
-	draw(b, a);
-
-	return a->getColorTexture();
-}
-void Program::draw(ci::gl::FboRef, ci::gl::FboRef) {
 	draw();
+
+	auto effect = getEffect();
+	if (effect) {
+		return effect->getColorTexture(base, _);
+	}
+
+	return base->getColorTexture();
 }
+
 void Program::draw() {
 	gl::pushViewport();
 	gl::pushMatrices();
@@ -53,7 +56,21 @@ void Program::draw() {
 	gl::popViewport();
 }
 
-void Program::setBase(std::string)
+ProgramRef Program::getEffect()
 {
-	throw Exception("Can't set the base of a regular prog.");
+	if(mEffect) {
+		return mState->getProgram(*mEffect);
+	}
+
+	return nullptr; 
+}
+
+void Program::setEffect(std::string eff)
+{
+	mEffect = std::make_shared<std::string>(eff);
+}
+
+void Program::setCombinator(std::string)
+{
+	throw Exception("Can't set the combinator of a regular prog.");
 }

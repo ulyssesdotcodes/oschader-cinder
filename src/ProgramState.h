@@ -5,6 +5,9 @@
 
 class ProgramFactory;
 
+class ProgramState;
+typedef std::shared_ptr<ProgramState> ProgramStateRef;
+
 class ProgramState {
 public:
 	void setProgram(std::string id, std::string name, const ProgramFactory&);

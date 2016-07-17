@@ -59,10 +59,17 @@ void OschaderCinderApp::setup()
 	mOscReceiver->bind();
 	mOscReceiver->listen();
 
-	mOscReceiver->setListener("/progs/base", [&](const osc::Message msg) {
+	mOscReceiver->setListener("/progs/effect", [&](const osc::Message msg) {
 		ProgramRef s = mState->getProgram(msg.getArgString(0));
 		if (s) {
 			s->setBase(msg.getArgString(1));
+		}
+	});
+
+	mOscReceiver->setListener("/progs/combinator", [&](const osc::Message msg) {
+		ProgramRef s = mState->getProgram(msg.getArgString(0));
+		if (s) {
+			s->setCombinator(msg.getArgString(1));
 		}
 	});
 

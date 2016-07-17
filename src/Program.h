@@ -3,6 +3,8 @@
 #include "cinder/gl/gl.h"
 #include "cinder/app/App.h"
 
+#include "ProgramState.h"
+
 typedef std::shared_ptr<class Program> ProgramRef;
 
 class Program {
@@ -15,15 +17,18 @@ public:
 	virtual void updateUniform(std::string name, int val);
 
 	virtual ci::gl::Texture2dRef getColorTexture(ci::gl::FboRef, ci::gl::FboRef);
-	virtual void draw(ci::gl::FboRef, ci::gl::FboRef);
-	virtual void draw();
 
-	virtual void setBase(std::string);
+	virtual void setEffect(std::string);
+	virtual void setCombinator(std::string);
 
 protected:
-	Program(ci::gl::BatchRef);
-
+	Program(ci::gl::BatchRef, ProgramstateRef);
+	virtual void draw();
+	ProgramRef getEffect();
 
 private:
 	ci::gl::BatchRef mBatch;
+	std::shared_ptr<std::string> mEffect;
+	ProgramStateRef mState;
+
 };

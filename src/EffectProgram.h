@@ -14,16 +14,12 @@ public:
 
 	static EffectProgramRef create(std::shared_ptr<ProgramState>, std::string frag);
 
-	virtual void draw(ci::gl::FboRef, ci::gl::FboRef) override;
-
-	virtual void setBase(std::string) override;
+	virtual void setCombinator(std::string) override;
 
 protected:
 	EffectProgram(std::shared_ptr<ProgramState>, ci::gl::BatchRef prog);
-	ProgramRef getBaseProgram();
 
 private:
-	std::shared_ptr<ProgramState> mState;
 	std::string mBaseProg;
 
 	uint32_t mLastUpdatedFrame;
