@@ -4,5 +4,5 @@
 
 class FragmentProgram : public ProgramRect {
 public:
-	static ProgramRef create(const ci::fs::path);
+	static ProgramRef create(ProgramStateRef, const ci::fs::path);
 };

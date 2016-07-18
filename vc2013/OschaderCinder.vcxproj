@@ -108,7 +108,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\EffectProgram.cpp" />
-    <ClCompile Include="..\src\FboProgram.cpp" />
     <ClCompile Include="..\src\FragmentProgram.cpp" />
     <ClCompile Include="..\src\OschaderCinderApp.cpp" />
     <ClCompile Include="..\blocks\OSC\src\Osc.cpp" />
@@ -116,13 +115,11 @@
     <ClCompile Include="..\src\ProgramRect.cpp" />
     <ClCompile Include="..\src\ProgramFactory.cpp" />
     <ClCompile Include="..\src\ProgramState.cpp" />
-    <ClCompile Include="..\src\ScaleEffectProgram.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Resources.h" />
     <ClInclude Include="..\blocks\OSC\src\Osc.h" />
     <ClInclude Include="..\src\EffectProgram.h" />
-    <ClInclude Include="..\src\FboProgram.h" />
     <ClInclude Include="..\src\FragmentProgram.h" />
     <ClInclude Include="..\src\ProgramRect.h" />
     <ClInclude Include="..\src\Program.h" />

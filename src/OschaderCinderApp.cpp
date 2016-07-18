@@ -62,7 +62,7 @@ void OschaderCinderApp::setup()
 	mOscReceiver->setListener("/progs/effect", [&](const osc::Message msg) {
 		ProgramRef s = mState->getProgram(msg.getArgString(0));
 		if (s) {
-			s->setBase(msg.getArgString(1));
+			s->setEffect(msg.getArgString(1));
 		}
 	});
 
@@ -74,7 +74,7 @@ void OschaderCinderApp::setup()
 	});
 
 	mOscReceiver->setListener("/progs", [&](const osc::Message msg) {
-		mState->setProgram(msg.getArgString(0), msg.getArgString(1), mFactory);
+		mState->setProgram(msg.getArgString(0), msg.getArgString(1), std::bind(&ProgramFactory::createProgram, mFactory, msg.getArgString(1)));
 	});
 
 	mOscReceiver->setListener("/progs/uniform", [&](const osc::Message msg) {
@@ -99,7 +99,7 @@ void OschaderCinderApp::draw()
 
 	ProgramRef s = mState->getProgram("s");
 	if (s) {
-		s->draw(a, b);
+		gl::draw(s->getColorTexture(a, b));
 	}
 }
 

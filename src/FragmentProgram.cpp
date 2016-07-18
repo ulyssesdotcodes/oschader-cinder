@@ -2,9 +2,9 @@
 
 using namespace ci;
 
-ProgramRef FragmentProgram::create(const ci::fs::path path)
+ProgramRef FragmentProgram::create(ProgramStateRef state, const ci::fs::path path)
 {
 	gl::GlslProgRef prog = gl::GlslProg::create(app::loadAsset("shaders/passthrough.vert"), app::loadAsset(path));
 	prog->uniform("i_resolution", (vec2) app::getWindowSize());
-	return ProgramRect::create(prog);
+	return ProgramRect::create(prog, state);
 }

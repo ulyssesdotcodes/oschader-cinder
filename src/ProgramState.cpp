@@ -1,18 +1,11 @@
 #include "ProgramState.h"
 
-#include "ProgramFactory.h"
-
-void ProgramState::setProgram(std::string id, std::string name, const ProgramFactory &factory)
+void ProgramState::setProgram(std::string id, std::string name, std::function<std::shared_ptr<Program>()> createProgram)
 {
 	auto s = mState.find(id);
 	if(s == mState.end() || s->second.first != name) {
-		mState[id] = std::pair<std::string, ProgramRef>(name, factory.createProgram(name));
+		mState[id] = std::pair<std::string, std::shared_ptr<Program>>(name, createProgram());
 	}
-}
-
-void ProgramState::setUniform(std::string id, std::string name, float uniform)
-{
-	mState[id].second->updateUniform(name, uniform);
 }
 
 void ProgramState::clearProgram(std::string id)
@@ -20,7 +13,7 @@ void ProgramState::clearProgram(std::string id)
 	return;
 }
 
-ProgramRef ProgramState::getProgram(std::string id)
+std::shared_ptr<Program> ProgramState::getProgram(std::string id)
 {
 	auto p = mState.find(id);
 	return p == mState.end() ? nullptr : mState.at(id).second;

@@ -3,9 +3,8 @@
 using namespace ci;
 
 EffectProgram::EffectProgram(std::shared_ptr<ProgramState> state, ci::gl::BatchRef prog) :
-	Program(prog), mLastUpdatedFrame(0)
+	Program(prog, state), mLastUpdatedFrame(0)
 {
-	mState = state;
 	updateUniform("tex_base", 0);
 }
 

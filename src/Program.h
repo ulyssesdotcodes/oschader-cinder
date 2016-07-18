@@ -22,7 +22,7 @@ public:
 	virtual void setCombinator(std::string);
 
 protected:
-	Program(ci::gl::BatchRef, ProgramstateRef);
+	Program(ci::gl::BatchRef, ProgramStateRef);
 	virtual void draw();
 	ProgramRef getEffect();
 

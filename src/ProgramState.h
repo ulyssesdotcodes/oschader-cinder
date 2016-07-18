@@ -1,20 +1,22 @@
 #pragma once
 
-#include "Program.h"
-
+#include <memory>
+#include <string>
+#include <map>
+#include <functional>
 
 class ProgramFactory;
+class Program;
 
 class ProgramState;
 typedef std::shared_ptr<ProgramState> ProgramStateRef;
 
 class ProgramState {
 public:
-	void setProgram(std::string id, std::string name, const ProgramFactory&);
-	void setUniform(std::string id, std::string name, float uniform);
+	void setProgram(std::string id, std::string name, std::function<std::shared_ptr<Program>()>);
 	void clearProgram(std::string id);
-	ProgramRef getProgram(std::string id);
+	std::shared_ptr<Program> getProgram(std::string id);
 	
 private:
-	std::map<std::string, std::pair<std::string, ProgramRef>> mState;
+	std::map<std::string, std::pair<std::string, std::shared_ptr<Program>>> mState;
 };

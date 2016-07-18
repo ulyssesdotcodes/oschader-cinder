@@ -2,7 +2,7 @@
 
 using namespace ci;
 
-Program::Program(gl::BatchRef batch) : mBatch(batch)
+Program::Program(gl::BatchRef batch, ProgramStateRef state) : mBatch(batch), mState(state)
 {
 }
 
