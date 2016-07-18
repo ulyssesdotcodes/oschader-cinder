@@ -16,19 +16,20 @@ public:
 	virtual void updateUniform(std::string name, float val);
 	virtual void updateUniform(std::string name, int val);
 
-	virtual ci::gl::Texture2dRef getColorTexture(ci::gl::FboRef, ci::gl::FboRef);
+	virtual ci::gl::Texture2dRef getColorTexture(ci::gl::FboRef base, ci::gl::FboRef extra);
 
 	virtual void setEffect(std::string);
-	virtual void setCombinator(std::string);
+	virtual void clearEffect();
+	virtual void setConnection(std::string);
 
 protected:
 	Program(ci::gl::BatchRef, ProgramStateRef);
 	virtual void draw();
 	ProgramRef getEffect();
+	ProgramRef getProgram(std::string);
 
 private:
 	ci::gl::BatchRef mBatch;
 	std::shared_ptr<std::string> mEffect;
 	ProgramStateRef mState;
-
 };

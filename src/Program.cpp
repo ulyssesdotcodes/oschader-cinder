@@ -65,12 +65,22 @@ ProgramRef Program::getEffect()
 	return nullptr; 
 }
 
+ProgramRef Program::getProgram(std::string id)
+{
+	return mState->getProgram(id);
+}
+
 void Program::setEffect(std::string eff)
 {
 	mEffect = std::make_shared<std::string>(eff);
 }
 
-void Program::setCombinator(std::string)
+void Program::clearEffect()
+{
+	mEffect = nullptr;
+}
+
+void Program::setConnection(std::string)
 {
 	throw Exception("Can't set the combinator of a regular prog.");
 }

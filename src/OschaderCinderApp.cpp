@@ -66,10 +66,17 @@ void OschaderCinderApp::setup()
 		}
 	});
 
+	mOscReceiver->setListener("/progs/effect/clear", [&](const osc::Message msg) {
+		ProgramRef s = mState->getProgram(msg.getArgString(0));
+		if (s) {
+			s->clearEffect();
+		}
+	});
+
 	mOscReceiver->setListener("/progs/combinator", [&](const osc::Message msg) {
 		ProgramRef s = mState->getProgram(msg.getArgString(0));
 		if (s) {
-			s->setCombinator(msg.getArgString(1));
+			s->setConnection(msg.getArgString(1));
 		}
 	});
 

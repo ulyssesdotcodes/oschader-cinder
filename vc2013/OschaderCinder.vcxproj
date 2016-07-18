@@ -100,6 +100,7 @@
     <ResourceCompile Include="Resources.rc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\assets\fade.frag" />
     <None Include="..\assets\shaders\additive_blend.frag" />
     <None Include="..\assets\shaders\line_down.frag" />
     <None Include="..\assets\shaders\passthrough.vert" />
@@ -107,7 +108,9 @@
     <None Include="..\assets\shaders\sine.frag" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\EffectProgram.cpp" />
+    <ClCompile Include="..\src\ConnectionProgram.cpp" />
+    <ClCompile Include="..\src\EffectRect.cpp" />
+    <ClCompile Include="..\src\FadeEffect.cpp" />
     <ClCompile Include="..\src\FragmentProgram.cpp" />
     <ClCompile Include="..\src\OschaderCinderApp.cpp" />
     <ClCompile Include="..\blocks\OSC\src\Osc.cpp" />
@@ -119,7 +122,9 @@
   <ItemGroup>
     <ClInclude Include="..\include\Resources.h" />
     <ClInclude Include="..\blocks\OSC\src\Osc.h" />
-    <ClInclude Include="..\src\EffectProgram.h" />
+    <ClInclude Include="..\src\ConnectionProgram.h" />
+    <ClInclude Include="..\src\EffectRect.h" />
+    <ClInclude Include="..\src\FadeEffect.h" />
     <ClInclude Include="..\src\FragmentProgram.h" />
     <ClInclude Include="..\src\ProgramRect.h" />
     <ClInclude Include="..\src\Program.h" />

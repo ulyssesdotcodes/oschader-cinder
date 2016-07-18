@@ -1,6 +1,6 @@
 #pragma once
 
-#include "EffectProgram.h"
+#include "Program.h"
 
 #include "ProgramState.h"
 
