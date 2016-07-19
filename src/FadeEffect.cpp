@@ -12,31 +12,31 @@ ProgramRef FadeEffect::create(ProgramStateRef state)
 ci::gl::Texture2dRef FadeEffect::getColorTexture(ci::gl::FboRef base, ci::gl::FboRef last)
 {
 	{
-		gl::ScopedFramebuffer fbo(last);
+		// Scope mLastFrame to be updated
+		gl::ScopedFramebuffer lastF(base);
+
+		gl::ScopedTextureBind baseT(base->getColorTexture(), 0);
+		gl::ScopedTextureBind lastT(mLastFrame->getColorTexture(), 1);
+
+		// Draw the base 
+		Program::draw();
+	}
+
+	{
+		gl::ScopedFramebuffer fbo(mLastFrame);
 		gl::clear(Color::black());
 
 		if (getEffect()) {
 			// Draw last frame with the effects
-			gl::draw(getEffect()->getColorTexture(mLastFrame, last));
+			gl::draw(getEffect()->getColorTexture(base, last));
 		}
 		else {
 			gl::draw(mLastFrame->getColorTexture());
 		}
 	}
 
-	{
-		// Scope mLastFrame to be updated
-		gl::ScopedFramebuffer lastF(mLastFrame);
-		gl::clear(Color::black());
 
-		gl::ScopedTextureBind baseT(base->getColorTexture(), 0);
-		gl::ScopedTextureBind lastT(last->getColorTexture(), 1);
-
-		// Draw the base 
-		Program::draw();
-	}
-
-	return mLastFrame->getColorTexture();
+	return base->getColorTexture();
 }
 
 FadeEffect::FadeEffect(ProgramStateRef state, ci::gl::BatchRef r) : Program(r, state), ProgramRect(r, state)
