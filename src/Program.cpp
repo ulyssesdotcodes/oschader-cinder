@@ -22,12 +22,11 @@ void Program::updateUniform(std::string name, int val) {
 // Note that it uses fbo a
 gl::Texture2dRef Program::getColorTexture(ci::gl::FboRef base, ci::gl::FboRef _)
 {
-	gl::ScopedFramebuffer fbo(base);
-	gl::ScopedViewport vp(base->getSize());
-	gl::ScopedMatrices ms();
-	gl::setMatricesWindow(base->getSize());
+	{
+		gl::ScopedFramebuffer fbo(base);
 
-	draw();
+		draw();
+	}
 
 	auto effect = getEffect();
 	if (effect) {

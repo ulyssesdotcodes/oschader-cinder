@@ -13,26 +13,21 @@ ci::gl::Texture2dRef FadeEffect::getColorTexture(ci::gl::FboRef base, ci::gl::Fb
 {
 	{
 		gl::ScopedFramebuffer fbo(last);
+		gl::clear(Color::black());
+
 		if (getEffect()) {
 			// Draw last frame with the effects
 			gl::draw(getEffect()->getColorTexture(mLastFrame, last));
 		}
 		else {
-			gl::pushViewport();
-			gl::pushMatrices();
-
-			gl::setMatricesWindow(*matrixWindow());
-
 			gl::draw(mLastFrame->getColorTexture());
-
-			gl::popMatrices();
-			gl::popViewport();
 		}
 	}
 
 	{
 		// Scope mLastFrame to be updated
 		gl::ScopedFramebuffer lastF(mLastFrame);
+		gl::clear(Color::black());
 
 		gl::ScopedTextureBind baseT(base->getColorTexture(), 0);
 		gl::ScopedTextureBind lastT(last->getColorTexture(), 1);
@@ -46,7 +41,12 @@ ci::gl::Texture2dRef FadeEffect::getColorTexture(ci::gl::FboRef base, ci::gl::Fb
 
 FadeEffect::FadeEffect(ProgramStateRef state, ci::gl::BatchRef r) : Program(r, state), ProgramRect(r, state)
 {
-	mLastFrame = gl::Fbo::create(app::getWindowWidth(), app::getWindowHeight());
-	updateUniform("tex_last", 1);
+	gl::Texture::Format fmt;
+	fmt.setWrap(GL_CLAMP_TO_BORDER, GL_CLAMP_TO_BORDER);
+	fmt.setBorderColor(Color::black());
+	gl::Fbo::Format fboFmt;
+	fboFmt.setColorTextureFormat(fmt);
+	mLastFrame = gl::Fbo::create(app::getWindowWidth(), app::getWindowHeight(), fboFmt);
 	updateUniform("tex_base", 0);
+	updateUniform("tex_last", 1);
 }
