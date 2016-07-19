@@ -30,26 +30,6 @@ private:
 	ProgramFactory mFactory;
 };
 
-//s $ p "fade" ["a" 0.98] "s1"
-//pr "s1" $ p "sine"
-//pr "a" $ p "moveY" [1] "a1"
-//pr "a1" $ p "scale" [1]
-//
-//["/shader", "fade"]
-//["/shader/uniform/prog", ["a"]]
-//["/shader/uniform/fade", [0.98]]
-//["/shader/next", ["s1"]]
-//
-//["/progs/s1", "sine"]
-//
-//["/progs/a", "moveY"]
-//["/progs/a/uniform", [1]]
-//["/progs/a/next", ["a1"]]
-//
-//["/progs/a1", ["scale"]]
-//["/progs/a1/uniform/scale", [1]]
-
-
 void OschaderCinderApp::setup()
 {
 	mState = std::make_shared<ProgramState>();
@@ -66,10 +46,17 @@ void OschaderCinderApp::setup()
 		}
 	});
 
+	mOscReceiver->setListener("/progs/effect/clear", [&](const osc::Message msg) {
+		ProgramRef s = mState->getProgram(msg.getArgString(0));
+		if (s) {
+			s->clearEffect();
+		}
+	});
+
 	mOscReceiver->setListener("/progs/combinator", [&](const osc::Message msg) {
 		ProgramRef s = mState->getProgram(msg.getArgString(0));
 		if (s) {
-			s->setCombinator(msg.getArgString(1));
+			s->setConnection(msg.getArgString(1));
 		}
 	});
 
@@ -85,8 +72,14 @@ void OschaderCinderApp::setup()
 	});
 
 
-	a = gl::Fbo::create(app::getWindowWidth(), app::getWindowHeight());
-	b = gl::Fbo::create(app::getWindowWidth(), app::getWindowHeight());
+	gl::Texture::Format fmt;
+	fmt.setWrap(GL_CLAMP_TO_BORDER, GL_CLAMP_TO_BORDER);
+	fmt.setBorderColor(Color::black());
+
+	gl::Fbo::Format fboFmt;
+	fboFmt.setColorTextureFormat(fmt);
+	a = gl::Fbo::create(app::getWindowWidth(), app::getWindowHeight(), fboFmt);
+	b = gl::Fbo::create(app::getWindowWidth(), app::getWindowHeight(), fboFmt);
 }
 
 void OschaderCinderApp::update()

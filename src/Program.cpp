@@ -22,12 +22,11 @@ void Program::updateUniform(std::string name, int val) {
 // Note that it uses fbo a
 gl::Texture2dRef Program::getColorTexture(ci::gl::FboRef base, ci::gl::FboRef _)
 {
-	gl::ScopedFramebuffer fbo(base);
-	gl::ScopedViewport vp(base->getSize());
-	gl::ScopedMatrices ms();
-	gl::setMatricesWindow(base->getSize());
+	{
+		gl::ScopedFramebuffer fbo(base);
 
-	draw();
+		draw();
+	}
 
 	auto effect = getEffect();
 	if (effect) {
@@ -65,12 +64,22 @@ ProgramRef Program::getEffect()
 	return nullptr; 
 }
 
+ProgramRef Program::getProgram(std::string id)
+{
+	return mState->getProgram(id);
+}
+
 void Program::setEffect(std::string eff)
 {
 	mEffect = std::make_shared<std::string>(eff);
 }
 
-void Program::setCombinator(std::string)
+void Program::clearEffect()
+{
+	mEffect = nullptr;
+}
+
+void Program::setConnection(std::string)
 {
 	throw Exception("Can't set the combinator of a regular prog.");
 }
