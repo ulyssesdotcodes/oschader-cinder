@@ -1,9 +1,6 @@
 #pragma once
 
-#include <memory>
-#include <string>
-#include <map>
-#include <functional>
+#include "InputState.h"
 
 class ProgramFactory;
 class Program;
@@ -13,6 +10,7 @@ typedef std::shared_ptr<ProgramState> ProgramStateRef;
 
 class ProgramState {
 public:
+	void update(std::function<void(std::shared_ptr<Program>)> updateFn);
 	void setProgram(std::string id, std::string name, std::function<std::shared_ptr<Program>()>);
 	void clearProgram(std::string id);
 	std::shared_ptr<Program> getProgram(std::string id);

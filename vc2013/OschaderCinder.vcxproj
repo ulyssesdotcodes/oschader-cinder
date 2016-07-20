@@ -102,12 +102,14 @@
   <ItemGroup>
     <None Include="..\assets\fade.frag" />
     <None Include="..\assets\shaders\additive_blend.frag" />
+    <None Include="..\assets\shaders\audio_data.frag" />
     <None Include="..\assets\shaders\line_down.frag" />
     <None Include="..\assets\shaders\passthrough.vert" />
     <None Include="..\assets\shaders\scale.frag" />
     <None Include="..\assets\shaders\sine.frag" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\AudioSource.cpp" />
     <ClCompile Include="..\src\ConnectionProgram.cpp" />
     <ClCompile Include="..\src\EffectRect.cpp" />
     <ClCompile Include="..\src\FadeEffect.cpp" />
@@ -122,6 +124,8 @@
   <ItemGroup>
     <ClInclude Include="..\include\Resources.h" />
     <ClInclude Include="..\blocks\OSC\src\Osc.h" />
+    <ClInclude Include="..\src\AudioSource.h" />
+    <ClInclude Include="..\src\InputState.h" />
     <ClInclude Include="..\src\ConnectionProgram.h" />
     <ClInclude Include="..\src\EffectRect.h" />
     <ClInclude Include="..\src\FadeEffect.h" />

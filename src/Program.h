@@ -3,6 +3,7 @@
 #include "cinder/gl/gl.h"
 #include "cinder/app/App.h"
 
+#include "InputState.h"
 #include "ProgramState.h"
 
 typedef std::shared_ptr<class Program> ProgramRef;
@@ -14,6 +15,7 @@ public:
 	ci::gl::BatchRef batch();
 
 	virtual void updateUniform(std::string name, float val);
+	virtual void updateUniform(std::string name, std::string, float modifier);
 	virtual void updateUniform(std::string name, int val);
 
 	virtual ci::gl::Texture2dRef getColorTexture(ci::gl::FboRef base, ci::gl::FboRef extra);
@@ -21,6 +23,8 @@ public:
 	virtual void setEffect(std::string);
 	virtual void clearEffect();
 	virtual void setConnection(std::string);
+
+	virtual void update(input::InputState);
 
 protected:
 	Program(ci::gl::BatchRef, ProgramStateRef);
@@ -30,6 +34,8 @@ protected:
 
 private:
 	ci::gl::BatchRef mBatch;
+	std::map<std::string, std::pair<input::InputType, float>> mInputUniforms;
 	std::shared_ptr<std::string> mEffect;
 	ProgramStateRef mState;
+	input::InputState mLastInputState;
 };

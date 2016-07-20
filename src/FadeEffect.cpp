@@ -31,7 +31,7 @@ ci::gl::Texture2dRef FadeEffect::getColorTexture(ci::gl::FboRef base, ci::gl::Fb
 			gl::draw(getEffect()->getColorTexture(base, last));
 		}
 		else {
-			gl::draw(mLastFrame->getColorTexture());
+			gl::draw(base->getColorTexture());
 		}
 	}
 

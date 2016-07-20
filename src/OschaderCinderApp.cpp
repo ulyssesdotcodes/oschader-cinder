@@ -6,6 +6,8 @@
 
 #include "Osc.h"
 
+#include "AudioSource.h"
+#include "InputState.h"
 #include "ProgramFactory.h"
 #include "ProgramState.h"
 
@@ -28,12 +30,15 @@ private:
 
 	std::shared_ptr<ProgramState> mState;
 	ProgramFactory mFactory;
+	AudioSource mAudioSource;
 };
 
 void OschaderCinderApp::setup()
 {
 	mState = std::make_shared<ProgramState>();
 	mFactory.setup(mState);
+	
+	mAudioSource.setup();
 
 	mOscReceiver = std::shared_ptr<osc::ReceiverUdp>(new osc::ReceiverUdp(9001));
 	mOscReceiver->bind();
@@ -67,7 +72,12 @@ void OschaderCinderApp::setup()
 	mOscReceiver->setListener("/progs/uniform", [&](const osc::Message msg) {
 		ProgramRef p = mState->getProgram(msg.getArgString(0));
 		if (p) {
-			p->updateUniform(msg.getArgString(1), msg.getArgFloat(2));
+			if(msg.getArgType(2) == osc::ArgType::FLOAT) {
+				p->updateUniform(msg.getArgString(1), msg.getArgFloat(2));
+			}
+			else if (msg.getArgType(2) == osc::ArgType::STRING) {
+				p->updateUniform(msg.getArgString(1), msg.getArgString(2), msg.getArgFloat(3));
+			}
 		}
 	});
 
@@ -84,6 +94,13 @@ void OschaderCinderApp::setup()
 
 void OschaderCinderApp::update()
 {
+	input::InputState is;
+	is.audioTexture = mAudioSource.getMagSpectrumTexture();
+	is.volume = mAudioSource.getVolume(); 
+
+	mState->update([is](std::shared_ptr<Program> prog) {
+		prog->update(is);
+	});
 }
 
 void OschaderCinderApp::draw()
@@ -97,12 +114,12 @@ void OschaderCinderApp::draw()
 }
 
 CINDER_APP(OschaderCinderApp, RendererGl(), [&](App::Settings *settings) {
-	//FullScreenOptions options;
-	//std::vector<DisplayRef> displays = Display::getDisplays();
-	//settings->setConsoleWindowEnabled();
-	//settings->setFullScreen(true, options);	
-	//if (displays.size() > 1) {
-	//	settings->setDisplay(displays[1]);
-	//}
-	//settings->setFrameRate(60.0f);
+	FullScreenOptions options;
+	std::vector<DisplayRef> displays = Display::getDisplays();
+	settings->setConsoleWindowEnabled();
+	settings->setFullScreen(true, options);	
+	if (displays.size() > 1) {
+		settings->setDisplay(displays[1]);
+	}
+	settings->setFrameRate(60.0f);
 })

@@ -66,6 +66,9 @@
     <ClCompile Include="..\src\EffectRect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\AudioSource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Resources.h">
@@ -95,6 +98,12 @@
     <ClInclude Include="..\src\EffectRect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\InputState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\AudioSource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resources.rc">
@@ -118,6 +127,9 @@
       <Filter>Assets</Filter>
     </None>
     <None Include="..\assets\fade.frag">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="..\assets\shaders\audio_data.frag">
       <Filter>Assets</Filter>
     </None>
   </ItemGroup>

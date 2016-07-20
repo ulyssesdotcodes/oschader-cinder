@@ -1,5 +1,14 @@
 #include "ProgramState.h"
 
+using namespace input;
+
+void ProgramState::update(std::function<void(std::shared_ptr<Program>)> updateFn)
+{
+	for (std::pair<std::string, std::pair<std::string, std::shared_ptr<Program>>> prog : mState) {
+		updateFn(prog.second.second);
+	}
+}
+
 void ProgramState::setProgram(std::string id, std::string name, std::function<std::shared_ptr<Program>()> createProgram)
 {
 	auto s = mState.find(id);
