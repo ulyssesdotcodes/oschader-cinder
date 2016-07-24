@@ -141,5 +141,8 @@
     <None Include="..\assets\shaders\repeat.frag">
       <Filter>Assets</Filter>
     </None>
+    <None Include="..\assets\shaders\dots.frag">
+      <Filter>Assets</Filter>
+    </None>
   </ItemGroup>
 </Project>

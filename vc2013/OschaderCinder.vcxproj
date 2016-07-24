@@ -103,6 +103,7 @@
     <None Include="..\assets\fade.frag" />
     <None Include="..\assets\shaders\additive_blend.frag" />
     <None Include="..\assets\shaders\audio_data.frag" />
+    <None Include="..\assets\shaders\dots.frag" />
     <None Include="..\assets\shaders\repeat.frag" />
     <None Include="..\assets\shaders\line_down.frag" />
     <None Include="..\assets\shaders\passthrough.vert" />

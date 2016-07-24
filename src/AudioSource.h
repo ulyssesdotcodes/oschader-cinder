@@ -12,8 +12,11 @@ public:
 	float getVolume();
 	float getAccumulatedSound();
 	float getHighestVolumePos();
-	std::vector<float> getEqs(int binCount);
-	std::vector<float> getEqs(int binCount, float scale);
+	//std::vector<float> getEqs(int binCount);
+	//std::vector<float> getEqs(int binCount, float scale);
+
+	ci::gl::TextureRef getEqTexture(int);
+	std::vector<float> getEqs(int);
 
 private:
 	ci::audio::InputDeviceNodeRef mInputNode;

@@ -60,10 +60,13 @@ gl::Texture2dRef Program::getColorTexture(ci::gl::FboRef base, ci::gl::FboRef _)
 
 void Program::draw() {
 	int i = 1; // Leave room for effect
+	std::vector<gl::TextureRef> texes;
 	for (std::pair<std::string, std::pair<InputType, float>> e : mInputUniforms) {
 		if(isTexture(e.second.first)) {
 			mBatch->getGlslProg()->uniform("i_" + e.first, i);
-			getTexture(mLastInputState, e.second.first)->bind(i);
+			gl::TextureRef tex = getTexture(mLastInputState, e.second.first, e.second.second);
+			texes.push_back(tex);
+			tex->bind(i);
 			mBatch->getGlslProg()->uniform("i_" + e.first + "_mod", e.second.second);
 			++i;
 		}

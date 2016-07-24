@@ -97,6 +97,7 @@ void OschaderCinderApp::update()
 	input::InputState is;
 	is.audioTexture = mAudioSource.getMagSpectrumTexture();
 	is.volume = mAudioSource.getVolume(); 
+	is.eqTexture = std::bind(&AudioSource::getEqTexture, mAudioSource, std::placeholders::_1);
 
 	mState->update([is](std::shared_ptr<Program> prog) {
 		prog->update(is);

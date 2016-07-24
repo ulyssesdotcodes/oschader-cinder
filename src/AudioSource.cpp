@@ -96,11 +96,11 @@ float AudioSource::getAccumulatedSound()
 	return mAccumulatedSound;
 }
 
-std::vector<float> AudioSource::getEqs(int binCount) {
-	return getEqs(binCount, 1.0);
-}
-
-std::vector<float> AudioSource::getEqs(int binCount, float scale)
+//std::vector<float> AudioSource::getEqs(int binCount) {
+//	return getEqs(binCount, 1.0);
+//}
+//
+std::vector<float> AudioSource::getEqs(int binCount)
 {
 	std::vector<float> buffer = getMagSpectrum();
 	std::vector<float> bins(binCount);
@@ -117,8 +117,34 @@ std::vector<float> AudioSource::getEqs(int binCount, float scale)
 
 	for (std::vector<float>::iterator it = bins.begin(); it != bins.end(); ++it) {
 		// 100.0f to account for linear to decibal
-		*it = *it * scale/ binSize;
+		*it = *it / binSize;
 	}
 
 	return bins;
+}
+
+gl::TextureRef AudioSource::getEqTexture(int binCount) {
+	std::vector<float> buffer = getMagSpectrum();
+	std::vector<float> bins(binCount);
+	float eqs[512 * 3];
+
+	int binSize = buffer.size() * 0.5f / binCount;
+	for (std::vector<float>::size_type i = 0; i < buffer.size() * 0.5f; i++) {
+		int bin = i / binSize;
+
+		// Just discard the last one if it fits perfectly.
+		if(bin < bins.size()) {
+			bins[bin] += glm::pow(buffer[i], 2.0 - ((float) i / (float) buffer.size()));
+		}
+	}
+
+	for (std::vector<float>::size_type i = 0; i < binCount * binSize; i++) {
+		int bin = i / binSize;
+
+		eqs[i * 3] = bins[bin] / binSize;
+		eqs[i * 3 + 1] = bins[bin] / binSize;
+		eqs[i * 3 + 2] = 0;
+	}
+
+	return gl::Texture::create(Surface32f(eqs, 512, 1, 4, SurfaceChannelOrder::RGB));
 }
