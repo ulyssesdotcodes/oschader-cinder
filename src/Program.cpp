@@ -59,7 +59,7 @@ gl::Texture2dRef Program::getColorTexture(ci::gl::FboRef base, ci::gl::FboRef _)
 }
 
 void Program::draw() {
-	int i = 1; // Leave room for effect
+	int i = 2; // Leave room for effect and layer
 	std::vector<gl::TextureRef> texes;
 	for (std::pair<std::string, std::pair<InputType, float>> e : mInputUniforms) {
 		if(isTexture(e.second.first)) {

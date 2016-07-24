@@ -112,7 +112,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\AudioSource.cpp" />
-    <ClCompile Include="..\src\ConnectionProgram.cpp" />
+    <ClCompile Include="..\src\LayerProgram.cpp" />
     <ClCompile Include="..\src\EffectRect.cpp" />
     <ClCompile Include="..\src\FadeEffect.cpp" />
     <ClCompile Include="..\src\FragmentProgram.cpp" />
@@ -129,7 +129,7 @@
     <ClInclude Include="..\blocks\OSC\src\Osc.h" />
     <ClInclude Include="..\src\AudioSource.h" />
     <ClInclude Include="..\src\InputState.h" />
-    <ClInclude Include="..\src\ConnectionProgram.h" />
+    <ClInclude Include="..\src\LayerProgram.h" />
     <ClInclude Include="..\src\EffectRect.h" />
     <ClInclude Include="..\src\FadeEffect.h" />
     <ClInclude Include="..\src\FragmentProgram.h" />

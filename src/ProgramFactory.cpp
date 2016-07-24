@@ -3,6 +3,7 @@
 #include "EffectRect.h"
 #include "FadeEffect.h"
 #include "FragmentProgram.h"
+#include "LayerProgram.h"
 #include "PassthroughProgram.h"
 
 using namespace ci;
@@ -13,6 +14,7 @@ void ProgramFactory::setup(std::shared_ptr<ProgramState> state)
 {
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("passthrough", std::bind(&PassthroughProgram::create, state)));
 
+	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("add", std::bind(&LayerProgram::create, state, SHADER_DIR + "additive_blend.frag")));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("audio_data", std::bind(&FragmentProgram::create, state, SHADER_DIR + "audio_data.frag")));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("dots", std::bind(&FragmentProgram::create, state, SHADER_DIR + "dots.frag")));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("fade", std::bind(&FadeEffect::create, state)));

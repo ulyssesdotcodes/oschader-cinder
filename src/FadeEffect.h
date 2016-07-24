@@ -1,6 +1,5 @@
 #pragma once
 
-#include "ConnectionProgram.h"
 #include "ProgramRect.h"
 
 class FadeEffect : public ProgramRect {

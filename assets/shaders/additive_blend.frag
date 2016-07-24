@@ -1,17 +1,12 @@
-#version 330 core
+uniform sampler2D i_tex_base;
+uniform sampler2D i_tex_layer;
 
-
-uniform sampler2D i_tex_A;
-uniform sampler2D i_tex_B;
-
-uniform vec2 i_resolution;
-
+in vec2 vertTexCoord0;
 out vec4 o_fragColor;
 
 void main() {
-	vec2 pos = gl_FragCoord.xy / i_resolution.xy;
-	vec4 A = texture2D(i_tex_A, pos);
-	vec4 B = texture2D(i_tex_B, pos);
+	vec4 A = texture2D(i_tex_base, vertTexCoord0);
+	vec4 B = texture2D(i_tex_layer, vertTexCoord0);
 
 	vec3 color = min(vec3(1), A.xyz + B.xyz);
 
