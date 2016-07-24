@@ -116,7 +116,6 @@ void OschaderCinderApp::draw()
 CINDER_APP(OschaderCinderApp, RendererGl(), [&](App::Settings *settings) {
 	FullScreenOptions options;
 	std::vector<DisplayRef> displays = Display::getDisplays();
-	settings->setConsoleWindowEnabled();
 	settings->setFullScreen(true, options);	
 	if (displays.size() > 1) {
 		settings->setDisplay(displays[1]);

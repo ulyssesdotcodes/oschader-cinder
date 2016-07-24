@@ -116,6 +116,7 @@
     <ClCompile Include="..\src\FragmentProgram.cpp" />
     <ClCompile Include="..\src\OschaderCinderApp.cpp" />
     <ClCompile Include="..\blocks\OSC\src\Osc.cpp" />
+    <ClCompile Include="..\src\PassthroughProgram.cpp" />
     <ClCompile Include="..\src\Program.cpp" />
     <ClCompile Include="..\src\ProgramRect.cpp" />
     <ClCompile Include="..\src\ProgramFactory.cpp" />
@@ -130,6 +131,7 @@
     <ClInclude Include="..\src\EffectRect.h" />
     <ClInclude Include="..\src\FadeEffect.h" />
     <ClInclude Include="..\src\FragmentProgram.h" />
+    <ClInclude Include="..\src\PassthroughProgram.h" />
     <ClInclude Include="..\src\ProgramRect.h" />
     <ClInclude Include="..\src\Program.h" />
     <ClInclude Include="..\src\ProgramFactory.h" />
