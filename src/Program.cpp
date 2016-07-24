@@ -3,7 +3,7 @@
 using namespace ci;
 using namespace input;
 
-Program::Program(gl::BatchRef batch, ProgramStateRef state) : mBatch(batch), mState(state)
+Program::Program(gl::BatchRef batch, ProgramStateRef state) : mBatch(batch), mState(state), mOverflowCheck(std::make_pair(0, 0))
 {
 }
 
@@ -89,7 +89,16 @@ void Program::draw() {
 
 ProgramRef Program::getEffect()
 {
-	if(mEffect) {
+	app::console() << "Count" << mOverflowCheck.first << " El: " << (mOverflowCheck.first < app::getElapsedFrames()) << std::endl;
+	if (mOverflowCheck.first < app::getElapsedFrames()) {
+		mOverflowCheck.first = app::getElapsedFrames();
+		mOverflowCheck.second = 1;
+	}
+	else {
+		mOverflowCheck.second++;
+	}
+
+	if(mEffect && mOverflowCheck.second < 20) {
 		return mState->getProgram(*mEffect);
 	}
 

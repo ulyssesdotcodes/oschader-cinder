@@ -26,9 +26,11 @@ ci::gl::Texture2dRef FadeEffect::getColorTexture(ci::gl::FboRef base, ci::gl::Fb
 		gl::ScopedFramebuffer fbo(mLastFrame);
 		gl::clear(Color::black());
 
-		if (getEffect()) {
+		ProgramRef e = getEffect();
+
+		if (e) {
 			// Draw last frame with the effects
-			gl::draw(getEffect()->getColorTexture(base, last));
+			gl::draw(e->getColorTexture(base, last));
 		}
 		else {
 			gl::draw(base->getColorTexture());

@@ -38,4 +38,6 @@ private:
 	std::shared_ptr<std::string> mEffect;
 	ProgramStateRef mState;
 	input::InputState mLastInputState;
+
+	std::pair<int, int> mOverflowCheck;
 };

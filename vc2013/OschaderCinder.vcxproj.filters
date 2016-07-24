@@ -138,5 +138,8 @@
     <None Include="..\assets\shaders\audio_data.frag">
       <Filter>Assets</Filter>
     </None>
+    <None Include="..\assets\shaders\repeat.frag">
+      <Filter>Assets</Filter>
+    </None>
   </ItemGroup>
 </Project>
