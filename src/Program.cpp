@@ -92,7 +92,6 @@ void Program::draw() {
 
 ProgramRef Program::getEffect()
 {
-	app::console() << "Count" << mOverflowCheck.first << " El: " << (mOverflowCheck.first < app::getElapsedFrames()) << std::endl;
 	if (mOverflowCheck.first < app::getElapsedFrames()) {
 		mOverflowCheck.first = app::getElapsedFrames();
 		mOverflowCheck.second = 1;

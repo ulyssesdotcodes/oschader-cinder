@@ -8,7 +8,7 @@ in vec2 vertTexCoord0;
 out vec4 fragColor;
 
 void main() {
-	vec2 audio = texture2D(i_tex_audio, vec2(vertTexCoord0.x, 0.25)).xy;
+	vec2 audio = texture(i_tex_audio, vec2(vertTexCoord0.x, 0.25)).xy;
 
 	float audX = audio.y * (i_volume + 1) + 0.5;
 

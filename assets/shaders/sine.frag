@@ -1,4 +1,3 @@
-uniform vec2 i_resolution;
 uniform float i_time;
 uniform float i_scale;
 uniform float i_amplitude;
