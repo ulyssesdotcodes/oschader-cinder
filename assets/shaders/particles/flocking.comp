@@ -1,0 +1,166 @@
+#version 430
+#extension GL_ARB_compute_shader : enable
+#extension GL_ARB_shader_storage_buffer_object : enable
+
+uniform float i_delta;
+
+layout( std140, binding = 1 ) buffer Pos {
+	vec4 pos[];
+};
+
+layout( std140, binding = 2 ) buffer Vel {
+	vec4 vel[];
+};
+
+layout( local_size_x = WORK_GROUP_SIZE,  local_size_y = 1, local_size_z = 1 ) in;
+
+const float PI = 3.141592654;
+const float PI_2 = PI * 2.0;
+
+const float WIDTH = 64.0;
+
+float separationThresh = 0.45;
+float alignmentThresh = 0.65;
+
+const float UPPER_BOUNDS = 400.0;
+const float LOWER_BOUNDS = -UPPER_BOUNDS;
+
+vec3 hsv2rgb(vec3 c) {
+  vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+  vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+  return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+}
+
+vec3 rgb2hsv(vec3 c) {
+  vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);
+  vec4 p = mix(vec4(c.bg, K.wz), vec4(c.gb, K.xy), step(c.b, c.g));
+  vec4 q = mix(vec4(p.xyw, c.r), vec4(c.r, p.yzx), step(p.x, c.r));
+
+  float d = q.x - min(q.w, q.y);
+  float e = 1.0e-10;
+  return vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);
+}
+
+vec3 calculatePosition(vec3 position, vec3 velocity) {
+  float delt;
+  if(i_delta > 1.0) {
+    delt = 1.0;
+  }
+  else {
+    delt = i_delta;
+  }
+  return position.xyz + velocity * delt * 12.0;
+}
+
+vec4 calculateVelocity(vec3 position, vec3 velocity) {
+  float delt = min(1.0, i_delta);
+  float cd = 12 * (0.6);
+  float sd = 12 * (0.4);
+  float ad = 12 * (0.6);
+
+  float zoneRadius = sd + ad + cd;
+  separationThresh = sd / zoneRadius;
+  alignmentThresh = (sd + ad) / zoneRadius;
+  float zoneRadiusSquared = zoneRadius * zoneRadius;
+
+  vec3 pointPosition, pointVelocity;
+  float hueVelocity;
+
+  float dist;
+  vec3 dir;
+  float distSquared;
+
+  float separationSquared = 12 * 12;
+  float cohesionSquared = 12 * 12;
+
+  float percent;
+
+  float selfHueVelocity = 0.0;
+
+  //TODO: Predator
+
+  vec3 central = vec3(0.0, 0.0, 0.0);
+  dir = position.xyz - central;
+  dist = length(dir);
+  distSquared = dist * dist;
+
+  vec3 norm = vec3(
+    step(64, abs(position.x)) * sign(position.x),
+     step(64, abs(position.y)) * sign(position.y),
+     step(64, abs(position.z)) * sign(position.z));
+
+  if(length(norm) > 0.0 && dot(velocity, norm) > 0.0) {
+    velocity = reflect(velocity, norm);
+  }
+
+  velocity -= normalize(dir) * delt * 2.0;
+
+  float separationCount, alignmentCount, cohesionCount;
+
+  separationCount = 0.0;
+  alignmentCount = 0.0;
+  cohesionCount = 0.0;
+
+  for(int y=0; y < WIDTH; y++) {
+    for(int x = 0; x < WIDTH; x++){
+      pointPosition = pos[x + y * WIDTH]; 
+      pointVelocity = vel[x + y * WIDTH];
+      dir = pointPosition.xyz - position.xyz;
+      dist = length(dir);
+	  if(dist < 0.0001f) {
+		  continue;
+	  }
+      distSquared = dist * dist;
+
+	  float f = 0.25;
+
+      if(dist > 0.0 && distSquared < zoneRadiusSquared) {
+        percent = distSquared / zoneRadiusSquared;
+
+        if(percent < separationThresh) {
+          // Separate
+          f *= (separationThresh / percent - 1.0) * delt * 0.7;
+          velocity -= normalize(dir) * f;
+          selfHueVelocity += 0.0;
+          separationCount += 1.0;
+        }
+        else if (percent < alignmentThresh && !i_separateOnly){
+          // Align
+          float threshi_delta = alignmentThresh - separationThresh;
+          float adjustedPercent = (percent - separationThresh) / threshi_delta;
+
+          f *= (0.5 - cos(adjustedPercent * PI_2) * 0.5 + 0.5) * delt * 0.7;
+          velocity += normalize(pointVelocity.xyz) * f;
+          selfHueVelocity += 0.33;
+          alignmentCount += 1.0;
+        }
+        else if(!i_separateOnly) {
+          // Cohese
+          float threshi_delta = 1.0 - alignmentThresh;
+          float adjustedPercent = (percent - alignmentThresh) / threshi_delta;
+          f  *= (0.5 - cos(adjustedPercent * PI_2) * -0.5 + 0.5) * delt * 0.7;
+          velocity += normalize(dir) * f;
+          selfHueVelocity += 0.66;
+          cohesionCount += 1.0;
+        }
+      }
+    }
+  }
+
+  if(length(velocity) > i_speed) {
+    velocity = normalize(velocity) * i_speed;
+  }
+
+  return vec4(velocity * (0.99), 1.0);
+}
+
+void main() {
+	uint i = gl_GlobalInvocationID.x;
+	vec4 velocity = calculateVelocity(pos[i], vel[i].xyz);
+	vec3 position = calculatePosition(pos[i], vel[i].xyz);
+	tf_position = position;
+	tf_velocity = velocity.xyz;
+	tf_color = hsv2rgb(vec3(velocity.w, 1.0, 1.0));
+	pos[i] = vec4(position, 0);
+	vel[i] = velocity;
+}

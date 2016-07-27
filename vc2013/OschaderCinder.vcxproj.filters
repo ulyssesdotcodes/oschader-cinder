@@ -25,6 +25,9 @@
     <Filter Include="Assets">
       <UniqueIdentifier>{e045ef64-d4b1-4886-901a-a6b3fec3c77e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets\Particles">
+      <UniqueIdentifier>{b09a2d92-db14-4288-9dd1-d352e7fac64f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\OschaderCinderApp.cpp">
@@ -72,6 +75,9 @@
     <ClCompile Include="..\src\LayerProgram.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\ParticleSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Resources.h">
@@ -110,6 +116,9 @@
     <ClInclude Include="..\src\LayerProgram.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\ParticleSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resources.rc">
@@ -143,6 +152,18 @@
     </None>
     <None Include="..\assets\shaders\dots.frag">
       <Filter>Assets</Filter>
+    </None>
+    <None Include="..\assets\shaders\particles\flocking.comp">
+      <Filter>Assets\Particles</Filter>
+    </None>
+    <None Include="..\assets\shaders\particles\particles.comp">
+      <Filter>Assets\Particles</Filter>
+    </None>
+    <None Include="..\assets\shaders\particles\render.frag">
+      <Filter>Assets\Particles</Filter>
+    </None>
+    <None Include="..\assets\shaders\particles\render.vert">
+      <Filter>Assets\Particles</Filter>
     </None>
   </ItemGroup>
 </Project>

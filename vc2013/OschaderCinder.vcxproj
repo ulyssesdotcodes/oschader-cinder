@@ -104,6 +104,10 @@
     <None Include="..\assets\shaders\additive_blend.frag" />
     <None Include="..\assets\shaders\audio_data.frag" />
     <None Include="..\assets\shaders\dots.frag" />
+    <None Include="..\assets\shaders\particles\flocking.comp" />
+    <None Include="..\assets\shaders\particles\particles.comp" />
+    <None Include="..\assets\shaders\particles\render.frag" />
+    <None Include="..\assets\shaders\particles\render.vert" />
     <None Include="..\assets\shaders\repeat.frag" />
     <None Include="..\assets\shaders\line_down.frag" />
     <None Include="..\assets\shaders\passthrough.vert" />
@@ -118,6 +122,7 @@
     <ClCompile Include="..\src\FragmentProgram.cpp" />
     <ClCompile Include="..\src\OschaderCinderApp.cpp" />
     <ClCompile Include="..\blocks\OSC\src\Osc.cpp" />
+    <ClCompile Include="..\src\ParticleSystem.cpp" />
     <ClCompile Include="..\src\PassthroughProgram.cpp" />
     <ClCompile Include="..\src\Program.cpp" />
     <ClCompile Include="..\src\ProgramRect.cpp" />
@@ -133,6 +138,7 @@
     <ClInclude Include="..\src\EffectRect.h" />
     <ClInclude Include="..\src\FadeEffect.h" />
     <ClInclude Include="..\src\FragmentProgram.h" />
+    <ClInclude Include="..\src\ParticleSystem.h" />
     <ClInclude Include="..\src\PassthroughProgram.h" />
     <ClInclude Include="..\src\ProgramRect.h" />
     <ClInclude Include="..\src\Program.h" />

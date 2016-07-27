@@ -5,6 +5,7 @@
 #include "FragmentProgram.h"
 #include "LayerProgram.h"
 #include "PassthroughProgram.h"
+#include "ParticleSystem.h"
 
 using namespace ci;
 
@@ -19,6 +20,7 @@ void ProgramFactory::setup(std::shared_ptr<ProgramState> state)
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("dots", std::bind(&FragmentProgram::create, state, SHADER_DIR + "dots.frag")));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("fade", std::bind(&FadeEffect::create, state)));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("line_down", std::bind(&FragmentProgram::create, state, SHADER_DIR + "line_down.frag")));
+	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("particles", std::bind(&ParticleSystem::create, state)));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("scale", std::bind(&EffectRect::create, state, SHADER_DIR + "scale.frag")));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("sine", std::bind(&FragmentProgram::create, state, SHADER_DIR + "sine.frag")));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("repeat", std::bind(&EffectRect::create, state, SHADER_DIR + "repeat.frag")));
