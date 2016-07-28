@@ -42,7 +42,7 @@ float sfrand()
 	return ci::randPosNegFloat( -1.0f, 1.0f );
 }
 
-ParticleSystem::ParticleSystem(ProgramStateRef state, gl::BatchRef b, gl::VboRef indices, gl::SsboRef pos, gl::SsboRef vel) : Program(b, state),
+ParticleSystem::ParticleSystem(ProgramStateRef state, gl::BatchRef b, gl::VboRef indices, gl::SsboRef pos, gl::SsboRef vel, gl::GlslProgRef update) : Program(b, state),
 	mCam(new CameraPersp( app::getWindowWidth(), app::getWindowHeight(), 45.0f, 0.1f, 10.0f )),
 	  mNoiseSize( 16 ),
 	  mSpriteSize( 0.015f ),
@@ -55,6 +55,7 @@ ParticleSystem::ParticleSystem(ProgramStateRef state, gl::BatchRef b, gl::VboRef
 	mPos = pos;
 	mVel = vel;
 	mIndicesVbo = indices;
+	mUpdateProg = update;
 
 	mEnableAttractor = false;
 	mAnimate = true;
@@ -64,7 +65,6 @@ ParticleSystem::ParticleSystem(ProgramStateRef state, gl::BatchRef b, gl::VboRef
 	mNoiseSize = 16;
 
 	setupNoiseTexture3D();
-	setupShaders();
 
 	CI_CHECK_GL();
 
@@ -85,7 +85,7 @@ ParticleSystem::ParticleSystem(ProgramStateRef state, gl::BatchRef b, gl::VboRef
 
 }
 
-ParticleSystemRef ParticleSystem::create(ProgramStateRef state)
+ParticleSystemRef ParticleSystem::create(ProgramStateRef state, std::string comp)
 {
 	std::vector<uint32_t> indices( NUM_PARTICLES * 6 );
 	// the index buffer is a classic "two-tri quad" array.
@@ -113,7 +113,9 @@ ParticleSystemRef ParticleSystem::create(ProgramStateRef state)
 	gl::BatchRef batch = gl::Batch::create(vboMesh, renderProg);
 	auto pos = gl::Ssbo::create( sizeof(vec4) * NUM_PARTICLES, nullptr, GL_STATIC_DRAW );
 	auto vel = gl::Ssbo::create( sizeof(vec4) * NUM_PARTICLES, nullptr, GL_STATIC_DRAW );
-	return ParticleSystemRef(new ParticleSystem(state, batch, vbo, pos, vel));
+	auto update = gl::GlslProg::create( gl::GlslProg::Format().compute( app::loadAsset( "shaders/particles/" +  comp)));
+	update->uniform("numParticles", (float) NUM_PARTICLES);
+	return ParticleSystemRef(new ParticleSystem(state, batch, vbo, pos, vel, update));
 }
 
 std::shared_ptr<ci::Camera> ParticleSystem::camera()
@@ -124,21 +126,6 @@ std::shared_ptr<ci::Camera> ParticleSystem::camera()
 std::shared_ptr<ci::ivec2> ParticleSystem::matrixWindow()
 {
 	return nullptr;
-}
-
-void ParticleSystem::setupShaders()
-{
-	try {
-		mUpdateProg = gl::GlslProg::create( gl::GlslProg::Format().compute( app::loadAsset( "shaders/particles/particles.comp" ) ) );
-	}
-	catch( gl::GlslProgCompileExc e ) {
-		ci::app::console() << e.what() << std::endl;
-	}
-
-	// Particle update ubo.
-	mUpdateProg->uniform( "noiseTex3D", 0 );
-	mUpdateProg->uniform("numParticles", (float) NUM_PARTICLES);
-	mUpdateProg->uniform("invNoiseSize", 1.f/mNoiseSize);
 }
 
 void ParticleSystem::update(input::InputState s)
@@ -152,6 +139,12 @@ void ParticleSystem::draw()
 	gl::clear(Color::black());
 	gl::bindBufferBase( mPos->getTarget(), 1, mPos );
 	Program::draw();
+}
+
+void ParticleSystem::updateUniform(std::string name, float val)
+{
+	mUpdateProg->uniform("i_" + name, val);
+	Program::updateUniform(name, val);
 }
 
 void ParticleSystem::updateParticleSystem()

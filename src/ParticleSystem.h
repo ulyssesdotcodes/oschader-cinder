@@ -58,20 +58,20 @@ typedef std::shared_ptr<ParticleSystem> ParticleSystemRef;
 //! This sample was ported from https://github.com/NVIDIAGameWorks/OpenGLSamples/tree/master/samples/es3aep-kepler/ComputeParticles
 class ParticleSystem : public Program {
   public:
-	 static ParticleSystemRef create(ProgramStateRef);
-	ParticleSystem(ProgramStateRef, ci::gl::BatchRef, ci::gl::VboRef, ci::gl::SsboRef, ci::gl::SsboRef);
+	 static ParticleSystemRef create(ProgramStateRef, std::string);
+	ParticleSystem(ProgramStateRef, ci::gl::BatchRef, ci::gl::VboRef, ci::gl::SsboRef, ci::gl::SsboRef, ci::gl::GlslProgRef);
 
 	virtual std::shared_ptr<ci::Camera> camera();
 	virtual std::shared_ptr<ci::ivec2> matrixWindow();
 
 	virtual void update(input::InputState) override;
 	virtual void draw();
+	virtual void updateUniform(std::string name, float val);
 	
-	void setupShaders();
 	void updateParticleSystem();
 	void setupNoiseTexture3D();
 
-	enum { WORK_GROUP_SIZE = 128, NUM_PARTICLES = 1 << 18 };
+	enum { WORK_GROUP_SIZE = 128, NUM_PARTICLES = 1 << 15 };
 	
 	ci::gl::VboRef mVBO;
 	ci::gl::GlslProgRef mRenderProg;

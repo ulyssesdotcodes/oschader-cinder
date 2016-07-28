@@ -2,7 +2,10 @@
 #extension GL_ARB_compute_shader : enable
 #extension GL_ARB_shader_storage_buffer_object : enable
 
+#define WORK_GROUP_SIZE 128
+
 uniform float i_delta;
+uniform float numParticles;
 
 layout( std140, binding = 1 ) buffer Pos {
 	vec4 pos[];
@@ -49,14 +52,14 @@ vec3 calculatePosition(vec3 position, vec3 velocity) {
   else {
     delt = i_delta;
   }
-  return position.xyz + velocity * delt * 12.0;
+  return position.xyz + velocity * delt;
 }
 
 vec4 calculateVelocity(vec3 position, vec3 velocity) {
   float delt = min(1.0, i_delta);
-  float cd = 12 * (0.6);
-  float sd = 12 * (0.4);
-  float ad = 12 * (0.6);
+  float cd = 2 * (0.6);
+  float sd = 2 * (0.4);
+  float ad = 2 * (0.6);
 
   float zoneRadius = sd + ad + cd;
   separationThresh = sd / zoneRadius;
@@ -70,8 +73,8 @@ vec4 calculateVelocity(vec3 position, vec3 velocity) {
   vec3 dir;
   float distSquared;
 
-  float separationSquared = 12 * 12;
-  float cohesionSquared = 12 * 12;
+  float separationSquared = sd * sd;
+  float cohesionSquared = cd * cd;
 
   float percent;
 
@@ -101,15 +104,16 @@ vec4 calculateVelocity(vec3 position, vec3 velocity) {
   alignmentCount = 0.0;
   cohesionCount = 0.0;
 
-  for(int y=0; y < WIDTH; y++) {
-    for(int x = 0; x < WIDTH; x++){
-      pointPosition = pos[x + y * WIDTH]; 
-      pointVelocity = vel[x + y * WIDTH];
+  for(int i=0; i < numParticles; i++) {
+      pointPosition = pos[i].xyz; 
+      pointVelocity = vel[i].xyz;
       dir = pointPosition.xyz - position.xyz;
       dist = length(dir);
-	  if(dist < 0.0001f) {
+
+	  if (i == gl_GlobalInvocationID.x) {
 		  continue;
 	  }
+
       distSquared = dist * dist;
 
 	  float f = 0.25;
@@ -124,7 +128,7 @@ vec4 calculateVelocity(vec3 position, vec3 velocity) {
           selfHueVelocity += 0.0;
           separationCount += 1.0;
         }
-        else if (percent < alignmentThresh && !i_separateOnly){
+        else if (percent < alignmentThresh){
           // Align
           float threshi_delta = alignmentThresh - separationThresh;
           float adjustedPercent = (percent - separationThresh) / threshi_delta;
@@ -134,21 +138,13 @@ vec4 calculateVelocity(vec3 position, vec3 velocity) {
           selfHueVelocity += 0.33;
           alignmentCount += 1.0;
         }
-        else if(!i_separateOnly) {
-          // Cohese
-          float threshi_delta = 1.0 - alignmentThresh;
-          float adjustedPercent = (percent - alignmentThresh) / threshi_delta;
-          f  *= (0.5 - cos(adjustedPercent * PI_2) * -0.5 + 0.5) * delt * 0.7;
-          velocity += normalize(dir) * f;
-          selfHueVelocity += 0.66;
-          cohesionCount += 1.0;
-        }
       }
-    }
+    
   }
 
-  if(length(velocity) > i_speed) {
-    velocity = normalize(velocity) * i_speed;
+  float speed = 0.5;
+  if(length(velocity) > speed) {
+    velocity = normalize(velocity) * speed;
   }
 
   return vec4(velocity * (0.99), 1.0);
@@ -156,11 +152,14 @@ vec4 calculateVelocity(vec3 position, vec3 velocity) {
 
 void main() {
 	uint i = gl_GlobalInvocationID.x;
-	vec4 velocity = calculateVelocity(pos[i], vel[i].xyz);
-	vec3 position = calculatePosition(pos[i], vel[i].xyz);
-	tf_position = position;
-	tf_velocity = velocity.xyz;
-	tf_color = hsv2rgb(vec3(velocity.w, 1.0, 1.0));
-	pos[i] = vec4(position, 0);
+
+	if( i >= numParticles )
+	{
+		return;
+	}
+
+	vec4 velocity = calculateVelocity(pos[i].xyz, vel[i].xyz);
+	vec3 position = calculatePosition(pos[i].xyz, velocity.xyz);
+	pos[i] = vec4(position, 1);
 	vel[i] = velocity;
 }
