@@ -2,6 +2,8 @@
 
 #include "cinder/gl/gl.h"
 
+#include "cinder/Exception.h"
+
 namespace input {
 
 	enum class InputType { AUDIO_TEXTURE, EQ_TEXTURE, VOLUME, NULL_T };
@@ -36,7 +38,7 @@ namespace input {
 		case InputType::VOLUME:
 			return s.volume;
 		default:
-			throw std::exception("That isn't a float input type.");
+            throw ci::Exception("That isn't a float input type.");
 			return -1;
 		}
 	}
@@ -52,7 +54,7 @@ namespace input {
 		case InputType::EQ_TEXTURE:
 			return s.eqTexture(floor(mod));
 		default:
-			throw std::exception("That isn't a texture input type.");
+            throw ci::Exception("That isn't a texture input type.");
 			return nullptr;
 		}
 	}

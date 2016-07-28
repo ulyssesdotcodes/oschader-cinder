@@ -19,7 +19,7 @@ vec2 toCartesian(vec2 p) {
 
 float iDot(float section, vec2 uv) {
 
-  float l = texture2D(i_eqs, vec2(section, 0.25)).x * 100.0f;
+  float l = texture(i_eqs, vec2(section, 0.25)).x * 100.0f;
 
   vec2 cuv = vec2(section * 3.1415 * 2, 0.5);
   vec2 center = toCartesian(cuv);

@@ -14,11 +14,14 @@ using namespace ci;
  */
 
 void AudioSource::setup() {
+    mLastUpdateFrame = -1;
 	mAccumulatedSound = 0.0;
 
 	auto ctx = audio::Context::master();
+    ctx->deviceManager()->setSampleRate(ctx->deviceManager()->getDefaultInput(), 48000);
 
-	mInputNode = ctx->createInputDeviceNode();
+    mInputNode = ctx->createInputDeviceNode();
+    
 
 	auto monitorFormat = audio::MonitorSpectralNode::Format().fftSize(2048).windowSize(1024);
 	mMonitor = ctx->makeNode(new audio::MonitorSpectralNode(monitorFormat));
