@@ -19,7 +19,7 @@ ci::gl::Texture2dRef PassthroughProgram::getColorTexture(ci::gl::FboRef base, ci
 {
 	auto e = getEffect();
 	if(e) {
-		return getEffect()->getColorTexture(base, extra);
+		return e->getColorTexture(base, extra);
 	}
 
 	return base->getColorTexture();
