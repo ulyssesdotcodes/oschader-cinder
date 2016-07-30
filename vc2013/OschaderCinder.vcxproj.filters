@@ -150,5 +150,8 @@
     <None Include="..\assets\shaders\multiplicative_blend.frag">
       <Filter>Assets</Filter>
     </None>
+    <None Include="..\assets\shaders\string_theory.frag">
+      <Filter>Assets</Filter>
+    </None>
   </ItemGroup>
 </Project>

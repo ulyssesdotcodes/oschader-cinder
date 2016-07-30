@@ -111,6 +111,7 @@
     <None Include="..\assets\shaders\passthrough.vert" />
     <None Include="..\assets\shaders\scale.frag" />
     <None Include="..\assets\shaders\sine.frag" />
+    <None Include="..\assets\shaders\string_theory.frag" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\AudioSource.cpp" />
