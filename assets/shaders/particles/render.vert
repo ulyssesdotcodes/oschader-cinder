@@ -105,6 +105,10 @@ layout( std140, binding=1 ) buffer Pos {
 	vec4 pos[];
 };
 
+layout( std140, binding=2 ) buffer Vel {
+	vec4 vel[];
+};
+
 out gl_PerVertex {
 	vec4 gl_Position;
 };
@@ -127,10 +131,7 @@ void main()
 	vec4 vertexPosEye = particlePosEye + vec4( ( quadPos * 2.0 - 1.0 ) * spriteSize, 0, 0 );
 
 	Out.texCoord = quadPos;
-
-	float noise = snoise(particlePos.xy * 50.0);
-
-	Out.color = vec4( 0.5, 0.62 + noise * 0.38, 0.62 + (1.0 - noise) * 0.38, particlePos.w);
+	Out.color = vec4(1);
 
 	gl_Position = ciProjectionMatrix * vertexPosEye;
 }

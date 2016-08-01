@@ -52,6 +52,9 @@
 
 #define LIGHT_RADIUS	1.5f // Must be at least 1
 
+const static int WORK_GROUP_SIZE = 128;
+const static int NUM_PARTICLES = 1 << 14;
+
 class ParticleSystem;
 typedef std::shared_ptr<ParticleSystem> ParticleSystemRef;
 
@@ -70,8 +73,6 @@ class ParticleSystem : public Program {
 	
 	void updateParticleSystem();
 	void setupNoiseTexture3D();
-
-	enum { WORK_GROUP_SIZE = 128, NUM_PARTICLES = 1 << 15 };
 	
 	ci::gl::VboRef mVBO;
 	ci::gl::GlslProgRef mRenderProg;

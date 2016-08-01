@@ -87,7 +87,7 @@ ParticleSystem::ParticleSystem(ProgramStateRef state, gl::BatchRef b, gl::VboRef
 
 ParticleSystemRef ParticleSystem::create(ProgramStateRef state, std::string comp)
 {
-	std::vector<uint32_t> indices( NUM_PARTICLES * 6 );
+	std::vector<uint32_t> indices( NUM_PARTICLES  * 6);
 	// the index buffer is a classic "two-tri quad" array.
 	// This may seem odd, given that the compute buffer contains a single
 	// vector for each particle.  However, the shader takes care of this

@@ -40,7 +40,7 @@ in block {
 	vec2 texCoord;
 } In;
 
-layout( location = 0 ) out vec4 fragColor;
+out vec4 fragColor;
 
 void main()
 {
@@ -51,6 +51,9 @@ void main()
 	{
 		discard;
 	}
-
-    fragColor = vec4( In.color.rgb * In.color.w, i );
+	//vec2 pointCoord = gl_PointCoord;
+	//pointCoord = pointCoord - vec2(0.5);
+	//float dist = length(pointCoord);
+	//if(dist > 0.5) discard;
+    fragColor = vec4(In.color.xyz * In.color.w, i);
 }
