@@ -18,7 +18,7 @@ void ProgramFactory::setup(std::shared_ptr<ProgramState> state)
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("audio_data", std::bind(&FragmentProgram::create, state, SHADER_DIR + "audio_data.frag")));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("dots", std::bind(&FragmentProgram::create, state, SHADER_DIR + "dots.frag")));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("line_down", std::bind(&FragmentProgram::create, state, SHADER_DIR + "line_down.frag")));
-	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("particles", std::bind(&ParticleSystem::create, state, "flocking.comp")));
+	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("particles", std::bind(&ParticleSystem::create, state, "emitter.comp")));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("sine", std::bind(&FragmentProgram::create, state, SHADER_DIR + "sine.frag")));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("string_theory", std::bind(&FragmentProgram::create, state, SHADER_DIR + "string_theory.frag")));
 

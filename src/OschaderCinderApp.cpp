@@ -119,8 +119,8 @@ CINDER_APP(OschaderCinderApp, RendererGl(), [&](App::Settings *settings) {
 	std::vector<DisplayRef> displays = Display::getDisplays();
 	//settings->setFullScreen(true, options);	
 	settings->setWindowSize(displays[0]->getSize());
-	if (displays.size() > 1) {
-		settings->setDisplay(displays[1]);
-	}
+	//if (displays.size() > 1) {
+	//	settings->setDisplay(displays[1]);
+	//}
 	settings->setFrameRate(60.0f);
 })
