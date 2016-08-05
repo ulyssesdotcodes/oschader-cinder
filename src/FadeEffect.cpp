@@ -15,19 +15,11 @@ ci::gl::Texture2dRef FadeEffect::getColorTexture(ci::gl::FboRef base, ci::gl::Fb
     if(effect) {
         
         {
-        	gl::ScopedFramebuffer fbo(last);
-        	gl::ScopedTextureBind texl(mLastFrame->getColorTexture(), 1);
-        	gl::ScopedTextureBind tex(effect->getColorTexture(base, last), 0);
-            
-            gl::clear(Color::black());
+        	gl::ScopedFramebuffer fbo(mLastFrame);
+        	gl::ScopedTextureBind texl(base->getColorTexture(), 0);
+        	gl::ScopedTextureBind tex(effect->getColorTexture(mLastFrame, last), 1);
 
         	Program::draw();
-        }
-        
-        {
-        	gl::ScopedFramebuffer fbo(mLastFrame);
-            gl::clear(Color::black());
-            gl::draw(last->getColorTexture());
         }
     }
     else {

@@ -3,7 +3,7 @@
 
 uniform float i_angle;
 uniform float i_angle_delta;
-uniform float xoff;
+uniform float i_xoff;
 
 uniform float i_time;
 
@@ -38,7 +38,7 @@ void main()
 		vec3 col2 = (sin(vec3(3.7,2.5,2.2)+i*0.15)*0.5+0.54)*(1.-f(p));
 		col = max(col,col2);
 		
-        p.x -= (xoff + 0.7);
+        p.x -= (i_xoff + 0.7);
         p.y -= sin(i_time*0.11+1.5)*1.5+1.5;
 		p*= mm2(i*(i_angle_delta + 0.02)+(i_angle + 3.5));
 		

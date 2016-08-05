@@ -1,8 +1,8 @@
-uniform float i_time;
 uniform float i_accumulatedLoudness;
 
 uniform sampler2D i_eqs;
 uniform float i_eqs_mod;
+uniform float i_invVolume;
 
 in vec2 vertTexCoord0;
 out vec4 fragColor;
@@ -23,9 +23,10 @@ float iDot(float section, vec2 uv) {
 
   vec2 cuv = vec2(section * 3.1415 * 2, 0.5);
   vec2 center = toCartesian(cuv);
-  float dist = length(center - uv) * 4;
+  vec2 diff = center - uv;
+  float dist = dot(diff, diff) * i_invVolume;
 
-  return smoothstep(l, 0.0, dist * dist * dist);
+  return smoothstep(l, 0.0, dist * dist);
 }
 
 void main() {

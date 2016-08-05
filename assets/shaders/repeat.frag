@@ -1,7 +1,7 @@
 uniform vec2 i_resolution;
 
 uniform sampler2D i_tex_base;
-uniform float i_times;
+uniform float i_repeat;
 
 in vec2 vertTexCoord0;
 out vec4 fragColor;
