@@ -131,7 +131,7 @@ void main()
 	vec4 vertexPosEye = particlePosEye + vec4( ( quadPos * 2.0 - 1.0 ) * spriteSize, 0, 0 );
 
 	Out.texCoord = quadPos;
-	Out.color = vec4(1);
+	Out.color = vec4(vec3(1), particlePos.w);
 
 	gl_Position = ciProjectionMatrix * vertexPosEye;
 }

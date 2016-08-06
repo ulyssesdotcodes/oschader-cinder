@@ -58,9 +58,9 @@ vec3 calculatePosition(vec3 position, vec3 velocity) {
 
 vec4 calculateVelocity(vec3 position, vec3 velocity) {
   float delt = min(1.0, i_delta);
-  float cd = 2 * (1 + i_cohesion);
-  float sd = 2 * (1 + i_separation);
-  float ad = 1.5 * (1 + i_alignment);
+  float cd = 2 * (i_cohesion);
+  float sd = 2 * (i_separation);
+  float ad = 1.5 * (i_alignment);
 
   float zoneRadius = sd + ad + cd;
   float separationThresh = sd / zoneRadius;
@@ -143,6 +143,6 @@ void main() {
 
 	vec4 velocity = calculateVelocity(pos[i].xyz, vel[i].xyz);
 	vec3 position = calculatePosition(pos[i].xyz, velocity.xyz);
-	pos[i] = vec4(position, 0);
+	pos[i] = vec4(position, 1);
 	vel[i] = velocity;
 }

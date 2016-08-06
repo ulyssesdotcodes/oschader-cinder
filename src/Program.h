@@ -18,6 +18,8 @@ public:
 	virtual void updateUniform(std::string name, std::string, float modifier);
 	virtual void updateUniform(std::string name, int val);
 
+	virtual void onUpdateUniform(std::string name, float val);
+
 	virtual ci::gl::Texture2dRef getColorTexture(ci::gl::FboRef base, ci::gl::FboRef extra);
 
 	virtual void setEffect(std::string);

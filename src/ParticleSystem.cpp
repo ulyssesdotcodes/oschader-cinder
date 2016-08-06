@@ -73,7 +73,7 @@ ParticleSystem::ParticleSystem(ProgramStateRef state, gl::BatchRef b, gl::VboRef
 	float size = 0.5;
 	vec4 *posp = reinterpret_cast<vec4*>( mPos->map( GL_WRITE_ONLY ) );
 	for( size_t i = 0; i < NUM_PARTICLES; ++i ) {
-		posp[i] = vec4( sfrand() * size, sfrand() * size, sfrand() * size, 1.0f );
+		posp[i] = vec4( sfrand() * size, sfrand() * size, sfrand() * size, 0.0f );
 	}
 	mPos->unmap();
 
@@ -109,7 +109,7 @@ ParticleSystemRef ParticleSystem::create(ProgramStateRef state, std::string comp
 	gl::GlslProgRef renderProg = gl::GlslProg::create( gl::GlslProg::Format().vertex( app::loadAsset( "shaders/particles/render.vert" ) )
 			.fragment( app::loadAsset( "shaders/particles/render.frag" ) ) );
 	renderProg->uniform("spriteSize", 0.015f);
-	gl::VboMeshRef vboMesh = gl::VboMesh::create(NUM_PARTICLES * 6, GL_TRIANGLES, { gl::VboMesh::Layout().usage(GL_STATIC_DRAW).attrib(geom::POSITION, 1) }, NUM_PARTICLES, GL_UNSIGNED_INT, vbo);
+	gl::VboMeshRef vboMesh = gl::VboMesh::create(NUM_PARTICLES, GL_TRIANGLES, { gl::VboMesh::Layout().usage(GL_STATIC_DRAW).attrib(geom::POSITION, 1) }, NUM_PARTICLES * 6, GL_UNSIGNED_INT, vbo);
 	gl::BatchRef batch = gl::Batch::create(vboMesh, renderProg);
 	auto pos = gl::Ssbo::create( sizeof(vec4) * NUM_PARTICLES, nullptr, GL_STATIC_DRAW );
 	auto vel = gl::Ssbo::create( sizeof(vec4) * NUM_PARTICLES, nullptr, GL_STATIC_DRAW );
@@ -138,13 +138,13 @@ void ParticleSystem::draw()
 {
 	gl::clear(Color::black());
 	gl::bindBufferBase( mPos->getTarget(), 1, mPos );
+	//gl::drawElements(GL_TRIANGLES, NUM_PARTICLES * 6, GL_UNSIGNED_INT, 0);
 	Program::draw();
 }
 
-void ParticleSystem::updateUniform(std::string name, float val)
+void ParticleSystem::onUpdateUniform(std::string name, float val)
 {
 	mUpdateProg->uniform("i_" + name, val);
-	Program::updateUniform(name, val);
 }
 
 void ParticleSystem::updateParticleSystem()

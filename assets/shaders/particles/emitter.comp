@@ -5,6 +5,7 @@
 #define WORK_GROUP_SIZE 128
 
 uniform float i_delta;
+uniform float i_time;
 uniform float numParticles;
 
 layout( std140, binding = 1 ) buffer Pos {
@@ -25,8 +26,14 @@ void main() {
 		return;
 	}
 
-	vec4 velocity = vel[i] + vec4(0, 0.01, 0, 1);
+	float iPos = float(i) / numParticles;
+	vec4 velocity = vel[i] + vec4(0, 0.00001 * (iPos - 0.5) * 2, 0, 1);
 	vec3 position = pos[i].xyz + velocity.xyz;
+	position.y = iPos;
+	float alpha = pos[i].w;
+	alpha += ceil(max(0, (1.0 / numParticles) - abs(iPos - i_time)));
+	alpha = min(1, alpha);
+	alpha -= i_delta * 0.01;
 	pos[i] = vec4(position, 1);
 	vel[i] = velocity;
 }

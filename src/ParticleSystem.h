@@ -69,7 +69,7 @@ class ParticleSystem : public Program {
 
 	virtual void update(input::InputState) override;
 	virtual void draw();
-	virtual void updateUniform(std::string name, float val);
+	virtual void onUpdateUniform(std::string name, float val) override;
 	
 	void updateParticleSystem();
 	void setupNoiseTexture3D();

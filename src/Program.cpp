@@ -18,6 +18,7 @@ void Program::updateUniform(std::string name, float val) {
 		mInputUniforms.erase(name);
 	}
 	mBatch->getGlslProg()->uniform("i_" + name, val);
+	onUpdateUniform(name, val);
 }
 
 void Program::updateUniform(std::string name, std::string val, float modifier) {
@@ -39,6 +40,10 @@ void Program::updateUniform(std::string name, std::string val, float modifier) {
 
 void Program::updateUniform(std::string name, int val) {
 	mBatch->getGlslProg()->uniform("i_" + name, val);
+}
+
+void Program::onUpdateUniform(std::string name, float val)
+{
 }
 
 // Note that it uses fbo a
@@ -131,7 +136,9 @@ void Program::update(input::InputState s)
 {
 	for (std::pair<std::string, std::pair<InputType, float>> e : mInputUniforms) {
 		if(isFloat(e.second.first)) {
-			mBatch->getGlslProg()->uniform("i_" + e.first, getFloat(s, e.second.first) * e.second.second);
+			float val = getFloat(s, e.second.first) * e.second.second;
+			mBatch->getGlslProg()->uniform("i_" + e.first, val);
+			onUpdateUniform(e.first, val);
 		}
 	}
 
