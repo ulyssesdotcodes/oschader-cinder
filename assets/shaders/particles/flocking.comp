@@ -8,6 +8,7 @@ uniform float i_delta;
 uniform float i_separation;
 uniform float i_cohesion;
 uniform float i_alignment;
+uniform float i_speed;
 
 uniform float numParticles;
 
@@ -46,21 +47,16 @@ vec3 rgb2hsv(vec3 c) {
 }
 
 vec3 calculatePosition(vec3 position, vec3 velocity) {
-  float delt;
-  if(i_delta > 1.0) {
-    delt = 1.0;
-  }
-  else {
-    delt = i_delta;
-  }
-  return position.xyz + velocity * delt;
+  float delt = min(i_delta, 0.1);
+  vec3 newPos = position.xyz + velocity * delt;
+  return newPos;
 }
 
-vec4 calculateVelocity(vec3 position, vec3 velocity) {
+vec4 calculateVelocity(vec3 position, vec3 velocity, int current) {
   float delt = min(1.0, i_delta);
-  float cd = 2 * (i_cohesion);
-  float sd = 2 * (i_separation);
-  float ad = 1.5 * (i_alignment);
+  float cd = i_cohesion;
+  float sd = i_separation;
+  float ad = i_alignment;
 
   float zoneRadius = sd + ad + cd;
   float separationThresh = sd / zoneRadius;
@@ -84,10 +80,11 @@ vec4 calculateVelocity(vec3 position, vec3 velocity) {
   dir = position.xyz - central;
   distSquared = dot(dir, dir);
 
-  velocity -= normalize(dir) * delt * 2.0 * distSquared;
+  velocity -= normalize(dir) * delt * distSquared;
 
+  // NOTE: Can't make this more efficient because there's no guaranteed run order
   for(int i=0; i < numParticles; i++) {
-	  if (i == gl_GlobalInvocationID.x) {
+	  if(pos[i].w != 0.69) {
 	    continue;
 	  }
 
@@ -98,7 +95,7 @@ vec4 calculateVelocity(vec3 position, vec3 velocity) {
 
 	  float f = 0.5;
 
-      if(distSquared > 0.0 && distSquared < zoneRadiusSquared) {
+      if(distSquared > 0.001 && distSquared < zoneRadiusSquared) {
         percent = distSquared / zoneRadiusSquared;
 
         if(percent < separationThresh) {
@@ -125,9 +122,8 @@ vec4 calculateVelocity(vec3 position, vec3 velocity) {
     
   }
 
-  float speed = 1;
-  if(length(velocity) > speed) {
-    velocity = normalize(velocity) * speed;
+  if(dot(velocity, velocity) > i_speed * i_speed) {
+    velocity = normalize(velocity) * i_speed;
   }
 
   return vec4(velocity, 1.0);
@@ -136,13 +132,14 @@ vec4 calculateVelocity(vec3 position, vec3 velocity) {
 void main() {
 	uint i = gl_GlobalInvocationID.x;
 
-	if( i >= numParticles )
+	if( i >= numParticles)
 	{
 		return;
 	}
 
-	vec4 velocity = calculateVelocity(pos[i].xyz, vel[i].xyz);
-	vec3 position = calculatePosition(pos[i].xyz, velocity.xyz);
-	pos[i] = vec4(position, 1);
+	vec4 velocity = calculateVelocity(pos[i].xyz, vel[i].xyz, int(i));
+	vel[i] = velocity;
+	vec3 position = calculatePosition(pos[i].xyz, vel[i].xyz);
+	pos[i] = vec4(position, 0.69);
 	vel[i] = velocity;
 }

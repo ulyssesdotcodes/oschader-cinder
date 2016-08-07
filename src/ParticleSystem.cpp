@@ -43,7 +43,7 @@ float sfrand()
 }
 
 ParticleSystem::ParticleSystem(ProgramStateRef state, gl::BatchRef b, gl::VboRef indices, gl::SsboRef pos, gl::SsboRef vel, gl::GlslProgRef update) : Program(b, state),
-	mCam(new CameraPersp( app::getWindowWidth(), app::getWindowHeight(), 45.0f, 0.1f, 10.0f )),
+	mCam(new CameraPersp( app::getWindowWidth(), app::getWindowHeight(), 90.0f, 1.f, 100.0f )),
 	  mNoiseSize( 16 ),
 	  mSpriteSize( 0.015f ),
 	  mEnableAttractor( false ),
@@ -70,10 +70,10 @@ ParticleSystem::ParticleSystem(ProgramStateRef state, gl::BatchRef b, gl::VboRef
 
 	mCam->lookAt( vec3( 0.0f, 0.0f, -3.0f ), vec3( 0 ) );
 
-	float size = 0.5;
+	float size = 1;
 	vec4 *posp = reinterpret_cast<vec4*>( mPos->map( GL_WRITE_ONLY ) );
 	for( size_t i = 0; i < NUM_PARTICLES; ++i ) {
-		posp[i] = vec4( sfrand() * size, sfrand() * size, sfrand() * size, 0.0f );
+		posp[i] = vec4( sfrand() * size, sfrand() * size, sfrand() * size, 1.0f );
 	}
 	mPos->unmap();
 
@@ -104,17 +104,21 @@ ParticleSystemRef ParticleSystem::create(ProgramStateRef state, std::string comp
 		indices[j++] = index + 3;
 	}
 
-	gl::VboRef vbo = gl::Vbo::create<uint32_t>( GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW );
+	gl::enableVertexAttribArray(0);
+	auto vbo = gl::Vbo::create<uint32_t>( GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW );
 
 	gl::GlslProgRef renderProg = gl::GlslProg::create( gl::GlslProg::Format().vertex( app::loadAsset( "shaders/particles/render.vert" ) )
 			.fragment( app::loadAsset( "shaders/particles/render.frag" ) ) );
 	renderProg->uniform("spriteSize", 0.015f);
-	gl::VboMeshRef vboMesh = gl::VboMesh::create(NUM_PARTICLES, GL_TRIANGLES, { gl::VboMesh::Layout().usage(GL_STATIC_DRAW).attrib(geom::POSITION, 1) }, NUM_PARTICLES * 6, GL_UNSIGNED_INT, vbo);
+	gl::VboMeshRef vboMesh = gl::VboMesh::create(NUM_PARTICLES * 6, GL_TRIANGLES, { gl::VboMesh::Layout().usage(GL_STATIC_DRAW).attrib(geom::POSITION, 1) }, NUM_PARTICLES * 6, GL_UNSIGNED_INT, vbo);
 	gl::BatchRef batch = gl::Batch::create(vboMesh, renderProg);
 	auto pos = gl::Ssbo::create( sizeof(vec4) * NUM_PARTICLES, nullptr, GL_STATIC_DRAW );
 	auto vel = gl::Ssbo::create( sizeof(vec4) * NUM_PARTICLES, nullptr, GL_STATIC_DRAW );
 	auto update = gl::GlslProg::create( gl::GlslProg::Format().compute( app::loadAsset( "shaders/particles/" +  comp)));
 	update->uniform("numParticles", (float) NUM_PARTICLES);
+
+	CI_CHECK_GL();
+
 	return ParticleSystemRef(new ParticleSystem(state, batch, vbo, pos, vel, update));
 }
 
@@ -138,6 +142,7 @@ void ParticleSystem::draw()
 {
 	gl::clear(Color::black());
 	gl::bindBufferBase( mPos->getTarget(), 1, mPos );
+	gl::ScopedBuffer scopedindices(mIndicesVbo);
 	//gl::drawElements(GL_TRIANGLES, NUM_PARTICLES * 6, GL_UNSIGNED_INT, 0);
 	Program::draw();
 }
@@ -162,7 +167,9 @@ void ParticleSystem::updateParticleSystem()
 	gl::dispatchCompute( NUM_PARTICLES / WORK_GROUP_SIZE, 1, 1 );
 	// We need to block here on compute completion to ensure that the
 	// computation is done before we render
-	gl::memoryBarrier( GL_SHADER_STORAGE_BARRIER_BIT );
+	gl::memoryBarrier( GL_SHADER_STORAGE_BARRIER_BIT  );
+
+	CI_CHECK_GL();
 }
 
 void ParticleSystem::setupNoiseTexture3D()
