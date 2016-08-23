@@ -11,19 +11,41 @@ ProgramRef LayerProgram::create(ProgramStateRef state, std::string frag)
 
 ci::gl::Texture2dRef LayerProgram::getColorTexture(ci::gl::FboRef base, ci::gl::FboRef extra)
 {
+	gl::ScopedFramebuffer fbob(mFbo);
+	gl::clear();
 
-	ProgramRef effect = getEffect();
-	if(effect) {
-		gl::ScopedTextureBind texl(effect->getColorTexture(extra, mFbo), 1);
-		gl::ScopedTextureBind tex(base->getColorTexture(), 0);
+	if(mLayers.size() > 0) {
+		// Set up the first one separately
+		gl::draw(getProgram(mLayers[0])->getColorTexture(base, extra));
 
-		gl::ScopedFramebuffer fbob(mFbo);
-		Program::draw();
+		for (std::vector<std::string>::iterator iter = mLayers.begin() + 1; iter != mLayers.end(); ++iter) {
+			ProgramRef layerProg = getProgram(*iter);
 
-		return mFbo->getColorTexture();
+			if(layerProg) {
+				gl::ScopedTextureBind tex(mFbo->getColorTexture(), 0);
+				gl::ScopedTextureBind con(layerProg->getColorTexture(base, extra), 1);
+
+				Program::draw();
+			}
+		}
 	}
 
-	return base->getColorTexture();
+	ProgramRef effect = getEffect();
+	if (effect) {
+		return effect->getColorTexture(mFbo, extra);
+	}
+
+	return mFbo->getColorTexture();
+}
+
+void LayerProgram::addLayer(std::string layer)
+{
+	mLayers.push_back(layer);
+}
+
+void LayerProgram::clearLayers()
+{
+	mLayers.clear();
 }
 
 LayerProgram::LayerProgram(ProgramStateRef state, ci::gl::BatchRef b) : Program(b, state), ProgramRect(b, state)
@@ -31,9 +53,4 @@ LayerProgram::LayerProgram(ProgramStateRef state, ci::gl::BatchRef b) : Program(
 	updateUniform("tex_base", 0);
 	updateUniform("tex_layer", 1);
 	mFbo = gl::Fbo::create(app::getWindowWidth(), app::getWindowHeight());
-}
-
-ProgramRef LayerProgram::getConnection()
-{
-	return getProgram(mConnection);
 }

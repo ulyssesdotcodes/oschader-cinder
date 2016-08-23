@@ -127,9 +127,13 @@ void Program::clearEffect()
 	mEffect = nullptr;
 }
 
-void Program::setConnection(std::string)
+void Program::addLayer(std::string)
 {
-	throw Exception("Can't set the combinator of a regular prog.");
+	throw Exception("Can't add a layer to a regular prog.");
+}
+
+void Program::clearLayers()
+{
 }
 
 void Program::update(input::InputState s)

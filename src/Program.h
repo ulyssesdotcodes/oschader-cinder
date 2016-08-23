@@ -24,7 +24,8 @@ public:
 
 	virtual void setEffect(std::string);
 	virtual void clearEffect();
-	virtual void setConnection(std::string);
+	virtual void addLayer(std::string);
+	virtual void clearLayers();
 
 	virtual void update(input::InputState);
 

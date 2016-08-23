@@ -58,10 +58,13 @@ void OschaderCinderApp::setup()
 		}
 	});
 
-	mOscReceiver->setListener("/progs/combinator", [&](const osc::Message msg) {
+	mOscReceiver->setListener("/progs/connections", [&](const osc::Message msg) {
 		ProgramRef s = mState->getProgram(msg.getArgString(0));
 		if (s) {
-			s->setConnection(msg.getArgString(1));
+			s->clearLayers();
+			for (int i = 1; i < msg.getNumArgs(); ++i) {
+				s->addLayer(msg.getArgString(i));
+			}
 		}
 	});
 
