@@ -14,7 +14,8 @@ ci::gl::Texture2dRef LayerProgram::getColorTexture(ci::gl::FboRef base, ci::gl::
 	gl::ScopedFramebuffer fbob(mFbo);
 	gl::clear();
 
-	if(mLayers.size() > 0) {
+	if(mLayers.size() > 0 && getProgram(mLayers[0])) {
+
 		// Set up the first one separately
 		gl::draw(getProgram(mLayers[0])->getColorTexture(base, extra));
 

@@ -111,7 +111,7 @@ void OschaderCinderApp::draw()
 {
 	gl::clear( Color( 0, 0, 0 ) ); 
 
-	ProgramRef s = mState->getProgram("s");
+	ProgramRef s = mState->getProgram("s0");
 	if (s) {
 		gl::draw(s->getColorTexture(a, b));
 	}
