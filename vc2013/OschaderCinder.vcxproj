@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
@@ -106,6 +106,7 @@
     <None Include="..\assets\shaders\brightness.frag" />
     <None Include="..\assets\shaders\dots.frag" />
     <None Include="..\assets\shaders\filter.frag" />
+    <None Include="..\assets\shaders\lines.frag" />
     <None Include="..\assets\shaders\particles\emitter.comp" />
     <None Include="..\assets\shaders\particles\flocking.comp" />
     <None Include="..\assets\shaders\particles\particles.comp" />
@@ -116,8 +117,10 @@
     <None Include="..\assets\shaders\line_down.frag" />
     <None Include="..\assets\shaders\passthrough.vert" />
     <None Include="..\assets\shaders\scale.frag" />
+    <None Include="..\assets\shaders\shapes.frag" />
     <None Include="..\assets\shaders\sine.frag" />
     <None Include="..\assets\shaders\string_theory.frag" />
+    <None Include="..\assets\shaders\translate.frag" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\AudioSource.cpp" />

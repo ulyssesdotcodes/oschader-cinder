@@ -2,7 +2,7 @@ uniform float i_accumulatedLoudness;
 
 uniform sampler2D i_eqs;
 uniform float i_eqs_mod;
-uniform float i_invVolume;
+uniform float i_volume;
 
 in vec2 vertTexCoord0;
 out vec4 fragColor;
@@ -19,12 +19,12 @@ vec2 toCartesian(vec2 p) {
 
 float iDot(float section, vec2 uv) {
 
-  float l = texture(i_eqs, vec2(section, 0.25)).x * 100.0f;
+  float l = min(texture(i_eqs, vec2(section, 0.25)).x, 0.5);
 
   vec2 cuv = vec2(section * 3.1415 * 2, 0.5);
   vec2 center = toCartesian(cuv);
   vec2 diff = center - uv;
-  float dist = dot(diff, diff) * i_invVolume;
+  float dist = dot(diff, diff) * (1 / max(0.01, i_volume));
 
   return smoothstep(l, 0.0, dist * dist);
 }

@@ -5,6 +5,9 @@ using namespace input;
 
 Program::Program(gl::BatchRef batch, ProgramStateRef state) : mBatch(batch), mState(state), mOverflowCheck(std::make_pair(0, 0))
 {
+	if(mBatch) {
+		mBatch->getGlslProg()->uniform("i_resolution", (vec2) app::getWindowSize());
+	}
 }
 
 ci::gl::BatchRef Program::batch()
@@ -17,7 +20,11 @@ void Program::updateUniform(std::string name, float val) {
 	if (iter != mInputUniforms.end()) {
 		mInputUniforms.erase(name);
 	}
-	mBatch->getGlslProg()->uniform("i_" + name, val);
+
+	if(mBatch) {
+		mBatch->getGlslProg()->uniform("i_" + name, val);
+	}
+
 	onUpdateUniform(name, val);
 }
 
@@ -39,7 +46,9 @@ void Program::updateUniform(std::string name, std::string val, float modifier) {
 }
 
 void Program::updateUniform(std::string name, int val) {
-	mBatch->getGlslProg()->uniform("i_" + name, val);
+	if(mBatch) {
+		mBatch->getGlslProg()->uniform("i_" + name, val);
+	}
 }
 
 void Program::onUpdateUniform(std::string name, float val)
@@ -141,7 +150,9 @@ void Program::update(input::InputState s)
 	for (std::pair<std::string, std::pair<InputType, float>> e : mInputUniforms) {
 		if(isFloat(e.second.first)) {
 			float val = getFloat(s, e.second.first) * e.second.second;
-			mBatch->getGlslProg()->uniform("i_" + e.first, val);
+			if(mBatch) {
+				mBatch->getGlslProg()->uniform("i_" + e.first, val);
+			}
 			onUpdateUniform(e.first, val);
 		}
 	}
