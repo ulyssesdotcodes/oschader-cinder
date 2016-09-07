@@ -43,14 +43,15 @@ float sfrand()
 }
 
 ParticleSystem::ParticleSystem(ProgramStateRef state, gl::BatchRef b, gl::VboRef indices, gl::SsboRef pos, gl::SsboRef vel, gl::GlslProgRef update) : Program(b, state),
-	mCam(new CameraPersp( app::getWindowWidth(), app::getWindowHeight(), 90.0f, 1.f, 100.0f )),
+	mCam(new CameraPersp( app::getWindowWidth(), app::getWindowHeight(), 90.0f, 5.f, 500.0f )),
 	  mNoiseSize( 16 ),
-	  mSpriteSize( 0.015f ),
+	  mSpriteSize( 0.1f ),
 	  mEnableAttractor( false ),
 	  mAnimate( true ),
 	  mReset( false ),
 	  mTime( 0.0f ),
-	  mPrevElapsedSeconds( 0.0f )
+	  mPrevElapsedSeconds( 0.0f ),
+	mDrawnOnce(false)
 {
 	mPos = pos;
 	mVel = vel;
@@ -68,21 +69,7 @@ ParticleSystem::ParticleSystem(ProgramStateRef state, gl::BatchRef b, gl::VboRef
 
 	CI_CHECK_GL();
 
-	mCam->lookAt( vec3( 0.0f, 0.0f, -3.0f ), vec3( 0 ) );
-
-	float size = 1;
-	vec4 *posp = reinterpret_cast<vec4*>( mPos->map( GL_WRITE_ONLY ) );
-	for( size_t i = 0; i < NUM_PARTICLES; ++i ) {
-		posp[i] = vec4( sfrand() * size, sfrand() * size, sfrand() * size, 0.0f );
-	}
-	mPos->unmap();
-
-	vec4 *velp = reinterpret_cast<vec4*>( mVel->map( GL_WRITE_ONLY ) );
-	for( size_t i = 0; i < NUM_PARTICLES; ++i ) {
-		velp[i] = vec4( 0.0f, 0.0f, 0.0f, 1.0f );
-	}
-	mVel->unmap();
-
+	mCam->lookAt( vec3( 0.0f, 0.0f, -20.0f ), vec3( 0 ) );
 }
 
 ParticleSystemRef ParticleSystem::create(ProgramStateRef state, std::string comp)
@@ -109,13 +96,32 @@ ParticleSystemRef ParticleSystem::create(ProgramStateRef state, std::string comp
 
 	gl::GlslProgRef renderProg = gl::GlslProg::create( gl::GlslProg::Format().vertex( app::loadAsset( "shaders/particles/render.vert" ) )
 			.fragment( app::loadAsset( "shaders/particles/render.frag" ) ) );
-	renderProg->uniform("spriteSize", 0.015f);
+	renderProg->uniform("spriteSize", 0.075f);
 	gl::VboMeshRef vboMesh = gl::VboMesh::create(NUM_PARTICLES * 6, GL_TRIANGLES, { gl::VboMesh::Layout().usage(GL_STATIC_DRAW).attrib(geom::POSITION, 1) }, NUM_PARTICLES * 6, GL_UNSIGNED_INT, vbo);
 	gl::BatchRef batch = gl::Batch::create(vboMesh, renderProg);
 	auto pos = gl::Ssbo::create( sizeof(vec4) * NUM_PARTICLES, nullptr, GL_STATIC_DRAW );
 	auto vel = gl::Ssbo::create( sizeof(vec4) * NUM_PARTICLES, nullptr, GL_STATIC_DRAW );
+
+	float size = 1;
+	vec4 *posp = reinterpret_cast<vec4*>( pos->map( GL_WRITE_ONLY ) );
+	for( size_t i = 0; i < NUM_PARTICLES; ++i ) {
+		posp[i] = vec4( sfrand() * size, sfrand() * size, sfrand() * size, 0.0f );
+	}
+	pos->unmap();
+
+	vec4 *velp = reinterpret_cast<vec4*>( vel->map( GL_WRITE_ONLY ) );
+	for( size_t i = 0; i < NUM_PARTICLES; ++i ) {
+		velp[i] = vec4( 0.0f, 0.0f, 0.0f, 1.0f );
+	}
+	vel->unmap();
+
 	auto update = gl::GlslProg::create( gl::GlslProg::Format().compute( app::loadAsset( "shaders/particles/" +  comp)));
 	update->uniform("numParticles", (float) NUM_PARTICLES);
+	update->uniform("i_delta", 0.016f);
+	update->uniform("i_speed", 64.f);
+	update->uniform("i_separation", 0.01f);
+	update->uniform("i_cohesion", 0.01f);
+	update->uniform("i_alignment", 0.01f);
 
 	CI_CHECK_GL();
 
@@ -136,6 +142,7 @@ void ParticleSystem::update(input::InputState s)
 {
 	Program::update(s);
 	updateParticleSystem();
+	mDrawnOnce = true;
 }
 
 void ParticleSystem::draw()
@@ -149,7 +156,9 @@ void ParticleSystem::draw()
 
 void ParticleSystem::onUpdateUniform(std::string name, float val)
 {
-	mUpdateProg->uniform("i_" + name, val);
+	if(mDrawnOnce) {
+		mUpdateProg->uniform("i_" + name, val);
+	}
 }
 
 void ParticleSystem::updateParticleSystem()

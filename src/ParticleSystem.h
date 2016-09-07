@@ -91,4 +91,6 @@ class ParticleSystem : public Program {
 	bool mReset;
 	float mTime;
 	float mPrevElapsedSeconds;
+
+	bool mDrawnOnce;
 };
