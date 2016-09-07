@@ -22,6 +22,7 @@ class OschaderCinderApp : public App {
 	void setup() override;
 	void update() override;
 	void draw() override;
+	void resize() override;
 
 private:
 	std::shared_ptr<osc::ReceiverUdp> mOscReceiver;
@@ -87,7 +88,7 @@ void OschaderCinderApp::setup()
 
 	gl::Texture::Format fmt;
 	fmt.setWrap(GL_CLAMP_TO_BORDER, GL_CLAMP_TO_BORDER);
-	fmt.setBorderColor(Color::black());
+	fmt.setBorderColor(ColorA(0, 0, 0));
 
 	gl::Fbo::Format fboFmt;
 	fboFmt.setColorTextureFormat(fmt);
@@ -115,6 +116,18 @@ void OschaderCinderApp::draw()
 	if (s) {
 		gl::draw(s->getColorTexture(a, b));
 	}
+}
+
+void OschaderCinderApp::resize()
+{
+	gl::Texture::Format fmt;
+	fmt.setWrap(GL_CLAMP_TO_BORDER, GL_CLAMP_TO_BORDER);
+	fmt.setBorderColor(ColorA(0, 0, 0));
+
+	gl::Fbo::Format fboFmt;
+	fboFmt.setColorTextureFormat(fmt);
+	a = gl::Fbo::create(app::getWindowWidth(), app::getWindowHeight(), fboFmt);
+	b = gl::Fbo::create(app::getWindowWidth(), app::getWindowHeight(), fboFmt);
 }
 
 CINDER_APP(OschaderCinderApp, RendererGl(), [&](App::Settings *settings) {

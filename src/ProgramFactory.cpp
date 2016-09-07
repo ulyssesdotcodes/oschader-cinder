@@ -27,7 +27,10 @@ void ProgramFactory::setup(std::shared_ptr<ProgramState> state)
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("brightness", std::bind(&EffectRect::create, state, SHADER_DIR + "brightness.frag")));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("fade", std::bind(&FadeEffect::create, state)));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("filter", std::bind(&EffectRect::create, state, SHADER_DIR + "filter.frag")));
+	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("mirror", std::bind(&EffectRect::create, state, SHADER_DIR + "mirror.frag")));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("repeat", std::bind(&EffectRect::create, state, SHADER_DIR + "repeat.frag")));
+	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("reverse", std::bind(&EffectRect::create, state, SHADER_DIR + "reverse.frag")));
+	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("rotate", std::bind(&EffectRect::create, state, SHADER_DIR + "rotate.frag")));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("scale", std::bind(&EffectRect::create, state, SHADER_DIR + "scale.frag")));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("translate", std::bind(&EffectRect::create, state, SHADER_DIR + "translate.frag")));
 

@@ -189,5 +189,14 @@
     <None Include="..\assets\shaders\translate.frag">
       <Filter>Assets</Filter>
     </None>
+    <None Include="..\assets\shaders\mirror.frag">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="..\assets\shaders\rotate.frag">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="..\assets\shaders\reverse.frag">
+      <Filter>Assets</Filter>
+    </None>
   </ItemGroup>
 </Project>

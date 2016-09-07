@@ -13,6 +13,8 @@ void main() {
 
   vec3 color = vec3(0, 0, 0);
 
+  uv.x += (1 + i_spacing) / i_spacing;
+
   float d = round(sin(uv.x * TWO_PI * (1/i_spacing)) * 0.5 + (0.5 * (i_width / i_spacing)));
 
   color = vec3(d);

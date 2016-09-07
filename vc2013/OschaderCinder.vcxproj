@@ -107,6 +107,7 @@
     <None Include="..\assets\shaders\dots.frag" />
     <None Include="..\assets\shaders\filter.frag" />
     <None Include="..\assets\shaders\lines.frag" />
+    <None Include="..\assets\shaders\mirror.frag" />
     <None Include="..\assets\shaders\particles\emitter.comp" />
     <None Include="..\assets\shaders\particles\flocking.comp" />
     <None Include="..\assets\shaders\particles\particles.comp" />
@@ -116,6 +117,8 @@
     <None Include="..\assets\shaders\repeat.frag" />
     <None Include="..\assets\shaders\line_down.frag" />
     <None Include="..\assets\shaders\passthrough.vert" />
+    <None Include="..\assets\shaders\reverse.frag" />
+    <None Include="..\assets\shaders\rotate.frag" />
     <None Include="..\assets\shaders\scale.frag" />
     <None Include="..\assets\shaders\shapes.frag" />
     <None Include="..\assets\shaders\sine.frag" />

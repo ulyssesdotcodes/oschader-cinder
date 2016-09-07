@@ -40,7 +40,7 @@ FadeEffect::FadeEffect(ProgramStateRef state, ci::gl::BatchRef r) : Program(r, s
 {
 	gl::Texture::Format fmt;
 	fmt.setWrap(GL_CLAMP_TO_BORDER, GL_CLAMP_TO_BORDER);
-	fmt.setBorderColor(Color::black());
+	fmt.setBorderColor(ColorA(0, 0, 0));
 	gl::Fbo::Format fboFmt;
 	fboFmt.setColorTextureFormat(fmt);
 	mLastFrame = gl::Fbo::create(app::getWindowWidth(), app::getWindowHeight(), fboFmt);
