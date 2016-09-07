@@ -80,7 +80,7 @@ vec4 calculateVelocity(vec3 position, vec3 velocity, int current) {
   dir = position.xyz - central;
   distSquared = dot(dir, dir);
 
-  velocity -= normalize(dir) * delt * distSquared;
+  velocity -= normalize(dir) * delt * 0.4 * distSquared;
 
   // NOTE: Can't make this more efficient because there's no guaranteed run order
   for(int i=0; i < numParticles; i++) {
