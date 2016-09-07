@@ -6,6 +6,13 @@
 
 uniform float i_delta;
 uniform float i_time;
+uniform float i_emitterX;
+uniform float i_emitterY;
+uniform float i_emitterZ;
+uniform float i_attractorX;
+uniform float i_attractorY;
+uniform float i_attractorZ;
+uniform float i_speed;
 uniform float numParticles;
 
 layout( std140, binding = 1 ) buffer Pos {
@@ -18,6 +25,14 @@ layout( std140, binding = 2 ) buffer Vel {
 
 layout( local_size_x = WORK_GROUP_SIZE,  local_size_y = 1, local_size_z = 1 ) in;
 
+vec3 attract(vec3 p, vec3 p2) {
+    const float softeningSquared = 0.01;
+    vec3 v = p2 - p;
+    float r2 = dot(v, v);
+    r2 += softeningSquared;
+    return v * r2;
+}
+
 void main() {
 	uint i = gl_GlobalInvocationID.x;
 
@@ -27,13 +42,23 @@ void main() {
 	}
 
 	float iPos = float(i) / numParticles;
-	vec4 velocity = vel[i] + vec4(0, 0.00001 * (iPos - 0.5) * 2, 0, 1);
+	vec4 velocity = vel[i];
 	vec3 position = pos[i].xyz + velocity.xyz;
-	position.y = iPos;
 	float alpha = pos[i].w;
-	alpha += ceil(max(0, (1.0 / numParticles) - abs(iPos - i_time)));
-	alpha = min(1, alpha);
-	alpha -= i_delta * 0.01;
-	pos[i] = vec4(position, 1);
+	if((1.0 / numParticles) > abs(iPos - i_time)) {
+		alpha = 1.f;
+		position.x = i_emitterX;
+		position.y = i_emitterY;
+		position.z = i_emitterZ;
+		velocity = vec4(0, 0, 0, 0);
+	}
+	else {
+		vec3 attractor =  vec3(i_attractorX, i_attractorY, i_attractorZ);
+		velocity += vec4(attract(position, attractor) * i_speed, 0) * 0.95;
+	}
+
+	alpha -= i_delta;
+	alpha = max(0, alpha);
+	pos[i] = vec4(position, alpha);
 	vel[i] = velocity;
 }

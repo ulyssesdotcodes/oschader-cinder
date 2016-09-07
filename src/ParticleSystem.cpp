@@ -73,7 +73,7 @@ ParticleSystem::ParticleSystem(ProgramStateRef state, gl::BatchRef b, gl::VboRef
 	float size = 1;
 	vec4 *posp = reinterpret_cast<vec4*>( mPos->map( GL_WRITE_ONLY ) );
 	for( size_t i = 0; i < NUM_PARTICLES; ++i ) {
-		posp[i] = vec4( sfrand() * size, sfrand() * size, sfrand() * size, 1.0f );
+		posp[i] = vec4( sfrand() * size, sfrand() * size, sfrand() * size, 0.0f );
 	}
 	mPos->unmap();
 
