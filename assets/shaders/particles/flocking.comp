@@ -54,8 +54,8 @@ vec3 calculatePosition(vec3 position, vec3 velocity) {
 
 vec4 calculateVelocity(vec3 position, vec3 velocity, int current) {
   float delt = min(0.032, i_delta);
-  float cd = i_cohesion;
-  float sd = i_separation;
+  float cd = i_cohesion * 0.2;
+  float sd = i_separation * 0.2;
   float ad = i_alignment;
 
   float zoneRadius = sd + ad + cd;

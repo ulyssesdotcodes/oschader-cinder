@@ -45,6 +45,10 @@ void Program::updateUniform(std::string name, std::string val, float modifier) {
 	}
 }
 
+void Program::updateUniform(std::string name, std::string)
+{
+}
+
 void Program::updateUniform(std::string name, int val) {
 	if(mBatch) {
 		mBatch->getGlslProg()->uniform("i_" + name, val);

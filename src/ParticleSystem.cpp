@@ -69,7 +69,7 @@ ParticleSystem::ParticleSystem(ProgramStateRef state, gl::BatchRef b, gl::VboRef
 
 	CI_CHECK_GL();
 
-	mCam->lookAt( vec3( 0.0f, 0.0f, -20.0f ), vec3( 0 ) );
+	mCam->lookAt( vec3( 0.0f, 0.0f, -40.0f ), vec3( 0 ) );
 }
 
 ParticleSystemRef ParticleSystem::create(ProgramStateRef state, std::string comp)
@@ -96,7 +96,7 @@ ParticleSystemRef ParticleSystem::create(ProgramStateRef state, std::string comp
 
 	gl::GlslProgRef renderProg = gl::GlslProg::create( gl::GlslProg::Format().vertex( app::loadAsset( "shaders/particles/render.vert" ) )
 			.fragment( app::loadAsset( "shaders/particles/render.frag" ) ) );
-	renderProg->uniform("spriteSize", 0.075f);
+	renderProg->uniform("spriteSize", 0.25f);
 	gl::VboMeshRef vboMesh = gl::VboMesh::create(NUM_PARTICLES * 6, GL_TRIANGLES, { gl::VboMesh::Layout().usage(GL_STATIC_DRAW).attrib(geom::POSITION, 1) }, NUM_PARTICLES * 6, GL_UNSIGNED_INT, vbo);
 	gl::BatchRef batch = gl::Batch::create(vboMesh, renderProg);
 	auto pos = gl::Ssbo::create( sizeof(vec4) * NUM_PARTICLES, nullptr, GL_STATIC_DRAW );

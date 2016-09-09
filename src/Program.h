@@ -16,6 +16,7 @@ public:
 
 	virtual void updateUniform(std::string name, float val);
 	virtual void updateUniform(std::string name, std::string, float modifier);
+	virtual void updateUniform(std::string name, std::string);
 	virtual void updateUniform(std::string name, int val);
 
 	virtual void onUpdateUniform(std::string name, float val);

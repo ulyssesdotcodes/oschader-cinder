@@ -139,6 +139,7 @@
     <ClCompile Include="..\src\ProgramRect.cpp" />
     <ClCompile Include="..\src\ProgramFactory.cpp" />
     <ClCompile Include="..\src\ProgramState.cpp" />
+    <ClCompile Include="..\src\TriggeredPassthrough.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Resources.h" />
@@ -155,6 +156,7 @@
     <ClInclude Include="..\src\Program.h" />
     <ClInclude Include="..\src\ProgramFactory.h" />
     <ClInclude Include="..\src\ProgramState.h" />
+    <ClInclude Include="..\src\TriggeredPassthrough.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

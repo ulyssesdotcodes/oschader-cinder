@@ -80,7 +80,12 @@ void OschaderCinderApp::setup()
 				p->updateUniform(msg.getArgString(1), msg.getArgFloat(2));
 			}
 			else if (msg.getArgType(2) == osc::ArgType::STRING) {
-				p->updateUniform(msg.getArgString(1), msg.getArgString(2), msg.getArgFloat(3));
+				if (msg.getNumArgs() == 4) {
+					p->updateUniform(msg.getArgString(1), msg.getArgString(2), msg.getArgFloat(3));
+				}
+				else if (msg.getNumArgs() == 3) {
+					p->updateUniform(msg.getArgString(1), msg.getArgString(2));
+				}
 			}
 		}
 	});
