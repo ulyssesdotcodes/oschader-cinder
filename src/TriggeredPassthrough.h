@@ -13,6 +13,7 @@ protected:
 	TriggeredPassthrough(ProgramStateRef state);
 
 private:
+	bool mTriggered;
 	std::vector<std::string> mPrograms;
 	std::vector<std::string>::iterator mProgramIter;
 };

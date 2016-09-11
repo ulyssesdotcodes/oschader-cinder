@@ -81,6 +81,12 @@
     <ClCompile Include="..\src\TriggeredPassthrough.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\CameraSource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TexInputProgram.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Resources.h">
@@ -123,6 +129,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\TriggeredPassthrough.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\CameraSource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\TexInputProgram.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -202,6 +214,12 @@
       <Filter>Assets</Filter>
     </None>
     <None Include="..\assets\shaders\reverse.frag">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="..\assets\shaders\passthru.frag">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="..\assets\shaders\overlay.frag">
       <Filter>Assets</Filter>
     </None>
   </ItemGroup>

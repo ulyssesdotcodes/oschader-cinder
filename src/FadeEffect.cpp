@@ -2,9 +2,9 @@
 
 using namespace ci;
 
-ProgramRef FadeEffect::create(ProgramStateRef state)
+ProgramRef FadeEffect::create(ProgramStateRef state, std::string frag)
 {
-	gl::GlslProgRef prog = gl::GlslProg::create(app::loadAsset("shaders/passthrough.vert"), app::loadAsset("fade.frag"));
+	gl::GlslProgRef prog = gl::GlslProg::create(app::loadAsset("shaders/passthrough.vert"), app::loadAsset("shaders/" + frag + ".frag"));
 	gl::BatchRef batch = gl::Batch::create(geom::Rect(app::getWindowBounds()), prog);
 	return ProgramRef(new FadeEffect(state, batch));
 }

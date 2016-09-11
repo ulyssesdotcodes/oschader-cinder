@@ -99,10 +99,6 @@ float AudioSource::getAccumulatedSound()
 	return mAccumulatedSound;
 }
 
-//std::vector<float> AudioSource::getEqs(int binCount) {
-//	return getEqs(binCount, 1.0);
-//}
-//
 std::vector<float> AudioSource::getEqs(int binCount)
 {
 	std::vector<float> buffer = getMagSpectrum();

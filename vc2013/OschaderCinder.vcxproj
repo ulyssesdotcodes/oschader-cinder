@@ -108,12 +108,14 @@
     <None Include="..\assets\shaders\filter.frag" />
     <None Include="..\assets\shaders\lines.frag" />
     <None Include="..\assets\shaders\mirror.frag" />
+    <None Include="..\assets\shaders\overlay.frag" />
     <None Include="..\assets\shaders\particles\emitter.comp" />
     <None Include="..\assets\shaders\particles\flocking.comp" />
     <None Include="..\assets\shaders\particles\particles.comp" />
     <None Include="..\assets\shaders\particles\render.frag" />
     <None Include="..\assets\shaders\particles\render.vert" />
     <None Include="..\assets\shaders\multiplicative_blend.frag" />
+    <None Include="..\assets\shaders\passthru.frag" />
     <None Include="..\assets\shaders\repeat.frag" />
     <None Include="..\assets\shaders\line_down.frag" />
     <None Include="..\assets\shaders\passthrough.vert" />
@@ -127,6 +129,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\AudioSource.cpp" />
+    <ClCompile Include="..\src\CameraSource.cpp" />
     <ClCompile Include="..\src\LayerProgram.cpp" />
     <ClCompile Include="..\src\EffectRect.cpp" />
     <ClCompile Include="..\src\FadeEffect.cpp" />
@@ -139,12 +142,15 @@
     <ClCompile Include="..\src\ProgramRect.cpp" />
     <ClCompile Include="..\src\ProgramFactory.cpp" />
     <ClCompile Include="..\src\ProgramState.cpp" />
+    <ClCompile Include="..\src\TexInputProgram.cpp" />
     <ClCompile Include="..\src\TriggeredPassthrough.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Resources.h" />
     <ClInclude Include="..\blocks\OSC\src\Osc.h" />
     <ClInclude Include="..\src\AudioSource.h" />
+    <ClInclude Include="..\src\TexInputProgram.h" />
+    <ClInclude Include="..\src\CameraSource.h" />
     <ClInclude Include="..\src\InputState.h" />
     <ClInclude Include="..\src\LayerProgram.h" />
     <ClInclude Include="..\src\EffectRect.h" />

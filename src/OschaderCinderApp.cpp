@@ -7,6 +7,7 @@
 #include "Osc.h"
 
 #include "AudioSource.h"
+#include "CameraSource.h"
 #include "InputState.h"
 #include "ProgramFactory.h"
 #include "ProgramState.h"
@@ -31,7 +32,8 @@ private:
 
 	std::shared_ptr<ProgramState> mState;
 	ProgramFactory mFactory;
-	AudioSource mAudioSource;
+	std::shared_ptr<AudioSource> mAudioSource;
+	std::shared_ptr<CameraSource> mCameraSource;
 };
 
 void OschaderCinderApp::setup()
@@ -39,7 +41,10 @@ void OschaderCinderApp::setup()
 	mState = std::make_shared<ProgramState>();
 	mFactory.setup(mState);
 	
-	mAudioSource.setup();
+	mAudioSource = std::shared_ptr<AudioSource>(new AudioSource());
+	mAudioSource->setup();
+
+	mCameraSource = std::shared_ptr<CameraSource>(new CameraSource());
 
 	mOscReceiver = std::shared_ptr<osc::ReceiverUdp>(new osc::ReceiverUdp(9001));
 	mOscReceiver->bind();
@@ -104,9 +109,12 @@ void OschaderCinderApp::setup()
 void OschaderCinderApp::update()
 {
 	input::InputState is;
-	is.audioTexture = mAudioSource.getMagSpectrumTexture();
-	is.volume = mAudioSource.getVolume(); 
+	is.audioTexture = mAudioSource->getMagSpectrumTexture();
+	is.volume = mAudioSource->getVolume();
+	auto eqs = mAudioSource->getEqs(128);
+	is.kick = eqs[1] + eqs[2];
 	is.eqTexture = std::bind(&AudioSource::getEqTexture, mAudioSource, std::placeholders::_1);
+	is.cameraTexture = mCameraSource->getTexture();
 
 	mState->update([is](std::shared_ptr<Program> prog) {
 		prog->update(is);
@@ -138,10 +146,10 @@ void OschaderCinderApp::resize()
 CINDER_APP(OschaderCinderApp, RendererGl(), [&](App::Settings *settings) {
 	FullScreenOptions options;
 	std::vector<DisplayRef> displays = Display::getDisplays();
-	//settings->setFullScreen(true, options);	
+	settings->setFullScreen(true, options);	
 	settings->setWindowSize(displays[0]->getSize());
-	//if (displays.size() > 1) {
-	//	settings->setDisplay(displays[1]);
-	//}
+	if (displays.size() > 1) {
+		settings->setDisplay(displays[1]);
+	}
 	settings->setFrameRate(60.0f);
 })

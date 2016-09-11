@@ -31,16 +31,16 @@ public:
 	virtual void update(input::InputState);
 
 protected:
+	ProgramStateRef mState;
+	ci::gl::BatchRef mBatch;
 	Program(ci::gl::BatchRef, ProgramStateRef);
 	virtual void draw();
 	ProgramRef getEffect();
 	ProgramRef getProgram(std::string);
 
 private:
-	ci::gl::BatchRef mBatch;
 	std::map<std::string, std::pair<input::InputType, float>> mInputUniforms;
 	std::shared_ptr<std::string> mEffect;
-	ProgramStateRef mState;
 	input::InputState mLastInputState;
 
 	std::pair<int, int> mOverflowCheck;

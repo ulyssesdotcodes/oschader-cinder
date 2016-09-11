@@ -9,13 +9,18 @@ ProgramRef TriggeredPassthrough::create(ProgramStateRef state)
 
 void TriggeredPassthrough::onUpdateUniform(std::string name, float val)
 {
-	if (name.compare("trigger") == 0 && val > 0.95) {
+	float thresh = 0.5;
+	if (name.compare("trigger") == 0 && !mTriggered && val > thresh) {
+		mTriggered = true;
 		++mProgramIter;
 		if (mProgramIter == mPrograms.end()) {
 			mProgramIter = mPrograms.begin();
 		}
 
 		PassthroughProgram::updateUniform("program", *mProgramIter);
+	}
+	else if(name.compare("trigger") == 0 && mTriggered && val < thresh){
+		mTriggered = false;
 	}
 }
 
@@ -29,7 +34,7 @@ void TriggeredPassthrough::updateUniform(std::string name, std::string val)
 	}
 }
 
-TriggeredPassthrough::TriggeredPassthrough(ProgramStateRef state) : PassthroughProgram(state), Program(nullptr, state)
+TriggeredPassthrough::TriggeredPassthrough(ProgramStateRef state) : PassthroughProgram(state), Program(nullptr, state), mTriggered(false)
 {
 	mProgramIter = mPrograms.end();
 }
