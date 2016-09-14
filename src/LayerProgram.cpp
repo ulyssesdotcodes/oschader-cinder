@@ -12,7 +12,7 @@ ProgramRef LayerProgram::create(ProgramStateRef state, std::string frag)
 ci::gl::Texture2dRef LayerProgram::getColorTexture(ci::gl::FboRef base, ci::gl::FboRef extra)
 {
 	gl::ScopedFramebuffer fbob(mFbo);
-	gl::clear();
+	gl::clear(Color::black());
 
 	if(mLayers.size() > 0 && getProgram(mLayers[0])) {
 
@@ -23,8 +23,8 @@ ci::gl::Texture2dRef LayerProgram::getColorTexture(ci::gl::FboRef base, ci::gl::
 			ProgramRef layerProg = getProgram(*iter);
 
 			if(layerProg) {
-				gl::ScopedTextureBind tex(mFbo->getColorTexture(), 0);
 				gl::ScopedTextureBind con(layerProg->getColorTexture(base, extra), 1);
+				gl::ScopedTextureBind tex(mFbo->getColorTexture(), 0);
 
 				Program::draw();
 			}

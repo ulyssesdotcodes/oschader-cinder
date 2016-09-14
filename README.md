@@ -1,6 +1,6 @@
 ### Oschader Cinder
 
-This doesn't actually do anything by itself! You need to send some OSC messages to it to make it do anything. It's designed to be used with https://github.com/ulyssesp/oscillare.
+This doesn't actually do anything by itself! You need to send some OSC messages to it to make it do anything. It's designed to be used with [oscillare](https://github.com/ulyssesp/oscillare).
 
 #### OSC Messages
 
@@ -20,35 +20,17 @@ Content: first string is the slot slot of the main program, second is the slot o
 E.g. Osc message "/progs" "p1", "fade" will put a fade effect into "p1"
 and "/progs/effect" "s", "p1" will point the sine program above to "p1"
 
+Address: "/progs/connections"
+Content: first string is the slot slot of the main program, the rest are layered programs
+
+E.g. Osc message "/progs" "p1", "sine" will put a base sine program into "p1",
+message "/progs" "p2", "dots" will put a base dots program into "p2",
+message "/progs" "s", "add" will put an add layer program into "s"
+and "/progs/connections" "s", "p1", "p2" will make that layer program add p1 and p2 together.
+
 #### Programs
 
-There are only a few built in programs currently. They fall into three categories.
-
-##### Base programs
-
-Sine, Dots, AudioData
-
-These programs actually display something. They're usually the first ones in your chain.
-
-Adding more based on a fragment shader is as easy as using ProgramRect::create.
-
-##### Effect programs
-
-Fade, Repeat, Scale
-
-These programs modify something that's already been displayed with a base program.
-
-Adding more based on a fragment shader is easy using EffectRect::create.
-
-##### Passthrough
-
-This is a special program that just defers rendering to a different slot. Use it when you want to keep a program in memory but also want to switch between different programs in a single slot.
-
-##### Layer effect
-
-Add
-
-These combine a base layer with a secondary layer.
+See [oscillare](https://github.com/ulyssesp/oscillare) for a list of programs.
 
 #### Known Bugs
 
@@ -59,3 +41,7 @@ These combine a base layer with a secondary layer.
 
 - Moving all the visualizations from https://github.com/ulyssesp/AVSyn to this
 - Creating a multiply layer effect
+
+Copyright 2016 Ulysses Popple
+
+Image Testcard.jpg by wikimedia user [Ughhhg](https://commons.wikimedia.org/wiki/User:Ughhhg)

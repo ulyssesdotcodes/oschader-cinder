@@ -3,11 +3,12 @@
 #include "EffectRect.h"
 #include "FadeEffect.h"
 #include "FragmentProgram.h"
+#include "ImageProgram.h"
 #include "LayerProgram.h"
 #include "PassthroughProgram.h"
 #include "ParticleSystem.h"
-#include "ParticleSystem.h"
 #include "TexInputProgram.h"
+#include "TextProgram.h"
 #include "TriggeredPassthrough.h"
 
 using namespace ci;
@@ -20,13 +21,15 @@ void ProgramFactory::setup(std::shared_ptr<ProgramState> state)
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("dots", std::bind(&FragmentProgram::create, state, SHADER_DIR + "dots.frag")));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("emitter", std::bind(&ParticleSystem::create, state, "emitter.comp")));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("flocking", std::bind(&ParticleSystem::create, state, "flocking.comp")));
+	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("image", std::bind(&ImageProgram::create, state)));
+	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("input_texture", std::bind(&TexInputProgram::create, state)));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("lines", std::bind(&FragmentProgram::create, state, SHADER_DIR + "lines.frag")));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("line_down", std::bind(&FragmentProgram::create, state, SHADER_DIR + "line_down.frag")));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("pt", std::bind(&PassthroughProgram::create, state)));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("sine", std::bind(&FragmentProgram::create, state, SHADER_DIR + "sine.frag")));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("string_theory", std::bind(&FragmentProgram::create, state, SHADER_DIR + "string_theory.frag")));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("shapes", std::bind(&FragmentProgram::create, state, SHADER_DIR + "shapes.frag")));
-	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("input_texture", std::bind(&TexInputProgram::create, state)));
+	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("text", std::bind(&TextProgram::create, state)));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("ptTriggered", std::bind(&TriggeredPassthrough::create, state)));
 
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("brightness", std::bind(&EffectRect::create, state, SHADER_DIR + "brightness.frag")));

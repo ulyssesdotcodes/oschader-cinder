@@ -130,6 +130,7 @@
   <ItemGroup>
     <ClCompile Include="..\src\AudioSource.cpp" />
     <ClCompile Include="..\src\CameraSource.cpp" />
+    <ClCompile Include="..\src\ImageProgram.cpp" />
     <ClCompile Include="..\src\LayerProgram.cpp" />
     <ClCompile Include="..\src\EffectRect.cpp" />
     <ClCompile Include="..\src\FadeEffect.cpp" />
@@ -143,12 +144,14 @@
     <ClCompile Include="..\src\ProgramFactory.cpp" />
     <ClCompile Include="..\src\ProgramState.cpp" />
     <ClCompile Include="..\src\TexInputProgram.cpp" />
+    <ClCompile Include="..\src\TextProgram.cpp" />
     <ClCompile Include="..\src\TriggeredPassthrough.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Resources.h" />
     <ClInclude Include="..\blocks\OSC\src\Osc.h" />
     <ClInclude Include="..\src\AudioSource.h" />
+    <ClInclude Include="..\src\ImageProgram.h" />
     <ClInclude Include="..\src\TexInputProgram.h" />
     <ClInclude Include="..\src\CameraSource.h" />
     <ClInclude Include="..\src\InputState.h" />
@@ -162,6 +165,7 @@
     <ClInclude Include="..\src\Program.h" />
     <ClInclude Include="..\src\ProgramFactory.h" />
     <ClInclude Include="..\src\ProgramState.h" />
+    <ClInclude Include="..\src\TextProgram.h" />
     <ClInclude Include="..\src\TriggeredPassthrough.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
