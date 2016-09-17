@@ -43,5 +43,3 @@ See [oscillare](https://github.com/ulyssesp/oscillare) for a list of programs.
 - Creating a multiply layer effect
 
 Copyright 2016 Ulysses Popple
-
-Image Testcard.jpg by wikimedia user [Ughhhg](https://commons.wikimedia.org/wiki/User:Ughhhg)
