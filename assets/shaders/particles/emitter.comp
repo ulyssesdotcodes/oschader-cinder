@@ -9,10 +9,10 @@ uniform float i_time;
 uniform float i_emitterX;
 uniform float i_emitterY;
 uniform float i_emitterZ;
-uniform float i_attractorX;
-uniform float i_attractorY;
-uniform float i_attractorZ;
-uniform float i_speed;
+uniform float i_emitVelX;
+uniform float i_emitVelY;
+uniform float i_emitVelZ;
+uniform float i_lifespan;
 uniform float numParticles;
 
 layout( std140, binding = 1 ) buffer Pos {
@@ -25,12 +25,30 @@ layout( std140, binding = 2 ) buffer Vel {
 
 layout( local_size_x = WORK_GROUP_SIZE,  local_size_y = 1, local_size_z = 1 ) in;
 
-vec3 attract(vec3 p, vec3 p2) {
-    const float softeningSquared = 0.01;
-    vec3 v = p2 - p;
-    float r2 = dot(v, v);
-    r2 += softeningSquared;
-    return v * r2;
+float mod289(float x){return x - floor(x * (1.0 / 289.0)) * 289.0;}
+vec4 mod289(vec4 x){return x - floor(x * (1.0 / 289.0)) * 289.0;}
+vec4 perm(vec4 x){return mod289(((x * 34.0) + 1.0) * x);}
+
+float noise(vec3 p){
+    vec3 a = floor(p);
+    vec3 d = p - a;
+    d = d * d * (3.0 - 2.0 * d);
+
+    vec4 b = a.xxyy + vec4(0.0, 1.0, 0.0, 1.0);
+    vec4 k1 = perm(b.xyxy);
+    vec4 k2 = perm(k1.xyxy + b.zzww);
+
+    vec4 c = k2 + a.zzzz;
+    vec4 k3 = perm(c);
+    vec4 k4 = perm(c + 1.0);
+
+    vec4 o1 = fract(k3 * (1.0 / 41.0));
+    vec4 o2 = fract(k4 * (1.0 / 41.0));
+
+    vec4 o3 = o2 * d.z + o1 * (1.0 - d.z);
+    vec2 o4 = o3.yw * d.x + o3.xz * (1.0 - d.x);
+
+    return o4.y * d.y + o4.x * (1.0 - d.y);
 }
 
 void main() {
@@ -42,23 +60,26 @@ void main() {
 	}
 
 	float iPos = float(i) / numParticles;
-	vec4 velocity = vel[i];
+	vec3 velocity = vel[i].xyz;
 	vec3 position = pos[i].xyz + velocity.xyz;
 	float alpha = pos[i].w;
-	if((1.0 / numParticles) > abs(iPos - i_time)) {
-		alpha = 1.f;
-		position.x = i_emitterX;
-		position.y = i_emitterY;
-		position.z = i_emitterZ;
-		velocity = vec4(0, 0, 0, 0);
+	float nAngleXY = noise(vec3(position.xy, i_time)) * 15.0f;
+	float nAngleXZ = noise(vec3(position.xz, i_time)) * 15.0f;
+	float nAngleYZ = noise(vec3(position.yz, i_time)) * 15.0f;
+	if((1.0 / numParticles) > abs(iPos - mod(i_time, 1))) {
+		alpha = i_lifespan;
+		position.x = i_emitterX + cos(nAngleXY) * nAngleYZ * 0.1;
+		position.y = i_emitterY + sin(nAngleXY) * nAngleYZ * 0.1;
+		position.z = i_emitterZ + cos(nAngleXZ) * 0.1;
+		velocity = vec3(i_emitVelX, i_emitVelY, i_emitVelZ);
 	}
 	else {
-		vec3 attractor =  vec3(i_attractorX, i_attractorY, i_attractorZ);
-		velocity += vec4(attract(position, attractor) * i_speed, 0) * 0.95;
+		velocity *= 0.995;
+		velocity += vec3(cos(nAngleXY) * sin(nAngleXZ), cos(nAngleXY) * sin(nAngleYZ), cos(nAngleXZ) * sin(nAngleYZ)) * 0.003 * (1.0f - alpha);
 	}
 
 	alpha -= i_delta;
 	alpha = max(0, alpha);
 	pos[i] = vec4(position, alpha);
-	vel[i] = velocity;
+	vel[i] = vec4(velocity.xyz, 0);
 }

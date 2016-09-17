@@ -146,7 +146,7 @@ void OschaderCinderApp::resize()
 CINDER_APP(OschaderCinderApp, RendererGl(), [&](App::Settings *settings) {
 	FullScreenOptions options;
 	std::vector<DisplayRef> displays = Display::getDisplays();
-	settings->setFullScreen(true, options);	
+	//settings->setFullScreen(true, options);	
 	settings->setWindowSize(displays[0]->getSize());
 	if (displays.size() > 1) {
 		settings->setDisplay(displays[1]);

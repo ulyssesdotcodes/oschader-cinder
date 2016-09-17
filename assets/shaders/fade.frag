@@ -10,7 +10,7 @@ void main() {
   vec4 b = texture(i_tex_base, vertTexCoord0);
   vec4 l = texture(i_tex_last, vertTexCoord0) * i_fade;
 
-  if(dot(l.xyz, l.xyz) < 0.01) {
+  if(l.x + l.y + l.z < 0.3) {
     l.xyz = vec3(0);
   }
 

@@ -123,12 +123,13 @@ void main()
 	// expand points to quads without using GS
 	int particleID = gl_VertexID >> 2; // 4 vertices per particle
 	vec4 particlePos = pos[particleID];
+	vec4 particleVel = vel[particleID];
 
 	//map vertex ID to quad vertex
 	vec2 quadPos = vec2( ( ( gl_VertexID - 1 ) & 2 ) >> 1, ( gl_VertexID & 2 ) >> 1 );
 
 	vec4 particlePosEye = ciModelView * vec4(particlePos.xyz, 1);
-	vec4 vertexPosEye = particlePosEye + vec4( ( quadPos * 2.0 - 1.0 ) * spriteSize, 0, 0 );
+	vec4 vertexPosEye = particlePosEye + vec4( ( quadPos * 2.0 - 1.0 ) * spriteSize * particlePos.w, 0, 0 );
 
 	Out.texCoord = quadPos;
 	Out.color = vec4(vec3(1) * particlePos.w, particlePos.w);

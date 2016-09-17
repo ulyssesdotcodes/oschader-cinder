@@ -100,11 +100,11 @@
     <ResourceCompile Include="Resources.rc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\assets\fade.frag" />
     <None Include="..\assets\shaders\additive_blend.frag" />
     <None Include="..\assets\shaders\audio_data.frag" />
     <None Include="..\assets\shaders\brightness.frag" />
     <None Include="..\assets\shaders\dots.frag" />
+    <None Include="..\assets\shaders\fade.frag" />
     <None Include="..\assets\shaders\filter.frag" />
     <None Include="..\assets\shaders\lines.frag" />
     <None Include="..\assets\shaders\mirror.frag" />
