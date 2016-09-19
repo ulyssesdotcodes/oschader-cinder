@@ -23,9 +23,16 @@ std::shared_ptr<ci::ivec2> ImageProgram::matrixWindow()
 
 void ImageProgram::updateUniform(std::string name, std::string val)
 {
-	if (name.compare("image") == 0 && val.compare(mPath) != 0) {
+	if (name.compare("image") == 0 && val.compare(mPath) != 0 && fs::exists(app::getAssetPath("images/" + val))) {
 		mPath = val;
 		mImage = ci::gl::Texture2d::create(ci::loadImage(ci::app::loadAsset("images/" + val)));
+	}
+}
+
+void ImageProgram::onUpdateUniform(std::string name, float val)
+{
+	if (name.compare("clear_shade") == 0) {
+		mClearShade = glm::clamp<float>(val, 0, 1);
 	}
 }
 
@@ -33,7 +40,7 @@ ci::gl::Texture2dRef ImageProgram::getColorTexture(ci::gl::FboRef base, ci::gl::
 {
 	if(mImage) {
 		gl::ScopedFramebuffer fbo(base);
-		gl::clear(Color::black());
+		gl::clear(Color(mClearShade, mClearShade, mClearShade));
 
 		gl::pushViewport();
 		gl::pushMatrices();

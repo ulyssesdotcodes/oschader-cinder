@@ -28,6 +28,15 @@
     <Filter Include="Assets\Particles">
       <UniqueIdentifier>{b09a2d92-db14-4288-9dd1-d352e7fac64f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Blocks\WMF-Video">
+      <UniqueIdentifier>{a66a7897-8e45-4b58-a161-31c0bf9f4b5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Blocks\WMF-Video\presenter">
+      <UniqueIdentifier>{5e306b36-06c5-4d99-8c3c-0e930ef50e2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Blocks\WMF-Video\presenter\common">
+      <UniqueIdentifier>{0dc5222e-5dff-41c4-b042-d60cbe5a7019}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\OschaderCinderApp.cpp">
@@ -93,6 +102,27 @@
     <ClCompile Include="..\src\TextProgram.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\blocks\Cinder-WMFVideo\src\ciWMFVideoPlayer.cpp">
+      <Filter>Blocks\WMF-Video</Filter>
+    </ClCompile>
+    <ClCompile Include="..\blocks\Cinder-WMFVideo\src\ciWMFVideoPlayerUtils.cpp">
+      <Filter>Blocks\WMF-Video</Filter>
+    </ClCompile>
+    <ClCompile Include="..\blocks\Cinder-WMFVideo\src\presenter\PresentEngine.cpp">
+      <Filter>Blocks\WMF-Video\presenter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\blocks\Cinder-WMFVideo\src\presenter\Presenter.cpp">
+      <Filter>Blocks\WMF-Video\presenter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\blocks\Cinder-WMFVideo\src\presenter\PresenterHelpers.cpp">
+      <Filter>Blocks\WMF-Video\presenter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\blocks\Cinder-WMFVideo\src\presenter\scheduler.cpp">
+      <Filter>Blocks\WMF-Video\presenter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\VideoProgram.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Resources.h">
@@ -147,6 +177,78 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\TextProgram.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\ciWMFVideoPlayer.h">
+      <Filter>Blocks\WMF-Video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\ciWMFVideoPlayerUtils.h">
+      <Filter>Blocks\WMF-Video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\EVRPresenter.h">
+      <Filter>Blocks\WMF-Video\presenter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\EVRPresenterUuid.h">
+      <Filter>Blocks\WMF-Video\presenter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\PresentEngine.h">
+      <Filter>Blocks\WMF-Video\presenter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\Presenter.h">
+      <Filter>Blocks\WMF-Video\presenter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\PresenterHelpers.h">
+      <Filter>Blocks\WMF-Video\presenter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\scheduler.h">
+      <Filter>Blocks\WMF-Video\presenter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\common\AsyncCB.h">
+      <Filter>Blocks\WMF-Video\presenter\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\common\BufferLock.h">
+      <Filter>Blocks\WMF-Video\presenter\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\common\ClassFactory.h">
+      <Filter>Blocks\WMF-Video\presenter\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\common\common.h">
+      <Filter>Blocks\WMF-Video\presenter\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\common\critsec.h">
+      <Filter>Blocks\WMF-Video\presenter\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\common\GrowArray.h">
+      <Filter>Blocks\WMF-Video\presenter\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\common\linklist.h">
+      <Filter>Blocks\WMF-Video\presenter\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\common\logging.h">
+      <Filter>Blocks\WMF-Video\presenter\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\common\logmediatype.h">
+      <Filter>Blocks\WMF-Video\presenter\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\common\mediatype.h">
+      <Filter>Blocks\WMF-Video\presenter\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\common\mfutils.h">
+      <Filter>Blocks\WMF-Video\presenter\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\common\PropVar.h">
+      <Filter>Blocks\WMF-Video\presenter\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\common\registry.h">
+      <Filter>Blocks\WMF-Video\presenter\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\common\TinyMap.h">
+      <Filter>Blocks\WMF-Video\presenter\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\common\trace.h">
+      <Filter>Blocks\WMF-Video\presenter\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\VideoProgram.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

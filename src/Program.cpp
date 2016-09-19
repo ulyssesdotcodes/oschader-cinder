@@ -64,7 +64,7 @@ gl::Texture2dRef Program::getColorTexture(ci::gl::FboRef base, ci::gl::FboRef _)
 {
 	{
 		gl::ScopedFramebuffer fbo(base);
-		gl::clear();
+		gl::clear(Color::black());
 
 		draw();
 	}
