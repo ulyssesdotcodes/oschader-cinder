@@ -336,5 +336,8 @@
     <None Include="..\assets\shaders\fade.frag">
       <Filter>Assets</Filter>
     </None>
+    <None Include="..\assets\shaders\edge_detection.frag">
+      <Filter>Assets</Filter>
+    </None>
   </ItemGroup>
 </Project>
