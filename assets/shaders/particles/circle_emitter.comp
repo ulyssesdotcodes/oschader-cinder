@@ -7,15 +7,14 @@
 uniform float i_delta;
 uniform float i_time;
 uniform float i_lastUpdate;
-uniform float i_emitterX;
-uniform float i_emitterY;
-uniform float i_emitterZ;
-uniform float i_emitVelX;
-uniform float i_emitVelY;
-uniform float i_emitVelZ;
 uniform float i_lifespan;
+uniform float i_emitVel;
+uniform float i_rotation;
+uniform int i_timeRot;
+uniform float i_pullback;
 uniform float numParticles;
-uniform int i_rotation;
+
+uniform sampler2D i_tex_audio;
 
 layout( std140, binding = 1 ) buffer Pos {
 	vec4 pos[];
@@ -53,6 +52,14 @@ float noise(vec3 p){
     return o4.y * d.y + o4.x * (1.0 - d.y);
 }
 
+vec2 cart2Polar(vec2 v) {
+  return vec2(atan(v.y, v.x), sqrt(v.x * v.x + v.y * v.y));
+}
+
+vec2 polar2Cart(vec2 p) {
+  return vec2(p.y * cos(p.x), p.y * sin(p.x));
+}
+
 void main() {
 	uint i = gl_GlobalInvocationID.x;
 
@@ -61,29 +68,40 @@ void main() {
 		return;
 	}
 
-	float iPos = float(i) / numParticles;
 	vec3 velocity = vel[i].xyz;
 	vec3 position = pos[i].xyz + velocity.xyz;
 	float alpha = pos[i].w;
 	float nAngleXY = noise(vec3(position.xy, i_time)) * 15.0f;
 	float nAngleXZ = noise(vec3(position.xz, i_time)) * 15.0f;
 	float nAngleYZ = noise(vec3(position.yz, i_time)) * 15.0f;
-	float rotTime = (i_time + float(i_rotation % 8)) / 8.0f;
-	float lastRotTime = (i_lastUpdate + float(i_rotation % 8)) / 8.0f;
+	float rotTime = (i_time + float(i_timeRot % 8)) / 8.0f;
+	float lastRotTime = (i_lastUpdate + float(i_timeRot % 8)) / 8.0f;
 	float delta = mod(rotTime - lastRotTime, 1);
-	if(iPos < rotTime * numParticles && i > lastRotTime * numParticles && alpha < 0.1) {
-		alpha = i_lifespan;
-		position.x = i_emitterX + cos(nAngleXY) * nAngleYZ * 0.1;
-		position.y = i_emitterY + sin(nAngleXY) * nAngleYZ * 0.1;
-		position.z = i_emitterZ + cos(nAngleXZ) * 0.1;
-		velocity = vec3(i_emitVelX, i_emitVelY, i_emitVelZ);
+	float iPos = i / numParticles;
+	if(iPos < rotTime && iPos > lastRotTime && alpha < 0.1) {
+		float deltaPos = (iPos - lastRotTime) / delta;
+		vec2 audio = texture(i_tex_audio, vec2(deltaPos, 0.25)).xy;
+		alpha = i_lifespan * (0.5 + 0.5 * audio.y);
+		vec2 emitterPos = polar2Cart(vec2(deltaPos * 2 * 3.1415 + i_rotation, 4));
+		position.x = emitterPos.x;
+		position.y = emitterPos.y;
+		position.z = 0;
+		vec2 dir = (emitterPos - vec2(0)) * pow(audio.y, 2) * i_emitVel;
+		velocity = vec3(dir.x, dir.y, 0);
 	}
 	else {
+		vec2 polar = cart2Polar(position.xy);
+		vec3 dir = vec3(polar2Cart(vec2(polar.x, 4)), 0) - position;
 		velocity *= 0.995;
-		velocity += vec3(cos(nAngleXY) * sin(nAngleXZ), cos(nAngleXY) * sin(nAngleYZ), cos(nAngleXZ) * sin(nAngleYZ)) * 0.003 * (1.0f - alpha);
+		if(polar.y > 4) {
+			velocity += normalize(dir) * 0.005 * i_pullback * (1 + length(velocity));
+		}
+		else {
+			velocity = vec3(0);
+		}
 	}
 
-	alpha -= delta;
+	alpha -= max(i_time - i_lastUpdate, 0);
 	alpha = max(0, alpha);
 	pos[i] = vec4(position, alpha);
 	vel[i] = vec4(velocity.xyz, 0);

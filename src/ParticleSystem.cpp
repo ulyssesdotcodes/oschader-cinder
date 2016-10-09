@@ -42,7 +42,7 @@ float sfrand()
 	return ci::randPosNegFloat( -1.0f, 1.0f );
 }
 
-ParticleSystem::ParticleSystem(ProgramStateRef state, gl::BatchRef b, gl::VboRef indices, gl::SsboRef pos, gl::SsboRef vel, gl::GlslProgRef update) : Program(b, state),
+ParticleSystem::ParticleSystem(ProgramStateRef state, gl::BatchRef b, gl::VboRef indices, gl::SsboRef pos, gl::SsboRef vel, gl::GlslProgRef update, int numParticles) : Program(b, state),
 	mCam(new CameraPersp( app::getWindowWidth(), app::getWindowHeight(), 90.0f, 5.f, 500.0f )),
 	  mNoiseSize( 16 ),
 	  mSpriteSize( 0.1f ),
@@ -50,8 +50,11 @@ ParticleSystem::ParticleSystem(ProgramStateRef state, gl::BatchRef b, gl::VboRef
 	  mAnimate( true ),
 	  mReset( false ),
 	  mTime( 0.0f ),
+	mLastUpdate(0.0f),
 	  mPrevElapsedSeconds( 0.0f ),
-	mDrawnOnce(false)
+	mDrawnOnce(false),
+	mNumParticles(numParticles),
+	mRotation(0.0f)
 {
 	mPos = pos;
 	mVel = vel;
@@ -66,22 +69,23 @@ ParticleSystem::ParticleSystem(ProgramStateRef state, gl::BatchRef b, gl::VboRef
 	mNoiseSize = 16;
 
 	setupNoiseTexture3D();
+	mNumParticles = numParticles;
 
 	CI_CHECK_GL();
 
 	mCam->lookAt( vec3( 0.0f, 0.0f, -40.0f ), vec3( 0 ) );
 }
 
-ParticleSystemRef ParticleSystem::create(ProgramStateRef state, std::string comp)
+ParticleSystemRef ParticleSystem::create(ProgramStateRef state, std::string comp, int numParticles)
 {
-	std::vector<uint32_t> indices( NUM_PARTICLES  * 6);
+	std::vector<uint32_t> indices( numParticles  * 6);
 	// the index buffer is a classic "two-tri quad" array.
 	// This may seem odd, given that the compute buffer contains a single
 	// vector for each particle.  However, the shader takes care of this
 	// by indexing the compute shader buffer with a /4.  The value mod 4
 	// is used to compute the offset from the vertex site, and each of the
 	// four indices in a given quad references the same center point
-	for( size_t i = 0, j = 0; i < NUM_PARTICLES; ++i ) {
+	for( size_t i = 0, j = 0; i < numParticles; ++i ) {
 		size_t index = i << 2;
 		indices[j++] = index;
 		indices[j++] = index + 1;
@@ -97,35 +101,36 @@ ParticleSystemRef ParticleSystem::create(ProgramStateRef state, std::string comp
 	gl::GlslProgRef renderProg = gl::GlslProg::create( gl::GlslProg::Format().vertex( app::loadAsset( "shaders/particles/render.vert" ) )
 			.fragment( app::loadAsset( "shaders/particles/render.frag" ) ) );
 	renderProg->uniform("spriteSize", 0.25f);
-	gl::VboMeshRef vboMesh = gl::VboMesh::create(NUM_PARTICLES * 6, GL_TRIANGLES, { gl::VboMesh::Layout().usage(GL_STATIC_DRAW).attrib(geom::POSITION, 1) }, NUM_PARTICLES * 6, GL_UNSIGNED_INT, vbo);
+	gl::VboMeshRef vboMesh = gl::VboMesh::create(numParticles * 6, GL_TRIANGLES, { gl::VboMesh::Layout().usage(GL_STATIC_DRAW).attrib(geom::POSITION, 1) }, numParticles * 6, GL_UNSIGNED_INT, vbo);
 	gl::BatchRef batch = gl::Batch::create(vboMesh, renderProg);
-	auto pos = gl::Ssbo::create( sizeof(vec4) * NUM_PARTICLES, nullptr, GL_STATIC_DRAW );
-	auto vel = gl::Ssbo::create( sizeof(vec4) * NUM_PARTICLES, nullptr, GL_STATIC_DRAW );
+	auto pos = gl::Ssbo::create( sizeof(vec4) * numParticles, nullptr, GL_STATIC_DRAW );
+	auto vel = gl::Ssbo::create( sizeof(vec4) * numParticles, nullptr, GL_STATIC_DRAW );
 
 	float size = 1;
 	vec4 *posp = reinterpret_cast<vec4*>( pos->map( GL_WRITE_ONLY ) );
-	for( size_t i = 0; i < NUM_PARTICLES; ++i ) {
+	for( size_t i = 0; i < numParticles; ++i ) {
 		posp[i] = vec4( sfrand() * size, sfrand() * size, sfrand() * size, 0.0f );
 	}
 	pos->unmap();
 
 	vec4 *velp = reinterpret_cast<vec4*>( vel->map( GL_WRITE_ONLY ) );
-	for( size_t i = 0; i < NUM_PARTICLES; ++i ) {
+	for( size_t i = 0; i < numParticles; ++i ) {
 		velp[i] = vec4( 0.0f, 0.0f, 0.0f, 1.0f );
 	}
 	vel->unmap();
 
 	auto update = gl::GlslProg::create( gl::GlslProg::Format().compute( app::loadAsset( "shaders/particles/" +  comp)));
-	update->uniform("numParticles", (float) NUM_PARTICLES);
+	update->uniform("numParticles", (float) numParticles);
 	update->uniform("i_delta", 0.016f);
 	update->uniform("i_speed", 64.f);
 	update->uniform("i_separation", 0.01f);
 	update->uniform("i_cohesion", 0.01f);
 	update->uniform("i_alignment", 0.01f);
+	update->uniform("i_lastUpdate", 0.0f);
 
 	CI_CHECK_GL();
 
-	return ParticleSystemRef(new ParticleSystem(state, batch, vbo, pos, vel, update));
+	return ParticleSystemRef(new ParticleSystem(state, batch, vbo, pos, vel, update, numParticles));
 }
 
 std::shared_ptr<ci::Camera> ParticleSystem::camera()
@@ -141,6 +146,7 @@ std::shared_ptr<ci::ivec2> ParticleSystem::matrixWindow()
 void ParticleSystem::update(input::InputState s)
 {
 	Program::update(s);
+	auto texes = bindInputTexes(mUpdateProg);
 	updateParticleSystem();
 	mDrawnOnce = true;
 }
@@ -157,6 +163,14 @@ void ParticleSystem::draw()
 void ParticleSystem::onUpdateUniform(std::string name, float val)
 {
 	if(mDrawnOnce) {
+		if (name.compare("time") == 0) {
+			if (val < mTime) {
+				mRotation++;
+				mUpdateProg->uniform("i_timeRot", mRotation);
+			}
+
+			mTime = val;
+		}
 		mUpdateProg->uniform("i_" + name, val);
 	}
 }
@@ -166,6 +180,9 @@ void ParticleSystem::updateParticleSystem()
 	// Invoke the compute shader to integrate the particles
 	gl::ScopedGlslProg prog( mUpdateProg );
 
+	mUpdateProg->uniform("i_lastUpdate", mLastUpdate);
+	mLastUpdate = mTime;
+
 	gl::ScopedTextureBind scoped3dTex( mNoiseTex );
 
 	//ScopedBufferBase scopedPosBuffer( mPos, 1 );
@@ -173,7 +190,7 @@ void ParticleSystem::updateParticleSystem()
 	gl::bindBufferBase( mPos->getTarget(), 1, mPos );
 	gl::bindBufferBase( mPos->getTarget(), 2, mVel );
 
-	gl::dispatchCompute( NUM_PARTICLES / WORK_GROUP_SIZE, 1, 1 );
+	gl::dispatchCompute( mNumParticles / WORK_GROUP_SIZE, 1, 1 );
 	// We need to block here on compute completion to ensure that the
 	// computation is done before we render
 	gl::memoryBarrier( GL_SHADER_STORAGE_BARRIER_BIT  );

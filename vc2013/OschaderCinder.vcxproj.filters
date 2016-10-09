@@ -339,5 +339,8 @@
     <None Include="..\assets\shaders\edge_detection.frag">
       <Filter>Assets</Filter>
     </None>
+    <None Include="..\assets\shaders\particles\circle_emitter.comp">
+      <Filter>Assets\Particles</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -31,17 +31,24 @@ ci::gl::Texture2dRef PassthroughProgram::getColorTexture(ci::gl::FboRef base, ci
 {
 	auto p = getProgram(mProgram);
 	if(p) {
-		gl::ScopedFramebuffer fbo(base);
+		gl::pushViewport();
+		gl::pushMatrices();
+
+		gl::setMatricesWindow(extra->getSize());
+		gl::ScopedFramebuffer fbo(extra);
 		gl::clear(Color::black());
 		gl::draw(p->getColorTexture(base, extra));
+
+		gl::popMatrices();
+		gl::popViewport();
 	}
 
 	auto e = getEffect();
 	if(e) {
-		return e->getColorTexture(base, extra);
+		return e->getColorTexture(extra, base);
 	}
 
-	return base->getColorTexture();
+	return extra->getColorTexture();
 }
 
 PassthroughProgram::PassthroughProgram(ProgramStateRef state) : Program(nullptr, state) // Note: VERY CAREFUL HERE

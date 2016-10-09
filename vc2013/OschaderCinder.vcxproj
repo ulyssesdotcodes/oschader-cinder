@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
@@ -110,6 +110,7 @@
     <None Include="..\assets\shaders\lines.frag" />
     <None Include="..\assets\shaders\mirror.frag" />
     <None Include="..\assets\shaders\overlay.frag" />
+    <None Include="..\assets\shaders\particles\circle_emitter.comp" />
     <None Include="..\assets\shaders\particles\emitter.comp" />
     <None Include="..\assets\shaders\particles\flocking.comp" />
     <None Include="..\assets\shaders\particles\particles.comp" />

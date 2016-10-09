@@ -48,6 +48,7 @@ std::vector<float> AudioSource::getMagSpectrum() {
 	mLastUpdateFrame = frame;
 
 	std::vector<float> scaledSpectrum = mMonitor->getMagSpectrum();
+
 	for (int i = 0; i < scaledSpectrum.size(); ++i) {
 		scaledSpectrum[i] = audio::linearToDecibel(scaledSpectrum[i]) / 100.0f;
 	}
@@ -62,10 +63,25 @@ gl::TextureRef AudioSource::getMagSpectrumTexture() {
 	float spectrum[1024 * 4];
 	std::vector<float> spectrumVec = getMagSpectrum();
 	audio::Buffer buffer = mMonitor->getBuffer();
+	float smoothBuffer[1024];
+
+	for (int i = 0; i < 1024; ++i) {
+		int j = -2;
+		smoothBuffer[i] = 0;
+		if (j + i > 0) smoothBuffer[i] += 0.061 * buffer.getData()[i + j];
+		j++;
+		if (j + i > 0) smoothBuffer[i] += 0.242 * buffer.getData()[i + j];
+		j++;
+		smoothBuffer[i] += 0.393 * buffer.getData()[i + j];
+		j++;
+		if(j + i < buffer.getSize() - 1) smoothBuffer[i] += 0.242 * buffer.getData()[i + j];
+		j++;
+		if(j + i < buffer.getSize() - 1) smoothBuffer[i] += 0.061 * buffer.getData()[i + j];
+	}
 
 	for (std::vector<float>::size_type i = 0; i < spectrumVec.size(); i++) {
 		spectrum[i * 4] = spectrumVec[i] * mMult;
-		spectrum[i * 4 + 1] = buffer.getData()[i] * mMult;
+		spectrum[i * 4 + 1] = smoothBuffer[i] * mMult;
 		spectrum[i * 4 + 2] = 0.0f;
 		spectrum[i * 4 + 3] = 256.0f;
 	}
@@ -127,8 +143,8 @@ gl::TextureRef AudioSource::getEqTexture(int binCount) {
 	std::vector<float> bins(binCount);
 	float eqs[512 * 3];
 
-	int binSize = buffer.size() * 0.5f / binCount;
-	for (std::vector<float>::size_type i = 0; i < buffer.size() * 0.5f; i++) {
+	int binSize = buffer.size() * 0.3f / binCount;
+	for (std::vector<float>::size_type i = 0; i < buffer.size() * 0.3f; i++) {
 		int bin = i / binSize;
 
 		// Just discard the last one if it fits perfectly.
@@ -137,8 +153,9 @@ gl::TextureRef AudioSource::getEqTexture(int binCount) {
 		}
 	}
 
-	for (std::vector<float>::size_type i = 0; i < binCount * binSize; i++) {
-		int bin = i / binSize;
+	float scale = (binCount * binSize) / 512.0f;
+	for (std::vector<float>::size_type i = 0; i < 512; i++) {
+		int bin = (int) (i * scale / binSize);
 
 		eqs[i * 3] = bins[bin] / binSize;
 		eqs[i * 3 + 1] = bins[bin] / binSize;

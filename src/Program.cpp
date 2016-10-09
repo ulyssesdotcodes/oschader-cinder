@@ -77,19 +77,9 @@ gl::Texture2dRef Program::getColorTexture(ci::gl::FboRef base, ci::gl::FboRef _)
 	return base->getColorTexture();
 }
 
-void Program::draw() {
-	int i = 2; // Leave room for effect and layer
-	std::vector<gl::TextureRef> texes;
-	for (std::pair<std::string, std::pair<InputType, float>> e : mInputUniforms) {
-		if(isTexture(e.second.first)) {
-			mBatch->getGlslProg()->uniform("i_" + e.first, i);
-			gl::TextureRef tex = getTexture(mLastInputState, e.second.first, e.second.second);
-			texes.push_back(tex);
-			tex->bind(i);
-			mBatch->getGlslProg()->uniform("i_" + e.first + "_mod", e.second.second);
-			++i;
-		}
-	}
+void Program::draw() 
+{
+	auto texes = bindInputTexes(mBatch->getGlslProg());
 
 	gl::pushViewport();
 	gl::pushMatrices();
@@ -163,4 +153,22 @@ void Program::update(input::InputState s)
 	}
 
 	mLastInputState = s;
+}
+
+std::shared_ptr<std::vector<gl::TextureRef>> Program::bindInputTexes(ci::gl::GlslProgRef prog)
+{
+	auto texes = std::shared_ptr<std::vector<gl::TextureRef>>(new std::vector<gl::TextureRef>());
+	int i = 2; // Leave room for effect and layer
+	for (std::pair<std::string, std::pair<InputType, float>> e : mInputUniforms) {
+		if(isTexture(e.second.first)) {
+			prog->uniform("i_" + e.first, i);
+			gl::TextureRef tex = getTexture(mLastInputState, e.second.first, e.second.second);
+			texes->push_back(tex);
+			tex->bind(i);
+			prog->uniform("i_" + e.first + "_mod", e.second.second);
+			++i;
+		}
+	}
+
+	return texes;
 }

@@ -53,7 +53,6 @@
 #define LIGHT_RADIUS	1.5f // Must be at least 1
 
 const static int WORK_GROUP_SIZE = 128;
-const static int NUM_PARTICLES = 1 << 14;
 
 class ParticleSystem;
 typedef std::shared_ptr<ParticleSystem> ParticleSystemRef;
@@ -61,8 +60,8 @@ typedef std::shared_ptr<ParticleSystem> ParticleSystemRef;
 //! This sample was ported from https://github.com/NVIDIAGameWorks/OpenGLSamples/tree/master/samples/es3aep-kepler/ComputeParticles
 class ParticleSystem : public Program {
   public:
-	 static ParticleSystemRef create(ProgramStateRef, std::string);
-	ParticleSystem(ProgramStateRef, ci::gl::BatchRef, ci::gl::VboRef, ci::gl::SsboRef, ci::gl::SsboRef, ci::gl::GlslProgRef);
+	static ParticleSystemRef create(ProgramStateRef, std::string, int);
+	ParticleSystem(ProgramStateRef, ci::gl::BatchRef, ci::gl::VboRef, ci::gl::SsboRef, ci::gl::SsboRef, ci::gl::GlslProgRef, int);
 
 	virtual std::shared_ptr<ci::Camera> camera();
 	virtual std::shared_ptr<ci::ivec2> matrixWindow();
@@ -84,13 +83,16 @@ class ParticleSystem : public Program {
 
 	ci::gl::Texture3dRef mNoiseTex;
 	std::shared_ptr<ci::CameraPersp>	mCam;
+	int mNumParticles;
 	int mNoiseSize;
 	float mSpriteSize;
 	bool mEnableAttractor;
 	bool mAnimate;
 	bool mReset;
-	float mTime;
 	float mPrevElapsedSeconds;
+	float mLastUpdate;
+	float mTime;
+	int mRotation;
 
 	bool mDrawnOnce;
 };

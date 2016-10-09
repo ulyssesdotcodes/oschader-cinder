@@ -19,9 +19,10 @@ const static std::string SHADER_DIR = "shaders/";
 void ProgramFactory::setup(std::shared_ptr<ProgramState> state)
 {
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("audio_data", std::bind(&FragmentProgram::create, state, SHADER_DIR + "audio_data.frag")));
+	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("circle_emitter", std::bind(&ParticleSystem::create, state, "circle_emitter.comp", 2 << 20)));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("dots", std::bind(&FragmentProgram::create, state, SHADER_DIR + "dots.frag")));
-	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("emitter", std::bind(&ParticleSystem::create, state, "emitter.comp")));
-	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("flocking", std::bind(&ParticleSystem::create, state, "flocking.comp")));
+	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("emitter", std::bind(&ParticleSystem::create, state, "emitter.comp", 2 << 20)));
+	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("flocking", std::bind(&ParticleSystem::create, state, "flocking.comp", 2 << 14)));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("image", std::bind(&ImageProgram::create, state)));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("input_texture", std::bind(&TexInputProgram::create, state)));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("lines", std::bind(&FragmentProgram::create, state, SHADER_DIR + "lines.frag")));

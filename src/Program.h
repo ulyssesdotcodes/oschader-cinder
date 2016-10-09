@@ -29,6 +29,7 @@ public:
 	virtual void clearLayers();
 
 	virtual void update(input::InputState);
+	virtual std::shared_ptr<std::vector<ci::gl::TextureRef>> bindInputTexes(ci::gl::GlslProgRef);
 
 protected:
 	ProgramStateRef mState;
