@@ -16,6 +16,7 @@ uniform float i_emitVelZ;
 uniform float i_lifespan;
 uniform float numParticles;
 uniform int i_rotation;
+uniform int i_timeRot;
 
 layout( std140, binding = 1 ) buffer Pos {
 	vec4 pos[];
@@ -68,10 +69,10 @@ void main() {
 	float nAngleXY = noise(vec3(position.xy, i_time)) * 15.0f;
 	float nAngleXZ = noise(vec3(position.xz, i_time)) * 15.0f;
 	float nAngleYZ = noise(vec3(position.yz, i_time)) * 15.0f;
-	float rotTime = (i_time + float(i_rotation % 8)) / 8.0f;
-	float lastRotTime = (i_lastUpdate + float(i_rotation % 8)) / 8.0f;
+	float rotTime = (i_time + float(i_timeRot % 8)) / 8.0f;
+	float lastRotTime = (i_lastUpdate + float(i_timeRot % 8)) / 8.0f;
 	float delta = mod(rotTime - lastRotTime, 1);
-	if(iPos < rotTime * numParticles && i > lastRotTime * numParticles && alpha < 0.1) {
+	if(iPos < rotTime && iPos > lastRotTime && alpha < 0.1) {
 		alpha = i_lifespan;
 		position.x = i_emitterX + cos(nAngleXY) * nAngleYZ * 0.1;
 		position.y = i_emitterY + sin(nAngleXY) * nAngleYZ * 0.1;
@@ -83,7 +84,7 @@ void main() {
 		velocity += vec3(cos(nAngleXY) * sin(nAngleXZ), cos(nAngleXY) * sin(nAngleYZ), cos(nAngleXZ) * sin(nAngleYZ)) * 0.003 * (1.0f - alpha);
 	}
 
-	alpha -= delta;
+	alpha -= max(i_time - i_lastUpdate, 0);
 	alpha = max(0, alpha);
 	pos[i] = vec4(position, alpha);
 	vel[i] = vec4(velocity.xyz, 0);

@@ -342,5 +342,8 @@
     <None Include="..\assets\shaders\particles\circle_emitter.comp">
       <Filter>Assets\Particles</Filter>
     </None>
+    <None Include="..\assets\shaders\little_planet.frag">
+      <Filter>Assets</Filter>
+    </None>
   </ItemGroup>
 </Project>

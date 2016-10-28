@@ -108,6 +108,7 @@
     <None Include="..\assets\shaders\fade.frag" />
     <None Include="..\assets\shaders\filter.frag" />
     <None Include="..\assets\shaders\lines.frag" />
+    <None Include="..\assets\shaders\little_planet.frag" />
     <None Include="..\assets\shaders\mirror.frag" />
     <None Include="..\assets\shaders\overlay.frag" />
     <None Include="..\assets\shaders\particles\circle_emitter.comp" />

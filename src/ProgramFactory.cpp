@@ -22,7 +22,7 @@ void ProgramFactory::setup(std::shared_ptr<ProgramState> state)
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("circle_emitter", std::bind(&ParticleSystem::create, state, "circle_emitter.comp", 2 << 20)));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("dots", std::bind(&FragmentProgram::create, state, SHADER_DIR + "dots.frag")));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("emitter", std::bind(&ParticleSystem::create, state, "emitter.comp", 2 << 20)));
-	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("flocking", std::bind(&ParticleSystem::create, state, "flocking.comp", 2 << 14)));
+	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("flocking", std::bind(&ParticleSystem::create, state, "flocking.comp", 2 << 13)));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("image", std::bind(&ImageProgram::create, state)));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("input_texture", std::bind(&TexInputProgram::create, state)));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("lines", std::bind(&FragmentProgram::create, state, SHADER_DIR + "lines.frag")));
@@ -39,6 +39,7 @@ void ProgramFactory::setup(std::shared_ptr<ProgramState> state)
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("edge_detection", std::bind(&EffectRect::create, state, SHADER_DIR + "edge_detection.frag")));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("fade", std::bind(&FadeEffect::create, state, "fade")));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("filter", std::bind(&EffectRect::create, state, SHADER_DIR + "filter.frag")));
+	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("little_planet", std::bind(&EffectRect::create, state, SHADER_DIR + "little_planet.frag")));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("mirror", std::bind(&EffectRect::create, state, SHADER_DIR + "mirror.frag")));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("overlay", std::bind(&FadeEffect::create, state, "overlay")));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("repeat", std::bind(&EffectRect::create, state, SHADER_DIR + "repeat.frag")));
