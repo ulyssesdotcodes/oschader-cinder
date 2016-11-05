@@ -31,6 +31,7 @@ void TriggeredPassthrough::updateUniform(std::string name, std::string val)
 		boost::trim(val);
 		mPrograms = boost::algorithm::split(mPrograms, val, boost::is_any_of(" "));
 		mProgramIter = mPrograms.begin() + currentIndex;
+		PassthroughProgram::updateUniform("program", *mProgramIter);
 	}
 }
 
