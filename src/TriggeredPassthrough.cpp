@@ -27,11 +27,15 @@ void TriggeredPassthrough::onUpdateUniform(std::string name, float val)
 void TriggeredPassthrough::updateUniform(std::string name, std::string val)
 {
 	if (name.compare("program") == 0) {
-		auto currentIndex = mProgramIter == mPrograms.end() ? 0 : mProgramIter - mPrograms.begin();
+		auto currentIndex = mProgramIter == mPrograms.end() ? "" : *mProgramIter;
 		boost::trim(val);
 		mPrograms = boost::algorithm::split(mPrograms, val, boost::is_any_of(" "));
-		mProgramIter = mPrograms.begin() + currentIndex;
-		PassthroughProgram::updateUniform("program", *mProgramIter);
+		mProgramIter = std::find(mPrograms.begin(), mPrograms.end(), currentIndex);
+		mProgramIter = mProgramIter == mPrograms.end() ? mPrograms.begin() : mProgramIter;
+
+		if(mPrograms.size() > 0) {
+			PassthroughProgram::updateUniform("program", *mProgramIter);
+		}
 	}
 }
 

@@ -74,8 +74,6 @@ class ParticleSystem : public Program {
 	void updateParticleSystem();
 	void setupNoiseTexture3D();
 	
-	ci::gl::VboRef mVBO;
-	ci::gl::GlslProgRef mRenderProg;
 	ci::gl::GlslProgRef mUpdateProg;
 	ci::gl::SsboRef mPos;
 	ci::gl::SsboRef mVel;

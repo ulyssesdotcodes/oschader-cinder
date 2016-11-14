@@ -98,6 +98,8 @@ ParticleSystemRef ParticleSystem::create(ProgramStateRef state, std::string comp
 	gl::enableVertexAttribArray(0);
 	auto vbo = gl::Vbo::create<uint32_t>( GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW );
 
+	CI_CHECK_GL();
+
 	gl::GlslProgRef renderProg = gl::GlslProg::create( gl::GlslProg::Format().vertex( app::loadAsset( "shaders/particles/render.vert" ) )
 			.fragment( app::loadAsset( "shaders/particles/render.frag" ) ) );
 	renderProg->uniform("spriteSize", 0.25f);
@@ -105,6 +107,8 @@ ParticleSystemRef ParticleSystem::create(ProgramStateRef state, std::string comp
 	gl::BatchRef batch = gl::Batch::create(vboMesh, renderProg);
 	auto pos = gl::Ssbo::create( sizeof(vec4) * numParticles, nullptr, GL_STATIC_DRAW );
 	auto vel = gl::Ssbo::create( sizeof(vec4) * numParticles, nullptr, GL_STATIC_DRAW );
+
+	CI_CHECK_GL();
 
 	float size = 1;
 	vec4 *posp = reinterpret_cast<vec4*>( pos->map( GL_WRITE_ONLY ) );
@@ -118,6 +122,8 @@ ParticleSystemRef ParticleSystem::create(ProgramStateRef state, std::string comp
 		velp[i] = vec4( 0.0f, 0.0f, 0.0f, 1.0f );
 	}
 	vel->unmap();
+
+	CI_CHECK_GL();
 
 	auto update = gl::GlslProg::create( gl::GlslProg::Format().compute( app::loadAsset( "shaders/particles/" +  comp)));
 	update->uniform("numParticles", (float) numParticles);
@@ -146,7 +152,9 @@ std::shared_ptr<ci::ivec2> ParticleSystem::matrixWindow()
 void ParticleSystem::update(input::InputState s)
 {
 	Program::update(s);
+
 	auto texes = bindInputTexes(mUpdateProg);
+
 	updateParticleSystem();
 	mDrawnOnce = true;
 }
@@ -156,7 +164,6 @@ void ParticleSystem::draw()
 	gl::clear(Color::black());
 	gl::bindBufferBase( mPos->getTarget(), 1, mPos );
 	gl::ScopedBuffer scopedindices(mIndicesVbo);
-	//gl::drawElements(GL_TRIANGLES, NUM_PARTICLES * 6, GL_UNSIGNED_INT, 0);
 	Program::draw();
 }
 
@@ -180,10 +187,10 @@ void ParticleSystem::updateParticleSystem()
 	// Invoke the compute shader to integrate the particles
 	gl::ScopedGlslProg prog( mUpdateProg );
 
-	mUpdateProg->uniform("i_lastUpdate", mLastUpdate);
+	//mUpdateProg->uniform("i_lastUpdate", mLastUpdate);
 	mLastUpdate = mTime;
 
-	gl::ScopedTextureBind scoped3dTex( mNoiseTex );
+	//gl::ScopedTextureBind scoped3dTex( mNoiseTex );
 
 	//ScopedBufferBase scopedPosBuffer( mPos, 1 );
 	//ScopedBufferBase scopedVelBuffer( mVel, 2 );

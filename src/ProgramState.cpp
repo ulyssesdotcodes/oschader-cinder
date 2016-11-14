@@ -19,7 +19,7 @@ void ProgramState::setProgram(std::string id, std::string name, std::function<st
 
 void ProgramState::clearProgram(std::string id)
 {
-	return;
+	mState.erase(id);
 }
 
 std::shared_ptr<Program> ProgramState::getProgram(std::string id)

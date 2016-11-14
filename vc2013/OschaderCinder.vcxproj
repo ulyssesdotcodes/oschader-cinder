@@ -46,7 +46,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\include;..\..\Cinder\include;..\blocks\OSC\src;..\blocks\Cinder-WMFVideo\src;C:\Users\Ulysses\Development\opencv\build\install\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\include;..\..\Cinder\include;..\blocks\OSC\src;C:\Users\Ulysses\Development\opencv\build\install\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WIN32_WINNT=0x0601;_WINDOWS;NOMINMAX;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -59,8 +59,8 @@
       <AdditionalIncludeDirectories>"..\..\Cinder\include";..\include</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>cinder-$(PlatformToolset)_d.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\Cinder\lib\msw\$(PlatformTarget);C:\Users\Ulysses\Development\opencv\build\install\x64\vc14\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>cinder.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\Cinder\lib\msw\$(PlatformTarget)\$(ConfigurationName)\v140;C:\Users\Ulysses\Development\opencv\build\install\x64\vc14\lib</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -86,7 +86,7 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>cinder-$(PlatformToolset).lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\Cinder\lib\msw\$(PlatformTarget);C:\Users\Ulysses\Development\opencv\build\install\x64\vc14\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\Cinder\lib\msw\$(PlatformTarget)\$(ConfigurationName)\v140;C:\Users\Ulysses\Development\opencv\build\install\x64\vc14\lib</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <GenerateMapFile>true</GenerateMapFile>
       <SubSystem>Windows</SubSystem>
@@ -131,12 +131,6 @@
     <None Include="..\assets\shaders\translate.frag" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\blocks\Cinder-WMFVideo\src\ciWMFVideoPlayer.cpp" />
-    <ClCompile Include="..\blocks\Cinder-WMFVideo\src\ciWMFVideoPlayerUtils.cpp" />
-    <ClCompile Include="..\blocks\Cinder-WMFVideo\src\presenter\PresentEngine.cpp" />
-    <ClCompile Include="..\blocks\Cinder-WMFVideo\src\presenter\Presenter.cpp" />
-    <ClCompile Include="..\blocks\Cinder-WMFVideo\src\presenter\PresenterHelpers.cpp" />
-    <ClCompile Include="..\blocks\Cinder-WMFVideo\src\presenter\scheduler.cpp" />
     <ClCompile Include="..\src\AudioSource.cpp" />
     <ClCompile Include="..\src\CameraSource.cpp" />
     <ClCompile Include="..\src\ImageProgram.cpp" />
@@ -155,32 +149,8 @@
     <ClCompile Include="..\src\TexInputProgram.cpp" />
     <ClCompile Include="..\src\TextProgram.cpp" />
     <ClCompile Include="..\src\TriggeredPassthrough.cpp" />
-    <ClCompile Include="..\src\VideoProgram.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\ciWMFVideoPlayer.h" />
-    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\ciWMFVideoPlayerUtils.h" />
-    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\common\AsyncCB.h" />
-    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\common\BufferLock.h" />
-    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\common\ClassFactory.h" />
-    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\common\common.h" />
-    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\common\critsec.h" />
-    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\common\GrowArray.h" />
-    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\common\linklist.h" />
-    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\common\logging.h" />
-    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\common\logmediatype.h" />
-    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\common\mediatype.h" />
-    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\common\mfutils.h" />
-    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\common\PropVar.h" />
-    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\common\registry.h" />
-    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\common\TinyMap.h" />
-    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\common\trace.h" />
-    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\EVRPresenter.h" />
-    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\EVRPresenterUuid.h" />
-    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\PresentEngine.h" />
-    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\Presenter.h" />
-    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\PresenterHelpers.h" />
-    <ClInclude Include="..\blocks\Cinder-WMFVideo\src\presenter\scheduler.h" />
     <ClInclude Include="..\include\Resources.h" />
     <ClInclude Include="..\blocks\OSC\src\Osc.h" />
     <ClInclude Include="..\src\AudioSource.h" />

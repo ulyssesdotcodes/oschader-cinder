@@ -3,7 +3,7 @@
 #include "Program.h"
 
 #include "cinder/gl/gl.h"
-#include "ciWMFVideoPlayer.h"
+//#include "ciWMFVideoPlayer.h"
 
 class VideoProgram : public virtual Program {
 public:
@@ -25,7 +25,7 @@ protected:
 private:
 	bool mLoaded;
 	std::string mPath;
-	ciWMFVideoPlayer mVideo;
+	//ciWMFVideoPlayer mVideo;
 	float      mVideoPos;
 	float      mVideoDuration;
 };

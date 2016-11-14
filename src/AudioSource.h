@@ -22,8 +22,11 @@ private:
 	ci::audio::InputDeviceNodeRef mInputNode;
 	ci::audio::MonitorSpectralNodeRef mMonitor;
 	std::vector<float>  mSpectrum;
+	ci::gl::TextureRef mSpectrumTex;
+	std::map<int, ci::gl::TextureRef> mEqTexes;
 
 	int mLastUpdateFrame;
+	int mLastUpdateTexFrame;
 	float mAccumulatedSound;
 	float mMult;
 };
