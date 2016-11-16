@@ -14,15 +14,11 @@ public:
 	virtual void updateUniform(std::string name, std::string val, float mod) override;
 
 	virtual ci::gl::Texture2dRef getColorTexture(ci::gl::FboRef base, ci::gl::FboRef extra) override;
-	virtual void update(input::InputState) override;
 
 protected:
 	TexInputProgram(ProgramStateRef);
 
 private:
-	input::InputState mLastInputState;
+	std::string mInput;
 	ci::CaptureRef mCapture;
-	input::InputType mInput;
-	float mMod;
-
 };

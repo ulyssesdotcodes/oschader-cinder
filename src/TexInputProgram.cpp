@@ -10,11 +10,10 @@ ProgramRef TexInputProgram::create(ProgramStateRef state)
 
 ci::gl::Texture2dRef TexInputProgram::getColorTexture(ci::gl::FboRef base, ci::gl::FboRef extra)
 {
-	if(isTexture(mInput)) {
+	std::pair<float, gl::TextureRef> tex = getInputTex(mInput);
+	if(tex.second) {
 		gl::ScopedFramebuffer fbo(base);
-
-		auto tex = getTexture(mLastInputState, mInput, mMod);
-		gl::draw(tex, tex->getBounds(), base->getBounds());
+		gl::draw(tex.second, tex.second->getBounds(), base->getBounds());
 	}
 
 	auto e = getEffect();
@@ -25,14 +24,8 @@ ci::gl::Texture2dRef TexInputProgram::getColorTexture(ci::gl::FboRef base, ci::g
 	return base->getColorTexture();
 }
 
-void TexInputProgram::update(input::InputState in)
-{
-	mLastInputState = in;
-}
-
 TexInputProgram::TexInputProgram(ProgramStateRef state) : Program(nullptr, state)
 {
-	
 }
 
 std::shared_ptr<ci::Camera> TexInputProgram::camera()
@@ -51,13 +44,5 @@ void TexInputProgram::updateUniform(std::string name, std::string val, float mod
 		return;
 	}
 
-	InputType it = parseInputType(val);
-
-	if (it == InputType::NULL_T || !isTexture(it)) {
-		throw Exception("Invalid input type"); // Can do because it's haskell and we'll constrain types
-		return;
-	}
-
-	mInput = it;
-	mMod = mod;
+	mInput = val;
 }

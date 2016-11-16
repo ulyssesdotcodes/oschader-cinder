@@ -66,7 +66,7 @@ class ParticleSystem : public Program {
 	virtual std::shared_ptr<ci::Camera> camera();
 	virtual std::shared_ptr<ci::ivec2> matrixWindow();
 
-	virtual void update(input::InputState) override;
+	virtual void onUpdate();
 	virtual void draw();
 	virtual void onUpdateUniform(std::string name, float val) override;
 

@@ -140,6 +140,7 @@
     <ClCompile Include="..\src\FragmentProgram.cpp" />
     <ClCompile Include="..\src\OschaderCinderApp.cpp" />
     <ClCompile Include="..\blocks\OSC\src\Osc.cpp" />
+    <ClCompile Include="..\src\OschaderInputState.cpp" />
     <ClCompile Include="..\src\ParticleSystem.cpp" />
     <ClCompile Include="..\src\PassthroughProgram.cpp" />
     <ClCompile Include="..\src\Program.cpp" />
@@ -155,9 +156,10 @@
     <ClInclude Include="..\blocks\OSC\src\Osc.h" />
     <ClInclude Include="..\src\AudioSource.h" />
     <ClInclude Include="..\src\ImageProgram.h" />
+    <ClInclude Include="..\src\OschaderInputState.h" />
     <ClInclude Include="..\src\TexInputProgram.h" />
     <ClInclude Include="..\src\CameraSource.h" />
-    <ClInclude Include="..\src\InputState.h" />
+    <ClInclude Include="..\src\InputResolver.h" />
     <ClInclude Include="..\src\LayerProgram.h" />
     <ClInclude Include="..\src\EffectRect.h" />
     <ClInclude Include="..\src\FadeEffect.h" />

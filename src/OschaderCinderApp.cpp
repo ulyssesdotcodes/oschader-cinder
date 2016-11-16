@@ -8,7 +8,8 @@
 
 #include "AudioSource.h"
 #include "CameraSource.h"
-#include "InputState.h"
+#include "InputResolver.h"
+#include "OschaderInputState.h"
 #include "ProgramFactory.h"
 #include "ProgramState.h"
 
@@ -26,6 +27,8 @@ class OschaderCinderApp : public App {
 	void resize() override;
 
 private:
+	std::shared_ptr<OschaderInputResolver> mInputResolver;
+
 	std::shared_ptr<osc::ReceiverUdp> mOscReceiver;
 
 	ci::gl::FboRef a, b;
@@ -109,11 +112,14 @@ void OschaderCinderApp::setup()
 	fboFmt.setColorTextureFormat(fmt);
 	a = gl::Fbo::create(app::getWindowWidth(), app::getWindowHeight(), fboFmt);
 	b = gl::Fbo::create(app::getWindowWidth(), app::getWindowHeight(), fboFmt);
+
+	mInputResolver = std::make_shared<OschaderInputResolver>();
+	update();
 }
 
 void OschaderCinderApp::update()
 {
-	input::InputState is;
+	InputState is;
 	is.audioTexture = mAudioSource->getMagSpectrumTexture();
 	is.volume = mAudioSource->getVolume();
 	auto eqs = mAudioSource->getEqs(128);
@@ -121,8 +127,10 @@ void OschaderCinderApp::update()
 	is.eqTexture = std::bind(&AudioSource::getEqTexture, mAudioSource, std::placeholders::_1);
 	is.cameraTexture = mCameraSource->getTexture();
 
-	mState->update([is](std::shared_ptr<Program> prog) {
-		prog->update(is);
+	mInputResolver->update(is);
+
+	mState->update([&, is](std::shared_ptr<Program> prog) {
+		prog->update(mInputResolver);
 	});
 }
 
@@ -153,8 +161,8 @@ void OschaderCinderApp::resize()
 CINDER_APP(OschaderCinderApp, RendererGl(), [&](App::Settings *settings) {
 	FullScreenOptions options;
 	std::vector<DisplayRef> displays = Display::getDisplays();
-	settings->setFullScreen(true, options);	
-	settings->setWindowSize(displays[0]->getSize());
+	settings->setFullScreen(false);	
+	settings->setWindowSize(1920 * 2, 1080);
 	if (displays.size() > 1) {
 		settings->setDisplay(displays[1]);
 		settings->setWindowSize(displays[1]->getSize());

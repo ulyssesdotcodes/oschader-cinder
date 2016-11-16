@@ -1,6 +1,6 @@
 #pragma once
 
-#include "InputState.h"
+#include "InputResolver.h"
 
 class ProgramFactory;
 class Program;

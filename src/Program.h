@@ -3,7 +3,7 @@
 #include "cinder/gl/gl.h"
 #include "cinder/app/App.h"
 
-#include "InputState.h"
+#include "InputResolver.h"
 #include "ProgramState.h"
 
 typedef std::shared_ptr<class Program> ProgramRef;
@@ -15,9 +15,10 @@ public:
 	ci::gl::BatchRef batch();
 
 	virtual void updateUniform(std::string name, float val);
-	virtual void updateUniform(std::string name, std::string, float modifier);
 	virtual void updateUniform(std::string name, std::string);
 	virtual void updateUniform(std::string name, int val);
+
+	virtual void updateUniform(std::string name, std::string, float modifier);
 
 	virtual void onUpdateUniform(std::string name, float val);
 
@@ -28,8 +29,11 @@ public:
 	virtual void addLayer(std::string);
 	virtual void clearLayers();
 
-	virtual void update(input::InputState);
-	virtual std::shared_ptr<std::vector<ci::gl::TextureRef>> bindInputTexes(ci::gl::GlslProgRef);
+	void update(std::shared_ptr<input::InputResolver>);
+
+	virtual void onUpdate();
+
+	virtual void bindInputTexes(ci::gl::GlslProgRef);
 
 protected:
 	ProgramStateRef mState;
@@ -38,11 +42,12 @@ protected:
 	virtual void draw();
 	ProgramRef getEffect();
 	ProgramRef getProgram(std::string);
+	std::pair<float, ci::gl::TextureRef> getInputTex(std::string str);
 
 private:
-	std::map<std::string, std::pair<input::InputType, float>> mInputUniforms;
+	std::map<std::string, std::pair<std::string, float>> mInputUniforms;
 	std::shared_ptr<std::string> mEffect;
-	input::InputState mLastInputState;
+	std::map<std::string, std::pair<float, ci::gl::TextureRef>> mLastInputTextures;
 
 	std::pair<int, int> mOverflowCheck;
 };

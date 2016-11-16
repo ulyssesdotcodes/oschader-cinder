@@ -29,20 +29,7 @@ void Program::updateUniform(std::string name, float val) {
 }
 
 void Program::updateUniform(std::string name, std::string val, float modifier) {
-	auto iter = mInputUniforms.find(name);
-	InputType it = parseInputType(val);
-
-	if (it == InputType::NULL_T) {
-		throw Exception("Invalid input type"); // Can do because it's haskell and we'll constrain types
-		return;
-	}
-
-	if (iter == mInputUniforms.end()) {
-		mInputUniforms.insert(std::make_pair(name, std::make_pair(it, modifier)));
-	}
-	else {
-		mInputUniforms[name] = std::make_pair(it, modifier);
-	}
+	mInputUniforms.insert_or_assign(name, std::make_pair(val, modifier));
 }
 
 void Program::updateUniform(std::string name, std::string)
@@ -79,7 +66,7 @@ gl::Texture2dRef Program::getColorTexture(ci::gl::FboRef base, ci::gl::FboRef _)
 
 void Program::draw() 
 {
-	auto texes = bindInputTexes(mBatch->getGlslProg());
+	bindInputTexes(mBatch->getGlslProg());
 
 	gl::pushViewport();
 	gl::pushMatrices();
@@ -140,35 +127,47 @@ void Program::clearLayers()
 {
 }
 
-void Program::update(input::InputState s)
+void Program::update(std::shared_ptr<input::InputResolver> r)
 {
-	for (std::pair<std::string, std::pair<InputType, float>> e : mInputUniforms) {
-		if(isFloat(e.second.first)) {
-			float val = getFloat(s, e.second.first) * e.second.second;
+	mLastInputTextures.clear();
+
+	for (std::pair<std::string, std::pair<std::string, float>> e : mInputUniforms) {
+		int inputType = r->parseInputType(e.second.first);
+
+		if (inputType == -1) continue;
+
+		if(r->isFloat(inputType)) {
+			float val = r->getFloat(inputType) * e.second.second;
 			if(mBatch) {
 				mBatch->getGlslProg()->uniform("i_" + e.first, val);
 			}
 			onUpdateUniform(e.first, val);
 		}
-	}
 
-	mLastInputState = s;
-}
-
-std::shared_ptr<std::vector<gl::TextureRef>> Program::bindInputTexes(ci::gl::GlslProgRef prog)
-{
-	auto texes = std::shared_ptr<std::vector<gl::TextureRef>>(new std::vector<gl::TextureRef>());
-	int i = 2; // Leave room for effect and layer
-	for (std::pair<std::string, std::pair<InputType, float>> e : mInputUniforms) {
-		if(isTexture(e.second.first)) {
-			prog->uniform("i_" + e.first, i);
-			gl::TextureRef tex = getTexture(mLastInputState, e.second.first, e.second.second);
-			texes->push_back(tex);
-			tex->bind(i);
-			prog->uniform("i_" + e.first + "_mod", e.second.second);
-			++i;
+		if(r->isTexture(inputType)) {
+			gl::TextureRef tex = r->getTexture(inputType, e.second.second);
+			mLastInputTextures.insert(std::make_pair(e.first, std::make_pair(e.second.second, tex)));
 		}
 	}
 
-	return texes;
+
+	onUpdate();
+}
+
+void Program::onUpdate() { }
+
+void Program::bindInputTexes(ci::gl::GlslProgRef prog)
+{
+	int i = 2; // Leave room for effect and layer
+	for (auto iter = mLastInputTextures.begin(); iter != mLastInputTextures.end(); iter++) {
+		iter->second.second->bind(i);
+		prog->uniform("i_" + iter->first, i);
+		prog->uniform("i_" + iter->first + "_mod", iter->second.first);
+		++i;
+	}
+}
+
+std::pair<float, gl::TextureRef> Program::getInputTex(std::string it) {
+	auto iter = mLastInputTextures.find(it);
+	return iter == mLastInputTextures.end() ? std::make_pair<int, gl::TextureRef>(-1, nullptr) : iter->second;
 }

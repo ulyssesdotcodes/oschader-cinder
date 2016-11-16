@@ -98,8 +98,6 @@ ParticleSystemRef ParticleSystem::create(ProgramStateRef state, std::string comp
 	gl::enableVertexAttribArray(0);
 	auto vbo = gl::Vbo::create<uint32_t>( GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW );
 
-	CI_CHECK_GL();
-
 	gl::GlslProgRef renderProg = gl::GlslProg::create( gl::GlslProg::Format().vertex( app::loadAsset( "shaders/particles/render.vert" ) )
 			.fragment( app::loadAsset( "shaders/particles/render.frag" ) ) );
 	renderProg->uniform("spriteSize", 0.25f);
@@ -107,8 +105,6 @@ ParticleSystemRef ParticleSystem::create(ProgramStateRef state, std::string comp
 	gl::BatchRef batch = gl::Batch::create(vboMesh, renderProg);
 	auto pos = gl::Ssbo::create( sizeof(vec4) * numParticles, nullptr, GL_STATIC_DRAW );
 	auto vel = gl::Ssbo::create( sizeof(vec4) * numParticles, nullptr, GL_STATIC_DRAW );
-
-	CI_CHECK_GL();
 
 	float size = 1;
 	vec4 *posp = reinterpret_cast<vec4*>( pos->map( GL_WRITE_ONLY ) );
@@ -134,8 +130,6 @@ ParticleSystemRef ParticleSystem::create(ProgramStateRef state, std::string comp
 	update->uniform("i_alignment", 0.01f);
 	update->uniform("i_lastUpdate", 0.0f);
 
-	CI_CHECK_GL();
-
 	return ParticleSystemRef(new ParticleSystem(state, batch, vbo, pos, vel, update, numParticles));
 }
 
@@ -149,11 +143,9 @@ std::shared_ptr<ci::ivec2> ParticleSystem::matrixWindow()
 	return nullptr;
 }
 
-void ParticleSystem::update(input::InputState s)
+void ParticleSystem::onUpdate()
 {
-	Program::update(s);
-
-	auto texes = bindInputTexes(mUpdateProg);
+	bindInputTexes(mUpdateProg);
 
 	updateParticleSystem();
 	mDrawnOnce = true;
@@ -201,8 +193,6 @@ void ParticleSystem::updateParticleSystem()
 	// We need to block here on compute completion to ensure that the
 	// computation is done before we render
 	gl::memoryBarrier( GL_SHADER_STORAGE_BARRIER_BIT  );
-
-	CI_CHECK_GL();
 }
 
 void ParticleSystem::setupNoiseTexture3D()
