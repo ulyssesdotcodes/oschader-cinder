@@ -18,7 +18,7 @@ public:
 	virtual void updateUniform(std::string name, std::string);
 	virtual void updateUniform(std::string name, int val);
 
-	virtual void updateUniform(std::string name, std::string, float modifier);
+	virtual void updateInputUniform(std::string name, std::string, std::vector<float> modifiers);
 
 	virtual void onUpdateUniform(std::string name, float val);
 
@@ -45,7 +45,7 @@ protected:
 	std::pair<float, ci::gl::TextureRef> getInputTex(std::string str);
 
 private:
-	std::map<std::string, std::pair<std::string, float>> mInputUniforms;
+	std::map<std::string, InputParameters> mInputUniforms;
 	std::shared_ptr<std::string> mEffect;
 	std::map<std::string, std::pair<float, ci::gl::TextureRef>> mLastInputTextures;
 

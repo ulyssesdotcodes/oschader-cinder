@@ -28,8 +28,8 @@ void Program::updateUniform(std::string name, float val) {
 	onUpdateUniform(name, val);
 }
 
-void Program::updateUniform(std::string name, std::string val, float modifier) {
-	mInputUniforms.insert_or_assign(name, std::make_pair(val, modifier));
+void Program::updateInputUniform(std::string name, std::string val, std::vector<float> modifiers) {
+	mInputUniforms.insert_or_assign(name, InputParameters(val, modifiers));
 }
 
 void Program::updateUniform(std::string name, std::string)
@@ -131,13 +131,13 @@ void Program::update(std::shared_ptr<input::InputResolver> r)
 {
 	mLastInputTextures.clear();
 
-	for (std::pair<std::string, std::pair<std::string, float>> e : mInputUniforms) {
-		int inputType = r->parseInputType(e.second.first);
+	for (std::pair<std::string, InputParameters> e : mInputUniforms) {
+		int inputType = r->parseInputType(e.second.inputType);
 
 		if (inputType == -1) continue;
 
 		if(r->isFloat(inputType)) {
-			float val = r->getFloat(inputType) * e.second.second;
+			float val = r->getFloat(e.second);
 			if(mBatch) {
 				mBatch->getGlslProg()->uniform("i_" + e.first, val);
 			}
@@ -145,8 +145,8 @@ void Program::update(std::shared_ptr<input::InputResolver> r)
 		}
 
 		if(r->isTexture(inputType)) {
-			gl::TextureRef tex = r->getTexture(inputType, e.second.second);
-			mLastInputTextures.insert(std::make_pair(e.first, std::make_pair(e.second.second, tex)));
+			gl::TextureRef tex = r->getTexture(e.second);
+			mLastInputTextures.insert(std::make_pair(e.first, ));
 		}
 	}
 

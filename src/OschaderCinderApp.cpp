@@ -93,11 +93,19 @@ void OschaderCinderApp::setup()
 				p->updateUniform(msg.getArgString(1), msg.getArgFloat(2));
 			}
 			else if (msg.getArgType(2) == osc::ArgType::STRING) {
-				if (msg.getNumArgs() == 4) {
-					p->updateUniform(msg.getArgString(1), msg.getArgString(2), msg.getArgFloat(3));
+				std::string arg = msg.getArgString(2);
+				if (arg.compare("input") == 0) {
+					std::vector<float> inputArgs;
+					for (int i = 3; i < msg.getNumArgs(); ++i) {
+						if (msg.getArgType(i) == osc::ArgType::FLOAT) {
+							inputArgs.push_back(msg.getArgFloat(i));
+						}
+					}
+
+					p->updateUniform(msg.getArgString(1), msg.getArgString(2), inputArgs);
 				}
-				else if (msg.getNumArgs() == 3) {
-					p->updateUniform(msg.getArgString(1), msg.getArgString(2));
+				else if (arg.compare("string") == 0) {
+					p->updateUniform(msg.getArgString(1), msg.getArgString(3));
 				}
 			}
 		}
