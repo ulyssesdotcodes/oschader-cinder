@@ -6,9 +6,9 @@
 
 namespace input {
 	struct InputParameters {
-		std::string inputType;
+		std::string inputTypeName;
 		std::vector<float> params;
-		InputParameters(std::string it, std::vector<float> ps) : inputType(it), params(ps) {}
+		InputParameters(std::string itn, int it, std::vector<float> ps) : inputTypeName(itn), inputType(it), params(ps) {}
 	};
 
 	class InputResolver {

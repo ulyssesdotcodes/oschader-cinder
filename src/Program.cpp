@@ -29,7 +29,7 @@ void Program::updateUniform(std::string name, float val) {
 }
 
 void Program::updateInputUniform(std::string name, std::string val, std::vector<float> modifiers) {
-	mInputUniforms.insert_or_assign(name, InputParameters(val, modifiers));
+	mInputUniforms.insert_or_assign(name, input::InputParameters(val, -1, modifiers));
 }
 
 void Program::updateUniform(std::string name, std::string)
@@ -146,7 +146,7 @@ void Program::update(std::shared_ptr<input::InputResolver> r)
 
 		if(r->isTexture(inputType)) {
 			gl::TextureRef tex = r->getTexture(e.second);
-			mLastInputTextures.insert(std::make_pair(e.first, ));
+			mLastInputTextures.insert(std::make_pair(e.first, tex));
 		}
 	}
 
@@ -160,14 +160,13 @@ void Program::bindInputTexes(ci::gl::GlslProgRef prog)
 {
 	int i = 2; // Leave room for effect and layer
 	for (auto iter = mLastInputTextures.begin(); iter != mLastInputTextures.end(); iter++) {
-		iter->second.second->bind(i);
+		iter->second->bind(i);
 		prog->uniform("i_" + iter->first, i);
-		prog->uniform("i_" + iter->first + "_mod", iter->second.first);
 		++i;
 	}
 }
 
-std::pair<float, gl::TextureRef> Program::getInputTex(std::string it) {
+gl::TextureRef Program::getInputTex(std::string it) {
 	auto iter = mLastInputTextures.find(it);
-	return iter == mLastInputTextures.end() ? std::make_pair<int, gl::TextureRef>(-1, nullptr) : iter->second;
+	return iter == mLastInputTextures.end() ? nullptr : iter->second;
 }

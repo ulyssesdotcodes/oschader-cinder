@@ -11,7 +11,7 @@ public:
 	virtual std::shared_ptr<ci::Camera> camera() override;
 	virtual std::shared_ptr<ci::ivec2> matrixWindow() override;
 
-	virtual void updateUniform(std::string name, std::string val, float mod) override;
+	virtual void updateInputUniform(std::string name, std::string val, std::vector<float> modifiers) override;
 
 	virtual ci::gl::Texture2dRef getColorTexture(ci::gl::FboRef base, ci::gl::FboRef extra) override;
 

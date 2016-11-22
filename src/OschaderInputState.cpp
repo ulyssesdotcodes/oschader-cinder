@@ -1,5 +1,7 @@
 #include "OschaderInputState.h"
 
+using namespace input;
+
 void OschaderInputResolver::update(InputState is) {
 	mState = is;
 }
@@ -28,8 +30,8 @@ bool OschaderInputResolver::isFloat(int t) {
 	return t == VOLUME || t == KICK;
 }
 
-float OschaderInputResolver::getFloat(int t) {
-	switch (t) {
+float OschaderInputResolver::getFloat(InputParameters ip) {
+	switch (parseInputType(ip.inputType)) {
 	case VOLUME:
 		return mState.volume;
 	case KICK:
@@ -44,14 +46,14 @@ bool OschaderInputResolver::isTexture(int t) {
 	return t == AUDIO_TEXTURE || t == CAMERA_TEXTURE || t == EQ_TEXTURE;
 }
 
-ci::gl::TextureRef OschaderInputResolver::getTexture(int t, float mod) {
-	switch (t) {
+ci::gl::TextureRef OschaderInputResolver::getTexture(InputParameters ip) {
+	switch (parseInputType(ip.inputType)) {
 	case AUDIO_TEXTURE:
 		return mState.audioTexture;
 	case CAMERA_TEXTURE:
 		return mState.cameraTexture;
 	case EQ_TEXTURE:
-		return mState.eqTexture(floor(mod));
+		return mState.eqTexture(ip.params[0]);
 	default:
 		throw ci::Exception("That isn't a texture input type.");
 		return nullptr;

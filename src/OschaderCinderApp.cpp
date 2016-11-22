@@ -102,7 +102,7 @@ void OschaderCinderApp::setup()
 						}
 					}
 
-					p->updateUniform(msg.getArgString(1), msg.getArgString(2), inputArgs);
+					p->updateInputUniform(msg.getArgString(1), msg.getArgString(3), inputArgs);
 				}
 				else if (arg.compare("string") == 0) {
 					p->updateUniform(msg.getArgString(1), msg.getArgString(3));

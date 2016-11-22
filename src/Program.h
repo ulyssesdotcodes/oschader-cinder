@@ -42,12 +42,12 @@ protected:
 	virtual void draw();
 	ProgramRef getEffect();
 	ProgramRef getProgram(std::string);
-	std::pair<float, ci::gl::TextureRef> getInputTex(std::string str);
+	ci::gl::TextureRef getInputTex(std::string str);
 
 private:
-	std::map<std::string, InputParameters> mInputUniforms;
+	std::map<std::string, input::InputParameters> mInputUniforms;
 	std::shared_ptr<std::string> mEffect;
-	std::map<std::string, std::pair<float, ci::gl::TextureRef>> mLastInputTextures;
+	std::map<std::string, ci::gl::TextureRef> mLastInputTextures;
 
 	std::pair<int, int> mOverflowCheck;
 };

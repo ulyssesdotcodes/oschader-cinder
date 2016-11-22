@@ -16,14 +16,14 @@ struct InputState {
 	std::function<ci::gl::TextureRef(int)> eqTexture;
 };
 
-class OschaderInputResolver : public input::InputResolver {
+class OschaderInputResolver : virtual public input::InputResolver {
 public:
 	virtual void update(InputState state);
 	virtual int parseInputType(std::string type);
 	virtual bool isTexture(int inputType);
 	virtual bool isFloat(int inputType);
-	virtual float getFloat(int inputType);
-	virtual ci::gl::TextureRef getTexture(int inputType, float mod);
+	virtual float getFloat(input::InputParameters ip);
+	virtual ci::gl::TextureRef getTexture(input::InputParameters ip);
 
 private:
 	InputState mState;

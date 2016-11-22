@@ -1,7 +1,7 @@
 uniform float i_accumulatedLoudness;
 
 uniform sampler2D i_eqs;
-uniform float i_eqs_mod;
+uniform float i_eq_count;
 uniform float i_volume;
 
 in vec2 vertTexCoord0;
@@ -34,8 +34,9 @@ void main() {
   //vec2 uv = ((2.0 * gl_FragCoord.xy) / i_resolution.xy - vec2(1.0)) * vec2(i_resolution.x/i_resolution.y, 1.0);
 
   vec3 col = vec3(0.0);
-  for(float i = 0.0; i < i_eqs_mod; i++) {
-	float seg = i / i_eqs_mod;
+  if(i_eq_count 
+  for(float i = 0.0; i < i_eq_count; i++) {
+	float seg = i / i_eq_count;
     vec3 color = hsv2rgb(vec3(seg, 1.0, 1.0));
 
     col += iDot(seg, uv) * color * pow(seg + 0.2, 0.5);
