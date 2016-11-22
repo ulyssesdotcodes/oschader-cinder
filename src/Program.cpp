@@ -29,7 +29,7 @@ void Program::updateUniform(std::string name, float val) {
 }
 
 void Program::updateInputUniform(std::string name, std::string val, std::vector<float> modifiers) {
-	mInputUniforms.insert_or_assign(name, input::InputParameters(val, -1, modifiers));
+	mInputUniforms.insert_or_assign(name, input::InputParameters(val, modifiers));
 }
 
 void Program::updateUniform(std::string name, std::string)
@@ -132,19 +132,13 @@ void Program::update(std::shared_ptr<input::InputResolver> r)
 	mLastInputTextures.clear();
 
 	for (std::pair<std::string, InputParameters> e : mInputUniforms) {
-		int inputType = r->parseInputType(e.second.inputType);
-
-		if (inputType == -1) continue;
-
-		if(r->isFloat(inputType)) {
+		if(r->isFloat(e.second)) {
 			float val = r->getFloat(e.second);
 			if(mBatch) {
 				mBatch->getGlslProg()->uniform("i_" + e.first, val);
 			}
 			onUpdateUniform(e.first, val);
-		}
-
-		if(r->isTexture(inputType)) {
+		} else if(r->isTexture(e.second)) {
 			gl::TextureRef tex = r->getTexture(e.second);
 			mLastInputTextures.insert(std::make_pair(e.first, tex));
 		}

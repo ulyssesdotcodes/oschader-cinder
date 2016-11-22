@@ -26,11 +26,12 @@ int OschaderInputResolver::parseInputType(std::string str) {
 	return -1;
 }
 
-bool OschaderInputResolver::isFloat(int t) {
+bool OschaderInputResolver::isFloat(const InputParameters& ip) {
+	int t = parseInputType(ip.inputType);
 	return t == VOLUME || t == KICK;
 }
 
-float OschaderInputResolver::getFloat(InputParameters ip) {
+float OschaderInputResolver::getFloat(const InputParameters& ip) {
 	switch (parseInputType(ip.inputType)) {
 	case VOLUME:
 		return mState.volume;
@@ -42,11 +43,12 @@ float OschaderInputResolver::getFloat(InputParameters ip) {
 	}
 }
 
-bool OschaderInputResolver::isTexture(int t) {
+bool OschaderInputResolver::isTexture(const InputParameters& ip) {
+	int t = parseInputType(ip.inputType);
 	return t == AUDIO_TEXTURE || t == CAMERA_TEXTURE || t == EQ_TEXTURE;
 }
 
-ci::gl::TextureRef OschaderInputResolver::getTexture(InputParameters ip) {
+ci::gl::TextureRef OschaderInputResolver::getTexture(const InputParameters& ip) {
 	switch (parseInputType(ip.inputType)) {
 	case AUDIO_TEXTURE:
 		return mState.audioTexture;

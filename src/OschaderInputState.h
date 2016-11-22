@@ -20,10 +20,10 @@ class OschaderInputResolver : virtual public input::InputResolver {
 public:
 	virtual void update(InputState state);
 	virtual int parseInputType(std::string type);
-	virtual bool isTexture(int inputType);
-	virtual bool isFloat(int inputType);
-	virtual float getFloat(input::InputParameters ip);
-	virtual ci::gl::TextureRef getTexture(input::InputParameters ip);
+	virtual bool isTexture(const input::InputParameters&);
+	virtual bool isFloat(const input::InputParameters&);
+	virtual float getFloat(const input::InputParameters& ip);
+	virtual ci::gl::TextureRef getTexture(const input::InputParameters& ip);
 
 private:
 	InputState mState;

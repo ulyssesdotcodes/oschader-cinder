@@ -6,17 +6,17 @@
 
 namespace input {
 	struct InputParameters {
-		std::string inputTypeName;
+		std::string inputType;
 		std::vector<float> params;
-		InputParameters(std::string itn, int it, std::vector<float> ps) : inputTypeName(itn), inputType(it), params(ps) {}
+		InputParameters(std::string it, std::vector<float> ps) : inputType(it), params(ps) {}
 	};
 
 	class InputResolver {
 	public:
 		virtual int parseInputType(std::string type) = 0;
-		virtual bool isTexture(int inputType) = 0;
-		virtual bool isFloat(int inputType) = 0;
-		virtual float getFloat(InputParameters) = 0;
-		virtual ci::gl::TextureRef getTexture(InputParameters) = 0;
+		virtual bool isTexture(const InputParameters&) = 0;
+		virtual bool isFloat(const InputParameters&) = 0;
+		virtual float getFloat(const InputParameters&) = 0;
+		virtual ci::gl::TextureRef getTexture(const InputParameters&) = 0;
 	};
 };
