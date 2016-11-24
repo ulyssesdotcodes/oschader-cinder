@@ -28,6 +28,9 @@
     <Filter Include="Assets\Particles">
       <UniqueIdentifier>{b09a2d92-db14-4288-9dd1-d352e7fac64f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Blocks\Oschader">
+      <UniqueIdentifier>{f4029807-5c37-453b-a341-2c5817589964}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\OschaderCinderApp.cpp">
@@ -45,108 +48,75 @@
     <ClInclude Include="..\blocks\OSC\src\Osc.h">
       <Filter>Blocks\OSC\src</Filter>
     </ClInclude>
-    <ClCompile Include="..\src\Program.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\ProgramFactory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\FragmentProgram.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\ProgramRect.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\ProgramState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\FadeEffect.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\EffectRect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\AudioSource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\PassthroughProgram.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\LayerProgram.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\ParticleSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\TriggeredPassthrough.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\CameraSource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\TexInputProgram.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\ImageProgram.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\TextProgram.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\OschaderInputState.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Oschader\EffectProgram.cpp">
+      <Filter>Blocks\Oschader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Oschader\EffectRect.cpp">
+      <Filter>Blocks\Oschader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Oschader\FadeEffect.cpp">
+      <Filter>Blocks\Oschader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Oschader\FragmentProgram.cpp">
+      <Filter>Blocks\Oschader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Oschader\ImageProgram.cpp">
+      <Filter>Blocks\Oschader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Oschader\LayerProgram.cpp">
+      <Filter>Blocks\Oschader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Oschader\PassthroughProgram.cpp">
+      <Filter>Blocks\Oschader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Oschader\Program.cpp">
+      <Filter>Blocks\Oschader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Oschader\ProgramRect.cpp">
+      <Filter>Blocks\Oschader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Oschader\ProgramState.cpp">
+      <Filter>Blocks\Oschader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Oschader\TexInputProgram.cpp">
+      <Filter>Blocks\Oschader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Oschader\TextProgram.cpp">
+      <Filter>Blocks\Oschader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Oschader\TriggeredPassthrough.cpp">
+      <Filter>Blocks\Oschader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Resources.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Program.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\ProgramFactory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\FragmentProgram.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\ProgramRect.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\ProgramState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\FadeEffect.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\EffectRect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\AudioSource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\PassthroughProgram.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\LayerProgram.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\ParticleSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\TriggeredPassthrough.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\CameraSource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\TexInputProgram.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\ImageProgram.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\TextProgram.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\VideoProgram.h">
@@ -155,8 +125,47 @@
     <ClInclude Include="..\src\OschaderInputState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\InputResolver.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\src\Oschader\EffectProgram.h">
+      <Filter>Blocks\Oschader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Oschader\EffectRect.h">
+      <Filter>Blocks\Oschader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Oschader\FadeEffect.h">
+      <Filter>Blocks\Oschader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Oschader\FragmentProgram.h">
+      <Filter>Blocks\Oschader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Oschader\ImageProgram.h">
+      <Filter>Blocks\Oschader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Oschader\InputResolver.h">
+      <Filter>Blocks\Oschader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Oschader\LayerProgram.h">
+      <Filter>Blocks\Oschader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Oschader\PassthroughProgram.h">
+      <Filter>Blocks\Oschader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Oschader\Program.h">
+      <Filter>Blocks\Oschader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Oschader\ProgramRect.h">
+      <Filter>Blocks\Oschader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Oschader\ProgramState.h">
+      <Filter>Blocks\Oschader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Oschader\TexInputProgram.h">
+      <Filter>Blocks\Oschader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Oschader\TextProgram.h">
+      <Filter>Blocks\Oschader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Oschader\TriggeredPassthrough.h">
+      <Filter>Blocks\Oschader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

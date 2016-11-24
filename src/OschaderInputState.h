@@ -1,6 +1,6 @@
 #pragma once
 
-#include "InputResolver.h"
+#include "Oschader/InputResolver.h"
 
 static const int AUDIO_TEXTURE = 0;
 static const int CAMERA_TEXTURE = 1;

@@ -47,7 +47,7 @@
 #include "cinder/gl/Ssbo.h"
 #include "cinder/Arcball.h"
 
-#include "Program.h"
+#include "Oschader/Program.h"
 
 
 #define LIGHT_RADIUS	1.5f // Must be at least 1

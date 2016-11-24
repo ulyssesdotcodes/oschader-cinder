@@ -8,10 +8,10 @@
 
 #include "AudioSource.h"
 #include "CameraSource.h"
-#include "InputResolver.h"
+#include "Oschader/InputResolver.h"
 #include "OschaderInputState.h"
 #include "ProgramFactory.h"
-#include "ProgramState.h"
+#include "Oschader/ProgramState.h"
 
 //#include "AdditiveProgram.h"
 
@@ -56,7 +56,6 @@ void OschaderCinderApp::setup()
 	mOscReceiver->setListener("/progs/effect", [&](const osc::Message msg) {
 		ProgramRef s = mState->getProgram(msg.getArgString(0));
 		if (s) {
-			app::console() << msg.getArgString(0) << " eff: " << msg.getArgString(1) << std::endl;
 			s->setEffect(msg.getArgString(1));
 		}
 	});

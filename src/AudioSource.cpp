@@ -57,7 +57,8 @@ std::vector<float> AudioSource::getMagSpectrum() {
 	std::vector<float> scaledSpectrum = mMonitor->getMagSpectrum();
 
 	for (int i = 0; i < scaledSpectrum.size(); ++i) {
-		scaledSpectrum[i] = log10(audio::linearToDecibel(scaledSpectrum[i]) / 100.0f + 1.0f);
+		float val = audio::linearToDecibel(scaledSpectrum[i]) / 100.0f + 1.0f;
+		scaledSpectrum[i] = log10(val * val);
 	}
 	mSpectrum = scaledSpectrum;
 
