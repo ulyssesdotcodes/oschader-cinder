@@ -32,15 +32,29 @@ bool OschaderInputResolver::isFloat(const InputParameters& ip) {
 }
 
 float OschaderInputResolver::getFloat(const InputParameters& ip) {
+	float val;
+
 	switch (parseInputType(ip.inputType)) {
 	case VOLUME:
-		return mState.volume;
+		val = mState.volume;
+		break;
 	case KICK:
-		return mState.kick;
+		val = mState.kick;
+		break;
 	default:
 		throw ci::Exception("That isn't a float input type.");
 		return -1;
 	}
+
+	if (ip.params.size() > 0) {
+		val *= ip.params[0];
+	}
+
+	if (ip.params.size() > 1) {
+		val += ip.params[1];
+	}
+
+	return val;
 }
 
 bool OschaderInputResolver::isTexture(const InputParameters& ip) {
