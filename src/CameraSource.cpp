@@ -2,8 +2,11 @@
 
 using namespace ci;
 
-CameraSource::CameraSource() : mCapture(Capture::create(1280, 720)), mCaptureTex(gl::Texture2d::create(1280, 720))
+CameraSource::CameraSource() : mCaptureTex(gl::Texture2d::create(1280, 720))
 {
+	if (Capture::getDevices().size() > 0) {
+		mCapture = Capture::create(1280, 720);
+	}
 }
 
 ci::gl::TextureRef CameraSource::getTexture()
@@ -14,7 +17,7 @@ ci::gl::TextureRef CameraSource::getTexture()
 
 void CameraSource::update()
 {
-	if (mCapture->checkNewFrame()) {
+	if (mCapture && mCapture->checkNewFrame()) {
 		mCaptureTex->update(*mCapture->getSurface());
 	}
 }

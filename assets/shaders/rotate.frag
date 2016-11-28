@@ -15,7 +15,7 @@ vec2 polar2Cart(vec2 p) {
 }
 
 void main() {
-  vec2 pos = (vertTexCoord0 - vec2(0.5)) * 2;
+  vec2 pos = (vertTexCoord0 - vec2(0.5)) * 2 / i_resolution.xy;
   pos = cart2Polar(pos);
   pos.x += i_rotate;
   pos = polar2Cart(pos) * 0.5 + 0.5;

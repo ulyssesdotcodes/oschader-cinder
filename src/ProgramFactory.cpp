@@ -4,6 +4,7 @@
 #include "Oschader/FadeEffect.h"
 #include "Oschader/FragmentProgram.h"
 #include "Oschader/ImageProgram.h"
+#include "Oschader/LayerEffect.h"
 #include "Oschader/LayerProgram.h"
 #include "Oschader/PassthroughProgram.h"
 #include "ParticleSystem.h"
@@ -35,11 +36,13 @@ void ProgramFactory::setup(std::shared_ptr<ProgramState> state)
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("text", std::bind(&TextProgram::create, state)));
 	//mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("video", std::bind(&VideoProgram::create, state)));
 
+	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("blur", std::bind(&EffectRect::create, state, SHADER_DIR + "blur.frag")));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("brightness", std::bind(&EffectRect::create, state, SHADER_DIR + "brightness.frag")));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("edge_detection", std::bind(&EffectRect::create, state, SHADER_DIR + "edge_detection.frag")));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("fade", std::bind(&FadeEffect::create, state, "fade")));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("filter", std::bind(&EffectRect::create, state, SHADER_DIR + "filter.frag")));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("little_planet", std::bind(&EffectRect::create, state, SHADER_DIR + "little_planet.frag")));
+	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("lumidots", std::bind(&EffectRect::create, state, SHADER_DIR + "lumidots.frag")));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("mirror", std::bind(&EffectRect::create, state, SHADER_DIR + "mirror.frag")));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("overlay", std::bind(&FadeEffect::create, state, "overlay")));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("repeat", std::bind(&EffectRect::create, state, SHADER_DIR + "repeat.frag")));
@@ -50,6 +53,7 @@ void ProgramFactory::setup(std::shared_ptr<ProgramState> state)
 
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("add", std::bind(&LayerProgram::create, state, SHADER_DIR + "additive_blend.frag")));
 	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("mult", std::bind(&LayerProgram::create, state, SHADER_DIR + "multiplicative_blend.frag")));
+	mConstructorMap.insert(std::pair<std::string, std::function<ProgramRef()>>("displace", std::bind(&LayerProgram::create, state, SHADER_DIR + "displace.frag")));
 }
 
 ProgramRef ProgramFactory::createProgram(std::string name) const

@@ -167,6 +167,9 @@
     <ClInclude Include="..\src\Oschader\TriggeredPassthrough.h">
       <Filter>Blocks\Oschader</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\Oschader\LayerEffect.h">
+      <Filter>Blocks\Oschader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resources.rc">
@@ -259,6 +262,15 @@
       <Filter>Assets\Particles</Filter>
     </None>
     <None Include="..\assets\shaders\little_planet.frag">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="..\assets\shaders\displace.frag">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="..\assets\shaders\lumidots.frag">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="..\assets\shaders\blur.frag">
       <Filter>Assets</Filter>
     </None>
   </ItemGroup>
